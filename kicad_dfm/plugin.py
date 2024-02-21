@@ -7,9 +7,9 @@ from pcbnew import *
 # 插件入口
 class Plugin(pcbnew.ActionPlugin):
     def __init__(self):
-        self.name = "Active Manufacturing"  # 插件名称
+        self.name = "HQ DFM"  # 插件名称
         self.category = "Manufacturing"  # 描述性类别名称
-        self.description = "Quote and place order with one button click."  # 对插件及其功能的描述
+        self.description = "One click analysis design hidden dangers."  # 对插件及其功能的描述
         self.pcbnew_icon_support = hasattr(self, "show_toolbar_button")
         self.show_toolbar_button = True  # 可选，默认为 False
         self.icon_file_name = os.path.join(

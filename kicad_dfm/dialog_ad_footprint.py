@@ -56,7 +56,7 @@ class DialogADFootprint(wx.Frame):
         self.rule_message_list = []
         super(wx.Frame, self).__init__(
             parent,
-            title=_("DFM Analysis"),
+            title=_("HQ DFM Analysis"),
             style=wx.DEFAULT_FRAME_STYLE | wx.STAY_ON_TOP,
         )
         current_file = os.path.abspath(os.path.dirname(__file__))
