@@ -4,6 +4,7 @@ import re
 from decimal import Decimal
 import pcbnew
 from . import config
+from .picture import GetImagePath
 
 import gettext
 
@@ -134,11 +135,9 @@ class ChildFrame(wx.Frame):
             wx.Size(50, 20),
             wx.NO_BORDER,
         )
-        picture_path = image_path.rsplit("\\")
-        path = image_path.replace(
-            picture_path[len(picture_path) - 1], "kicad_dfm\\picture\\none.png"
+        image = wx.Image(self.GetImagePath("none.png"), wx.BITMAP_TYPE_PNG).Rescale(
+            700, 150
         )
-        image = wx.Image(path, wx.BITMAP_TYPE_PNG).Rescale(700, 150)
         self.bmp = wx.StaticBitmap(picture_panel, -1, image)  # 转化为wx.StaticBitmap()形式
         picture_box.Add(self.bmp, 0, wx.Top, 5)
 
@@ -250,27 +249,38 @@ class ChildFrame(wx.Frame):
 
     def picture_path(self, string, language_string):
         json_string = string.lower()
-        current_file = os.path.abspath(os.path.dirname(__file__))
-        path = current_file.rsplit("\\")
-        self.path = current_file.replace(path[len(path) - 1], "kicad_dfm\\picture\\")
         if json_string == "acute angle traces" or json_string == "锐角":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "acute_angle" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("acute_angle" + language_string))
+            )
         elif json_string == "unconnected traces" or json_string == "断头线":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "breakage_line" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("breakage_line" + language_string))
+            )
         elif json_string == "floating copper" or json_string == "孤立铜":
             self.bmp.SetBitmap(
-                wx.Bitmap(self.path + "isolated_copper" + language_string)
+                wx.Bitmap(self.GetImagePath("isolated_copper" + language_string))
             )
         elif json_string == "unconnected vias" or json_string == "无效过孔":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "invalid_via" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("invalid_via" + language_string))
+            )
         elif json_string == "smallest trace width" or json_string == "最小线宽":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "line_width" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("line_width" + language_string))
+            )
         elif json_string == "trace spacing" or json_string == "线到线":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "line2line" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("line2line" + language_string))
+            )
         elif json_string == "trace-to-pad spacing" or json_string == "焊盘到线":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "pad2line" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("pad2line" + language_string))
+            )
         elif json_string == "pad spacing" or json_string == "焊盘间距":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "pad2pad" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("pad2pad" + language_string))
+            )
         elif (
             json_string == "bga pads"
             or json_string == "short pads"
@@ -279,7 +289,7 @@ class ChildFrame(wx.Frame):
             or json_string == "长条焊盘"
             or json_string == "常规焊盘"
         ):
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "bga" + language_string))
+            self.bmp.SetBitmap(wx.Bitmap(self.GetImagePath("bga" + language_string)))
         elif (
             json_string == "smd pad spacing"
             or json_string == "pad spacing"
@@ -287,35 +297,49 @@ class ChildFrame(wx.Frame):
             or json_string == "焊盘间距"
         ):
             self.bmp.SetBitmap(
-                wx.Bitmap(self.path + "pad_spacing_base" + language_string)
+                wx.Bitmap(self.GetImagePath("pad_spacing_base" + language_string))
             )
         elif json_string == "grid width" or json_string == "网格线宽":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "grid_width" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("grid_width" + language_string))
+            )
         elif json_string == "grid spacing" or json_string == "网格间距":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "grid_spacing" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("grid_spacing" + language_string))
+            )
         elif json_string == "smallest drill size" or json_string == "最小孔径":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "min_diameter" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("min_diameter" + language_string))
+            )
         elif json_string == "aspect ratio" or json_string == "孔后径比":
             self.bmp.SetBitmap(
-                wx.Bitmap(self.path + "min_thick_diameter" + language_string)
+                wx.Bitmap(self.GetImagePath("min_thick_diameter" + language_string))
             )
         elif json_string == "smallest slot width" or json_string == "最小槽宽":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "min_slot" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("min_slot" + language_string))
+            )
         elif json_string == "largest drill size" or json_string == "最大孔径":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "max_diameter" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("max_diameter" + language_string))
+            )
         elif json_string == "largest slot width" or json_string == "最大槽宽":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "max_slot" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("max_slot" + language_string))
+            )
         elif json_string == "largest slot length" or json_string == "最大槽长":
             self.bmp.SetBitmap(
-                wx.Bitmap(self.path + "max_slot_length" + language_string)
+                wx.Bitmap(self.GetImagePath("max_slot_length" + language_string))
             )
         elif json_string == "slot aspect ratio" or json_string == "槽长宽比":
             self.bmp.SetBitmap(
-                wx.Bitmap(self.path + "slot_length_width" + language_string)
+                wx.Bitmap(self.GetImagePath("slot_length_width" + language_string))
             )
         elif json_string == "largest blind/buried via" or json_string == "最大盲埋孔":
             self.bmp.SetBitmap(
-                wx.Bitmap(self.path + "max_diameter_blind_buried" + language_string)
+                wx.Bitmap(
+                    self.GetImagePath("max_diameter_blind_buried" + language_string)
+                )
             )
         elif (
             json_string == "via annular ring"
@@ -323,7 +347,9 @@ class ChildFrame(wx.Frame):
             or json_string == "via孔环"
             or json_string == "pth孔环"
         ):
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "via_ring" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("via_ring" + language_string))
+            )
         elif (
             json_string == "pth-to-trace (outer)"
             or json_string == "pth-to-trace (inner)"
@@ -335,44 +361,64 @@ class ChildFrame(wx.Frame):
             or json_string == "过孔到内层"
         ):
             self.bmp.SetBitmap(
-                wx.Bitmap(self.path + "line2pth_outer" + language_string)
+                wx.Bitmap(self.GetImagePath("line2pth_outer" + language_string))
             )
         elif json_string == "npth-to-copper" or json_string == "npth铜":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "npth2copper" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("npth2copper" + language_string))
+            )
         elif json_string == "smd-to-board edge" or json_string == "smd到板边":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "smd2edge" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("smd2edge" + language_string))
+            )
         elif json_string == "copper-to-board edge" or json_string == "铜到板边":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "copper2edge" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("copper2edge" + language_string))
+            )
         elif json_string == "square/rectangular drills" or json_string == "正长方形孔":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "hole_spuared" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("hole_spuared" + language_string))
+            )
         elif json_string == "castellated holes" or json_string == "半孔":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "hole_half" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("hole_half" + language_string))
+            )
         elif json_string == "via-in-pad" or json_string == "盘中孔":
             self.bmp.SetBitmap(
-                wx.Bitmap(self.path + "resin_hole_plugging" + language_string)
+                wx.Bitmap(self.GetImagePath("resin_hole_plugging" + language_string))
             )
         elif json_string == "pth on smd pad" or json_string == "插件孔上焊盘":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "pth_insmd" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("pth_insmd" + language_string))
+            )
         elif json_string.lower() == "via on smd pad".lower() or json_string == "过孔上焊盘":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "via_insmd" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("via_insmd" + language_string))
+            )
         elif json_string == "npth on smd pad" or json_string == "npth孔上焊盘":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "npth_insmd" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("npth_insmd" + language_string))
+            )
         elif json_string == "missing smask opening" or json_string == "阻焊少开窗":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "soldmask_lack" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("soldmask_lack" + language_string))
+            )
         elif json_string == "same net via spacing" or json_string == "通网络过孔":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "via_same net" + language_string))
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("via_same net" + language_string))
+            )
         elif json_string == "different net via spacing" or json_string == "不同网络过孔":
             self.bmp.SetBitmap(
-                wx.Bitmap(self.path + "via_difference_net" + language_string)
+                wx.Bitmap(self.GetImagePath("via_difference_net" + language_string))
             )
         elif json_string == "different net pth spacing" or json_string == "不同网络插件孔":
             self.bmp.SetBitmap(
-                wx.Bitmap(self.path + "pth_difference_net" + language_string)
+                wx.Bitmap(self.GetImagePath("pth_difference_net" + language_string))
             )
         elif json_string == "blind/buried via spacing" or json_string == "盲埋孔距离":
-            self.bmp.SetBitmap(wx.Bitmap(self.path + "blind2blind" + language_string))
-
-        # self.Refresh()
+            self.bmp.SetBitmap(
+                wx.Bitmap(self.GetImagePath("blind2blind" + language_string))
+            )
 
     def dispose_result(self):
         if self.combo_box.GetStringSelection() == "!!":
@@ -782,36 +828,9 @@ class ChildFrame(wx.Frame):
         kicad_layer["Outline"] = self.board.GetLayerName(44)
         kicad_layer["Top Paste"] = self.board.GetLayerName(35)
         kicad_layer["Bot Paste"] = self.board.GetLayerName(34)
-        kicad_layer["Inner2"] = self.board.GetLayerName(1)
-        kicad_layer["Inner3"] = self.board.GetLayerName(2)
-        kicad_layer["Inner4"] = self.board.GetLayerName(3)
-        kicad_layer["Inner5"] = self.board.GetLayerName(4)
-        kicad_layer["Inner6"] = self.board.GetLayerName(5)
-        kicad_layer["Inner7"] = self.board.GetLayerName(6)
-        kicad_layer["Inner8"] = self.board.GetLayerName(7)
-        kicad_layer["Inner9"] = self.board.GetLayerName(8)
-        kicad_layer["Inner10"] = self.board.GetLayerName(9)
-        kicad_layer["Inner11"] = self.board.GetLayerName(10)
-        kicad_layer["Inner12"] = self.board.GetLayerName(11)
-        kicad_layer["Inner13"] = self.board.GetLayerName(12)
-        kicad_layer["Inner14"] = self.board.GetLayerName(13)
-        kicad_layer["Inner15"] = self.board.GetLayerName(14)
-        kicad_layer["Inner16"] = self.board.GetLayerName(15)
-        kicad_layer["Inner17"] = self.board.GetLayerName(16)
-        kicad_layer["Inner18"] = self.board.GetLayerName(17)
-        kicad_layer["Inner19"] = self.board.GetLayerName(18)
-        kicad_layer["Inner20"] = self.board.GetLayerName(19)
-        kicad_layer["Inner21"] = self.board.GetLayerName(20)
-        kicad_layer["Inner22"] = self.board.GetLayerName(21)
-        kicad_layer["Inner23"] = self.board.GetLayerName(22)
-        kicad_layer["Inner24"] = self.board.GetLayerName(23)
-        kicad_layer["Inner25"] = self.board.GetLayerName(24)
-        kicad_layer["Inner26"] = self.board.GetLayerName(25)
-        kicad_layer["Inner27"] = self.board.GetLayerName(26)
-        kicad_layer["Inner28"] = self.board.GetLayerName(27)
-        kicad_layer["Inner29"] = self.board.GetLayerName(28)
-        kicad_layer["Inner30"] = self.board.GetLayerName(29)
-        kicad_layer["Inner31"] = self.board.GetLayerName(30)
+        for i in range(2, 32):
+            kicad_layer[f"Inner{i}"] = self.board.GetLayerName(i - 1)
+
         for k, v in enumerate(layer_result):
             layer = v
             if layer in kicad_layer.keys():
@@ -819,3 +838,6 @@ class ChildFrame(wx.Frame):
             layer_result[k] = layer
 
         return layer_result
+
+    def GetImagePath(self, bitmap_path):
+        return GetImagePath(bitmap_path)

@@ -17,6 +17,7 @@ from .create_file import CreateFile
 from .rule_manager import RuleManagerFrame
 from .hole_child_frame import HoleChildFrame
 from .child_frame import ChildFrame
+from .picture import GetImagePath
 
 from pathlib import Path
 
@@ -59,8 +60,7 @@ class DialogADFootprint(wx.Frame):
             title=_("HQ DFM Analysis"),
             style=wx.DEFAULT_FRAME_STYLE | wx.STAY_ON_TOP,
         )
-        current_file = os.path.abspath(os.path.dirname(__file__))
-        filename = current_file + "\\icon.png"
+        filename = GetImagePath("icon.png")
         icon = wx.Icon(filename, wx.BITMAP_TYPE_PNG)
         self.SetIcon(icon)  # 设置窗口图标
         panel = wx.Panel(self)

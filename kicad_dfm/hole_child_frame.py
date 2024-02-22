@@ -1,5 +1,6 @@
 import wx
 import pcbnew
+from .picture import GetImagePath
 
 
 class HoleChildFrame(wx.Frame):
@@ -46,11 +47,6 @@ class HoleChildFrame(wx.Frame):
                     + rule_string3[0]
                 )
 
-        picture_path = image_path.rsplit("\\")
-        path = image_path.replace(
-            picture_path[len(picture_path) - 1],
-            "kicad_dfm\\picture\\hole_density_en.png",
-        )
         super(wx.Frame, self).__init__(
             parent, title="Drill Hole Density", size=(650, 350)
         )
@@ -61,7 +57,9 @@ class HoleChildFrame(wx.Frame):
         )
         show_box.Add(text, 0, wx.Top, 5)
 
-        image = wx.Image(path, wx.BITMAP_TYPE_PNG).Rescale(630, 250)
+        image = wx.Image(
+            GetImagePath("hole_density_en.png"), wx.BITMAP_TYPE_PNG
+        ).Rescale(630, 250)
         bmp = wx.StaticBitmap(panel, -1, image)
         show_box.Add(bmp, 0, wx.ALL, 5)
 
