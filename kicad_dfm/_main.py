@@ -20,20 +20,3 @@ class BaseApp(wx.App, InspectionMixin):
 
     def startup(self):
         DialogADFootprint(None).Show()
-        # windows = wx.GetTopLevelWindows()
-        # pcb_window = [
-        #     w
-        #     for w in windows
-        #     if "pcb editor" in w.GetTitle().lower() or "pcb 编辑器" in w.GetTitle().lower()
-        # ]
-        # # wx.MessageBox(f"pcb_window:{pcb_window}。")
-        # if len(pcb_window) != 1:
-        #     dialog_ad_footprint.DialogADFootprint(None).Show()
-        # else:
-        #     if (
-        #         pcb_window[0].GetTitle().lower() == "pcb editor"
-        #         or pcb_window[0].GetTitle().lower() == "pcb 编辑器"
-        #     ):
-        #         wx.MessageBox("文件为空", "Help", style=wx.ICON_INFORMATION)
-        #     else:
-        #         dialog_ad_footprint.DialogADFootprint(pcb_window[0]).Show()

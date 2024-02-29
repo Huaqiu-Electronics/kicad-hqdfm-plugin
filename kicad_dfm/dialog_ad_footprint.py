@@ -7,6 +7,7 @@ from decimal import Decimal
 import json
 import logging
 import pcbnew
+import tempfile
 
 from . import config
 
@@ -35,10 +36,9 @@ class DialogADFootprint(wx.Frame):
         )
         self.control = {}
         self.control = config.Language_english
-        # for window in wx.GetTopLevelWindows():
-        #     if window.GetTitle().lower() == "dfm analysis":
-        #         window.Destroy()
-        # wx.MessageBox(f"pcbnew.GetLanguage():{pcbnew.GetLanguage()}")
+        for window in wx.GetTopLevelWindows():
+            if window.GetTitle().lower() == "HQ DFM":
+                window.Destroy()
 
         if pcbnew.GetLanguage() == "简体中文":
             self.control = config.Language_chinese
@@ -64,8 +64,8 @@ class DialogADFootprint(wx.Frame):
             self.board = pcbnew.GetBoard()
         except Exception as e:
             for fp in (
-                "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
-                "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
+                "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
+                "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
             ):
                 if os.path.exists(fp):
                     self.board = pcbnew.LoadBoard(fp)
@@ -230,14 +230,14 @@ class DialogADFootprint(wx.Frame):
         self.surface_finish_area_button = wx.Button(
             button_panel,
             wx.ID_ANY,
-            self.control["check_button"],
+            " ",
             wx.DefaultPosition,
             size=(100, 30),
         )
         self.test_point_count_button = wx.Button(
             button_panel,
             wx.ID_ANY,
-            self.control["check_button"],
+            " ",
             wx.DefaultPosition,
             size=(100, 30),
         )
@@ -342,11 +342,8 @@ class DialogADFootprint(wx.Frame):
         self.Destroy()
 
     def add_temp_json(self):
-        # current_file = os.path.abspath(os.path.dirname(__file__))
         json_name = GetFilePath("temp.json")
-        # json_name = current_file + "\\temp.json"
         temp_filename = GetFilePath("name.json")
-        # current_file + "\\name.json"
         if os.path.exists(temp_filename) and os.path.exists(json_name):
             with open(temp_filename, "r") as f:
                 content = f.read().encode(encoding="utf-8")
@@ -426,233 +423,61 @@ class DialogADFootprint(wx.Frame):
         self.create_child_frame(
             "Signal Integrity", self.analysis_result, self.line_list
         )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Signal Integrity",
-        #     self.analysis_result,
-        #     "Signal Integrity",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        # )
-        # child_frame.Show()
 
     def show_smallest_trace_width_button(self, event):
         self.create_child_frame(
             "Smallest Trace Width", self.kicad_result, self.line_list, True
         )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Smallest Trace Width",
-        #     self.kicad_result,
-        #     "Smallest Trace Width",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        #     True,
-        # )
-        # child_frame.Show()
 
     def show_smallest_trace_spacing_button(self, event):
         self.create_child_frame(
             "Smallest Trace Spacing", self.analysis_result, self.line_list
         )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Smallest Trace Spacing",
-        #     self.analysis_result,
-        #     "Smallest Trace Spacing",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        # )
-        # child_frame.Show()
 
     def show_pad_size_button(self, event):
         self.create_child_frame("Pad size", self.kicad_result, self.line_list, True)
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Pad size",
-        #     self.kicad_result,
-        #     "Pad size",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        #     True,
-        # )
-        # child_frame.Show()
 
     def show_pad_spacing_button(self, event):
         self.create_child_frame("Pad Spacing", self.analysis_result, self.line_list)
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Pad Spacing",
-        #     self.analysis_result,
-        #     "Pad Spacing",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        # )
-        # child_frame.Show()
 
     def show_hatched_copper_pour_button(self, event):
         self.create_child_frame(
             "Hatched Copper Pour", self.kicad_result, self.line_list, True
         )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Hatched Copper Pour",
-        #     self.kicad_result,
-        #     "Hatched Copper Pour",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        #     True,
-        # )
-        # child_frame.Show()
 
     def show_hole_diameter_button(self, event):
         self.create_child_frame("Hole Diameter", self.analysis_result, self.line_list)
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Hole Diameter",
-        #     self.analysis_result,
-        #     "Hole Diameter",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        # )
-        # child_frame.Show()
 
     def show_ringHole_button(self, event):
         self.create_child_frame("RingHole", self.kicad_result, self.line_list, True)
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "RingHole",
-        #     self.kicad_result,
-        #     "RingHole",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        #     True,
-        # )
-        # child_frame.Show()
 
     def show_drill_hole_spacing_button(self, event):
         self.create_child_frame(
             "Drill Hole Spacing", self.analysis_result, self.line_list
         )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Drill Hole Spacing",
-        #     self.analysis_result,
-        #     "Drill Hole Spacing",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        # )
-        # child_frame.Show()
 
     def show_drill_to_copper_button(self, event):
         self.create_child_frame("Drill to Copper", self.analysis_result, self.line_list)
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Drill to Copper",
-        #     self.analysis_result,
-        #     "Drill to Copper",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        # )
-        # child_frame.Show()
 
     def show_board_edge_clearance_button(self, event):
         self.create_child_frame(
             "Board Edge Clearance", self.analysis_result, self.line_list
         )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Board Edge Clearance",
-        #     self.analysis_result,
-        #     "Board Edge Clearance",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        # )
-        # child_frame.Show()
 
     def show_special_drill_holes_button(self, event):
         self.create_child_frame(
             "Special Drill Holes", self.analysis_result, self.line_list
         )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Special Drill Holes",
-        #     self.analysis_result,
-        #     "Special Drill Holes",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        # )
-        # child_frame.Show()
 
     def show_holes_on_smd_pads_button(self, event):
         self.create_child_frame(
             "Holes on SMD Pads", self.analysis_result, self.line_list
         )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Holes on SMD Pads",
-        #     self.analysis_result,
-        #     "Holes on SMD Pads",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        # )
-        # child_frame.Show()
 
     def show_missing_mask_openings_button(self, event):
         self.create_child_frame(
             "Missing SMask Openings", self.analysis_result, self.line_list
         )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Missing SMask Openings",
-        #     self.analysis_result,
-        #     "Missing SMask Openings",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
-        # )
-        # child_frame.Show()
 
     def show_drill_hole_density_button(self, event):
         grid_frame = HoleChildFrame(
@@ -663,37 +488,16 @@ class DialogADFootprint(wx.Frame):
         grid_frame.Show()
 
     def show_surface_finish_area_button(self, event):
-        self.create_child_frame(
-            "Surface Finish Area", self.analysis_result, self.line_list
-        )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Surface Finish Area",
-        #     self.analysis_result,
-        #     "Surface Finish Area",
-        #     self.check,
-        #     self.list,
-        #     self.line_list,
-        #     os.path.abspath(os.path.dirname(__file__)),
+        self.have_same_class_window()
+        # self.create_child_frame(
+        #     "Surface Finish Area", self.analysis_result, self.line_list
         # )
-        # child_frame.Show()
 
     def show_test_point_count_button(self, event):
-        self.create_child_frame(
-            "Test Point Count", self.analysis_result, self.line_list
-        )
-        # self.have_same_class_window()
-        # child_frame = ChildFrame(
-        #     self,
-        #     "Test Point Count",
-        #     self.analysis_result,
-        #     "Test Point Count",
-        #     self.check,
-        #     self.list,
-        #     os.path.abspath(os.path.dirname(__file__)),
+        self.have_same_class_window()
+        # self.create_child_frame(
+        #     "Test Point Count", self.analysis_result, self.line_list
         # )
-        # child_frame.Show()
 
     # 处理 kicad 获取的层尺寸信息
     def get_layer_size(self):
@@ -708,13 +512,17 @@ class DialogADFootprint(wx.Frame):
         return str(round(box_x - width, 2)) + "*" + str(round(box_y - width, 2))
 
     def on_select_export_gerber(self, event):
-        gerber_dir = os.path.join(self.path, "pcb", "gerber")
-        Path(gerber_dir).mkdir(parents=True, exist_ok=True)
+        try:
+            gerber_dir = os.path.join(self.path, "dfm", "gerber")
+            Path(gerber_dir).mkdir(parents=True, exist_ok=True)
+        except PermissionError as e:
+            gerber_dir = os.path.join(tempfile.gettempdir(), "dfm", "gerber")
+            Path(gerber_dir).mkdir(parents=True, exist_ok=True)
+
         creat_file = CreateFile(self.board)
         creat_file.export_gerber(gerber_dir)
         creat_file.export_drl(gerber_dir)
-        current_file = os.path.abspath(os.path.dirname(__file__))
-        filename = current_file + "\\temp.json"
+        filename = GetFilePath("temp.json")
         if os.path.exists(filename):
             os.remove(filename)
         archived = shutil.make_archive(Path(gerber_dir), "zip", Path(gerber_dir))
