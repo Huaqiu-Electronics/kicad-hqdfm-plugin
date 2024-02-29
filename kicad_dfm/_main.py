@@ -5,15 +5,19 @@ from wx.lib.mixins.inspection import InspectionMixin
 from .dialog_ad_footprint import DialogADFootprint
 
 
+def _displayHook(obj):
+    if obj is not None:
+        print(repr(obj))
+
+
 def _main():
     app = BaseApp()
-    app.MainLoop()
 
 
-class BaseApp(wx.App, InspectionMixin):
+class BaseApp(wx.EvtHandler):
     def __init__(self):
         super().__init__()
-        self.Init()
+        sys.displayhook = _displayHook
         self.locale = None
         self.startup()
         return None

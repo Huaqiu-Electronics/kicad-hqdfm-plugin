@@ -7,6 +7,7 @@ import os
 import sys
 import time
 from . import config
+from kicad_dfm import GetFilePath
 
 
 class DfmAnalysis:
@@ -93,9 +94,8 @@ class DfmAnalysis:
         if len(file_path["data"]) == 0:
             return ""
         file_url = file_path["data"]["analyse_url"]
-        current_file = os.path.abspath(os.path.dirname(__file__))
-        filename = current_file + "\\temp.json"
-        temp_filename = current_file + "\\name.json"
+        filename = GetFilePath("temp.json")
+        temp_filename = GetFilePath("name.json")
         urllib.request.urlretrieve(file_url, filename)
 
         data = {"name": title_name}

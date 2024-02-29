@@ -29,6 +29,9 @@ _ = gettext.gettext
 
 class DialogADFootprint(wx.Frame):
     def __init__(self, parent):
+        for window in wx.GetTopLevelWindows():
+            if window.GetTitle().lower() == "hq dfm":
+                window.Destroy()
         super(wx.Frame, self).__init__(
             parent,
             title=_("HQ DFM"),
@@ -36,9 +39,6 @@ class DialogADFootprint(wx.Frame):
         )
         self.control = {}
         self.control = config.Language_english
-        for window in wx.GetTopLevelWindows():
-            if window.GetTitle().lower() == "HQ DFM":
-                window.Destroy()
 
         if pcbnew.GetLanguage() == "简体中文":
             self.control = config.Language_chinese
@@ -59,16 +59,7 @@ class DialogADFootprint(wx.Frame):
         self.line_list = []
         self.have_progress = False
         self.logger = logging.getLogger(__name__)
-        try:
-            pcbnew.GetBoard().GetFileName()
-            self.board = pcbnew.GetBoard()
-        except Exception as e:
-            for fp in (
-                "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
-                "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
-            ):
-                if os.path.exists(fp):
-                    self.board = pcbnew.LoadBoard(fp)
+        self.board = pcbnew.GetBoard()
 
         self.path, self.filename = os.path.split(self.board.GetFileName())
         self.board_name = os.path.split(self.board.GetFileName())[1]
@@ -109,6 +100,12 @@ class DialogADFootprint(wx.Frame):
             size=(100, 30),
         )
         self.grid = wx.grid.Grid(ui_panel, size=(320, 666))
+        self.grid.SetDefaultCellBackgroundColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNHIGHLIGHT)
+        )
+        self.grid.SetDefaultCellTextColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT)
+        )
         self.grid.CreateGrid(19, 2)
         self.grid.HideColLabels()
         self.grid.HideRowLabels()
@@ -336,6 +333,14 @@ class DialogADFootprint(wx.Frame):
         self.Centre(wx.BOTH)
         self.add_temp_json()
 
+    @property
+    def show_or_activate(self):
+        # 检查窗口是否已创建
+        if not self.IsShown():
+            self.Show()
+        else:
+            self.Raise()
+
     def on_close(self, event):
         for line in self.line_list:
             self.board.Delete(line)
@@ -489,15 +494,9 @@ class DialogADFootprint(wx.Frame):
 
     def show_surface_finish_area_button(self, event):
         self.have_same_class_window()
-        # self.create_child_frame(
-        #     "Surface Finish Area", self.analysis_result, self.line_list
-        # )
 
     def show_test_point_count_button(self, event):
         self.have_same_class_window()
-        # self.create_child_frame(
-        #     "Test Point Count", self.analysis_result, self.line_list
-        # )
 
     # 处理 kicad 获取的层尺寸信息
     def get_layer_size(self):
