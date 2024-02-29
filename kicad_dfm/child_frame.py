@@ -22,11 +22,16 @@ class ChildFrame(wx.Frame):
         combo,
         line_list,
         image_path,
+        _board,
         kicad=False,
     ):
         self.temp_layer = {""}
         self.line_list = line_list
-        self.board = pcbnew.GetBoard()
+        # for fp in  'C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb',"C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb":
+        #     if os.path.exists(fp):
+        #         self.board = pcbnew.LoadBoard(fp)
+        #     else:
+        self.board = _board
         self.unit = pcbnew.GetUserUnits()
         self.result_json = result_json
         self.json_string = json_string

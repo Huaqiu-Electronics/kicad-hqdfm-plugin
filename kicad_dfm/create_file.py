@@ -34,8 +34,8 @@ from pcbnew import (
 
 
 class CreateFile:
-    def __init__(self):
-        self.board = pcbnew.GetBoard()
+    def __init__(self, _board):
+        self.board = _board
         self.logger = logging.getLogger(__name__)
 
     def export_gerber(self, gerber_dir, layer_count=None):

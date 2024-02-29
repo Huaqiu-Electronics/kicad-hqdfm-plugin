@@ -3,9 +3,9 @@ import wx
 
 
 class MinimumLineWidth:
-    def __init__(self, control):
+    def __init__(self, control, _board):
         self.language = control
-        self.board = pcbnew.GetBoard()
+        self.board = _board
 
     def get_pad(self, analysis_result):
         pad_result = {}
