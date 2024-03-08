@@ -27,7 +27,7 @@ class RuleManagerView(UiRuleManager):
         self.rule_manager_list.AppendTextColumn(
             _("AnalyseItem"),
             1,
-            width=180,
+            width=170,
             align=wx.ALIGN_CENTER,
             flags=dv.DATAVIEW_COL_RESIZABLE,
         )

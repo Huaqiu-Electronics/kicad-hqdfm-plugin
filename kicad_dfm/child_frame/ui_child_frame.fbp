@@ -49,7 +49,7 @@
       <property name="name">UiChildFrame</property>
       <property name="pos"></property>
       <property name="size">750,600</property>
-      <property name="style">wxDEFAULT_FRAME_STYLE</property>
+      <property name="style">wxDEFAULT_FRAME_STYLE|wxSTAY_ON_TOP</property>
       <property name="subclass">; ; forward_declare</property>
       <property name="title"></property>
       <property name="tooltip"></property>

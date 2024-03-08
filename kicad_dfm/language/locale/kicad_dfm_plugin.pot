@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-03-07 17:31+0800\n"
+"POT-Creation-Date: 2024-03-08 11:26+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,116 +16,243 @@ msgstr ""
 
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:33
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:52
 msgid "Layer"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:40
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:73
 msgid "Keep selected layers"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:43
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:80
 msgid "!!"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:43
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:44
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:80
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:84
 msgid "Show all"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:57
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:110
 msgid "Problem"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:73
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:145
 msgid "Occurrences(Click to view)"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:82
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:168
 msgid "First"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:85
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:176
 msgid "<<"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:88
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:181
 msgid ">>"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:91
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:188
 msgid "Last"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:114
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:217
 msgid "Rule description"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:18
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:19
 msgid "Upload DFM analysis file"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:19
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:20
 msgid "Please wait"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:37
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:72
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:39
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:76
 msgid "Network connection error"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:37
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:72
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:50
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:166
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:328
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:39
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:76
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:47
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:174
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:338
 msgid "Help"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:42
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:45
 msgid "Analysis file"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:66
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:69
 msgid "Analytical phase"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:37
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:14
+msgid "Layer Count"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:15
+msgid "Dimensions"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:16
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:191
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:232
+msgid "Signal Integrity"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:17
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:192
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:237
+msgid "Smallest Trace Width"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:18
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:193
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:242
+msgid "Smallest Trace Spacing"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:19
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:194
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:246
+msgid "Pad size"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:20
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:195
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:249
+msgid "Pad Spacing"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:21
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:196
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:253
+msgid "Hatched Copper Pour"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:22
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:197
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:258
+msgid "Hole Diameter"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:23
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:198
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:262
+msgid "RingHole"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:24
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:199
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:266
+msgid "Drill Hole Spacing"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:25
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:200
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:271
+msgid "Drill to Copper"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:26
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:201
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:276
+msgid "Board Edge Clearance"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:27
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:202
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:281
+msgid "Special Drill Holes"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:28
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:203
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:286
+msgid "Holes on SMD Pads"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:29
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:204
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:291
+msgid "Missing SMask Openings"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:30
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:205
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\ui_hole_childframe.py:25
+msgid "Drill Hole Density"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:31
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:206
+msgid "Surface Finish Area"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:32
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:207
+msgid "Test Point Count"
+msgstr ""
+
+#:
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:57
 msgid "DFM Analysis"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:40
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:67
 msgid "Rule Manager"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:108
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:111
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:114
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:117
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:120
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:123
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:126
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:129
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:132
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:135
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:138
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:141
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:144
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:147
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:150
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:194
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:204
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:214
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:224
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:234
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:244
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:254
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:264
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:274
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:284
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:294
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:304
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:314
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:324
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:334
 msgid "Check"
 msgstr ""
 
@@ -133,137 +260,54 @@ msgstr ""
 msgid "HQ DFM"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:49
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:46
 msgid "The language you selected is currently not supported"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:88
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:84
 msgid "no errors detected"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:166
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:173
 msgid "File parsing failed. Please click dfm analysis"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:182
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:228
-msgid "Signal Integrity"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:183
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:233
-msgid "Smallest Trace Width"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:184
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:238
-msgid "Smallest Trace Spacing"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:185
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:242
-msgid "Pad size"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:186
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:245
-msgid "Pad Spacing"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:187
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:249
-msgid "Hatched Copper Pour"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:188
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:253
-msgid "Hole Diameter"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:189
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:256
-msgid "RingHole"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:190
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:260
-msgid "Drill Hole Spacing"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:191
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:264
-msgid "Drill to Copper"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:192
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:268
-msgid "Board Edge Clearance"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:193
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:273
-msgid "Special Drill Holes"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:194
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:278
-msgid "Holes on SMD Pads"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:195
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:283
-msgid "Missing SMask Openings"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:196
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\ui_hole_childframe.py:21
-msgid "Drill Hole Density"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:197
-msgid "Surface Finish Area"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:198
-msgid "Test Point Count"
-msgstr ""
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:328
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:338
 msgid "File analysis failure"
 msgstr ""
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:364
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:379
 msgid "Error(s) detected"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:38
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:39
 msgid "Laser hole number 0; "
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:39
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:40
 msgid "\"Pcs / SET\"The number of holes is : "
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:41
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:50
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:42
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:51
 msgid "; \"Hole density\" is : "
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:46
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:47
 msgid "Laser hole number "
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:48
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:49
 msgid "; \"Pcs / SET\"The number of holes is : "
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\ui_hole_childframe.py:37
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\ui_hole_childframe.py:68
 msgid " Rule description"
 msgstr ""
 
@@ -280,31 +324,31 @@ msgid "Japanese"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:22
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:21
 msgid "ID"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:29
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:28
 msgid "AnalyseItem"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:36
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:35
 msgid "AnalyseSubItem"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:43
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:42
 msgid "ReportSet"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:50
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:49
 msgid "Unit"
 msgstr ""
 
 #:
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\ui_rule_manager.py:24
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\ui_rule_manager.py:29
 msgid "Rule View"
 msgstr ""

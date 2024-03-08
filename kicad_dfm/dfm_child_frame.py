@@ -17,7 +17,6 @@ class DfmChildFrame(UiChildFrame):
         title,
         result_json,
         json_string,
-        check,
         line_list,
         _board,
         kicad=False,
@@ -330,8 +329,6 @@ class DfmChildFrame(UiChildFrame):
     def set_result(self, event):
         self.set_layer()
         self.set_color_rule()
-        self.lst.Refresh()
-        self.lst.Update()
 
     def set_layer(self):
         if len(self.languages) == 0:
@@ -374,10 +371,8 @@ class DfmChildFrame(UiChildFrame):
         for data in list_data:
             list_string.append(self.lst_analysis_type.GetString(data))
         if len(list_string) == 0 and len(self.languages) != 0:
-            if self.lst_analysis_type.GetCount() > 0:
-                list_string.append(self.lst_analysis_type.GetString(0))
-            else:
-                return
+            tpye = self.lst_analysis_type.GetString(0)
+            list_string.append(self.lst_analysis_type.GetString(0))
             self.lst_analysis_type.SetSelection(0)
             self.picture_path(list_string[0], self.message_type["picture_path"])
 
@@ -429,7 +424,7 @@ class DfmChildFrame(UiChildFrame):
                         + "inch"
                         + ","
                         + str(len(self.result[result]))
-                        + _("pcs")
+                        + self.message_type["pcs"]
                     )
                 elif self.unit == 5:
                     string = (
@@ -439,7 +434,7 @@ class DfmChildFrame(UiChildFrame):
                         + "mils"
                         + ","
                         + str(len(self.result[result]))
-                        + _("pcs")
+                        + self.message_type["pcs"]
                     )
                 # elif self.unit == 1:
                 else:
@@ -450,7 +445,7 @@ class DfmChildFrame(UiChildFrame):
                         + "mm"
                         + ","
                         + str(len(self.result[result]))
-                        + _("pcs")
+                        + self.message_type["pcs"]
                     )
                 self.analysis_result_data.append(string)
             temp_num = 0
@@ -502,7 +497,8 @@ class DfmChildFrame(UiChildFrame):
                                 result_flag_list[str(num)] = str(iu_value) + "inch"
                             elif self.unit == 5:
                                 result_flag_list[str(num)] = str(mils_value) + "mil"
-                            elif self.unit == 1:
+                            # elif self.unit == 1:
+                            else:
                                 result_flag_list[str(num)] = result["value"] + "mm"
                         self.result[str(num)] = result_list
                         break
@@ -517,7 +513,7 @@ class DfmChildFrame(UiChildFrame):
     def Millimeter2mils(self, millimeter_value):
         return round((millimeter_value * 39.37), 3)
 
-    def analysis_result(self):
+    def analysis_result(self, event):
         if self.lst_analysis_result.GetSelection() != wx.NOT_FOUND:
             string_data = self.lst_analysis_result.GetString(
                 self.lst_analysis_result.GetSelection()
@@ -592,7 +588,6 @@ class DfmChildFrame(UiChildFrame):
                             line.SetWidth(250000)
                             if result["type"] == 0:
                                 if result["et"] == 0:
-                                    # GRAPHICS_SETTING
                                     line = self.set_segment(line, result, x, y)
                                 elif result["et"] == 1:
                                     line = self.set_arc(line, result, x, y)
@@ -616,11 +611,7 @@ class DfmChildFrame(UiChildFrame):
                             line.SetBrightened()
                             if count == len(self.line_list):
                                 pcbnew.FocusOnItem(line, pcbnew.Dwgs_User)
-        self.close_unshow_layer(layer_num)
-
         # 关闭不需要显示的层
-
-    def close_unshow_layer(self, layer_num):
         if self.check_box.GetValue() is False:
             gal_set = self.board.GetVisibleLayers()
             for num in [x for x in gal_set.Seq()]:
@@ -630,6 +621,42 @@ class DfmChildFrame(UiChildFrame):
             self.board.SetVisibleLayers(gal_set)
             pcbnew.UpdateUserInterface()
         pcbnew.Refresh()
+
+    def set_segment(self, line, result, x, y):
+        line.SetShape(pcbnew.S_SEGMENT)
+        line.SetEndX(int(Decimal(result["ex"]) * 1000000) + x)
+        line.SetEndY(y - int(Decimal(result["ey"]) * 1000000))
+        line.SetStartX(int(Decimal(result["sx"]) * 1000000) + x)
+        line.SetStartY(y - int(Decimal(result["sy"]) * 1000000))
+        return line
+
+    def set_arc(self, line, result, x, y):
+        line.SetShape(pcbnew.S_ARC)
+        line.SetEndX(int(Decimal(result["ex"]) * 1000000) + x)
+        line.SetEndY(y - int(Decimal(result["ey"]) * 1000000))
+        line.SetStartX(int(Decimal(result["sx"]) * 1000000) + x)
+        line.SetStartY(y - int(Decimal(result["sy"]) * 1000000))
+        line.SetCenter(
+            int(Decimal(result["cx"]) * 1000000) + x,
+            y - int(Decimal(result["cy"]) * 1000000),
+        )
+        return line
+
+    def set_rect(self, line, result, x, y):
+        line.SetShape(pcbnew.S_RECT)
+        line.SetStartX(int(Decimal(result["cx"]) * 1000000) - 250000 + x)
+        line.SetStartY(y - int(Decimal(result["cy"]) * 1000000) - 250000)
+        line.SetEndX(int(Decimal(result["cx"]) * 1000000) + 250000 + x)
+        line.SetEndY(y - int(Decimal(result["cy"]) * 1000000) + 250000)
+        return line
+
+    def set_rect_list(self, line, result, x, y):
+        line.SetShape(pcbnew.S_RECT)
+        line.SetStartX(int(Decimal(result["result"][0]) * 1000000) + x)
+        line.SetStartY(y - int(Decimal(result["result"][3]) * 1000000))
+        line.SetEndX(int(Decimal(result["result"][1]) * 1000000) + x)
+        line.SetEndY(y - int(Decimal(result["result"][2]) * 1000000))
+        return line
 
     def get_layer(self):
         layer = []
@@ -694,39 +721,3 @@ class DfmChildFrame(UiChildFrame):
 
     def GetImagePath(self, bitmap_path):
         return GetImagePath(bitmap_path)
-
-    def set_segment(self, line, result, x, y):
-        line.SetShape(pcbnew.S_SEGMENT)
-        line.SetEndX(int(Decimal(result["ex"]) * 1000000) + x)
-        line.SetEndY(y - int(Decimal(result["ey"]) * 1000000))
-        line.SetStartX(int(Decimal(result["sx"]) * 1000000) + x)
-        line.SetStartY(y - int(Decimal(result["sy"]) * 1000000))
-        return line
-
-    def set_arc(self, line, result, x, y):
-        line.SetShape(pcbnew.S_ARC)
-        line.SetEndX(int(Decimal(result["ex"]) * 1000000) + x)
-        line.SetEndY(y - int(Decimal(result["ey"]) * 1000000))
-        line.SetStartX(int(Decimal(result["sx"]) * 1000000) + x)
-        line.SetStartY(y - int(Decimal(result["sy"]) * 1000000))
-        line.SetCenter(
-            int(Decimal(result["cx"]) * 1000000) + x,
-            y - int(Decimal(result["cy"]) * 1000000),
-        )
-        return line
-
-    def set_rect(self, line, result, x, y):
-        line.SetShape(pcbnew.S_RECT)
-        line.SetStartX(int(Decimal(result["cx"]) * 1000000) - 250000 + x)
-        line.SetStartY(y - int(Decimal(result["cy"]) * 1000000) - 250000)
-        line.SetEndX(int(Decimal(result["cx"]) * 1000000) + 250000 + x)
-        line.SetEndY(y - int(Decimal(result["cy"]) * 1000000) + 250000)
-        return line
-
-    def set_rect_list(self, line, result, x, y):
-        line.SetShape(pcbnew.S_RECT)
-        line.SetStartX(int(Decimal(result["result"][0]) * 1000000) + x)
-        line.SetStartY(y - int(Decimal(result["result"][3]) * 1000000))
-        line.SetEndX(int(Decimal(result["result"][1]) * 1000000) + x)
-        line.SetEndY(y - int(Decimal(result["result"][2]) * 1000000))
-        return line

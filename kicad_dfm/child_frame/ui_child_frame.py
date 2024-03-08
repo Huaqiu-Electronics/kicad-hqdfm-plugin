@@ -10,7 +10,6 @@
 import wx
 import wx.xrc
 
-
 ###########################################################################
 ## Class UiChildFrame
 ###########################################################################
@@ -25,7 +24,7 @@ class UiChildFrame(wx.Frame):
             title=wx.EmptyString,
             pos=wx.DefaultPosition,
             size=wx.Size(750, 600),
-            style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
+            style=wx.DEFAULT_FRAME_STYLE | wx.STAY_ON_TOP | wx.TAB_TRAVERSAL,
         )
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)

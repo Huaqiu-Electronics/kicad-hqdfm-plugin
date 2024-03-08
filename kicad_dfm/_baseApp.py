@@ -8,6 +8,7 @@ import builtins
 from kicad_dfm import PLUGIN_ROOT
 from kicad_dfm.language.lang_const import LANG_DOMAIN
 
+
 # add translation macro to builtin similar to what gettext does
 builtins.__dict__["_"] = wx.GetTranslation
 

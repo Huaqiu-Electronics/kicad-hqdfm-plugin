@@ -11,40 +11,26 @@ import wx
 import wx.xrc
 import wx.dataview
 
-import gettext
-
-_ = gettext.gettext
-
 ###########################################################################
 ## Class UiRuleManager
 ###########################################################################
 
 
-class UiRuleManager(wx.Frame):
+class UiRuleManager(wx.Dialog):
     def __init__(self, parent):
-        wx.Frame.__init__(
+        wx.Dialog.__init__(
             self,
             parent,
             id=wx.ID_ANY,
             title=_("Rule View"),
             pos=wx.DefaultPosition,
-            size=wx.Size(680, 500),
-            style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL,
+            size=wx.Size(700, 500),
+            style=wx.DEFAULT_DIALOG_STYLE | wx.MAXIMIZE_BOX | wx.RESIZE_BORDER,
         )
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
-        self.SetFont(
-            wx.Font(
-                9,
-                wx.FONTFAMILY_DEFAULT,
-                wx.FONTSTYLE_NORMAL,
-                wx.FONTWEIGHT_NORMAL,
-                False,
-                "宋体",
-            )
-        )
 
-        bSizer1 = wx.BoxSizer(wx.VERTICAL)
+        bSizer3 = wx.BoxSizer(wx.VERTICAL)
 
         self.m_panel1 = wx.Panel(
             self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL
@@ -80,9 +66,9 @@ class UiRuleManager(wx.Frame):
         self.m_panel1.SetSizer(bSizer2)
         self.m_panel1.Layout()
         bSizer2.Fit(self.m_panel1)
-        bSizer1.Add(self.m_panel1, 1, wx.ALL | wx.EXPAND, 0)
+        bSizer3.Add(self.m_panel1, 1, wx.EXPAND | wx.ALL, 0)
 
-        self.SetSizer(bSizer1)
+        self.SetSizer(bSizer3)
         self.Layout()
 
         self.Centre(wx.BOTH)

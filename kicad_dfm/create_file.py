@@ -1,8 +1,6 @@
 import os
 from pathlib import Path
 import logging
-import pcbnew
-from .helpers import is_nightly
 import wx
 from pcbnew import (
     EXCELLON_WRITER,
@@ -27,9 +25,8 @@ from pcbnew import (
     F_Paste,
     F_SilkS,
     GetBoard,
-    GetBuildVersion,
-    Refresh,
     ToMM,
+    DRILL_MARKS_NO_DRILL_SHAPE,
 )
 
 
@@ -70,12 +67,7 @@ class CreateFile:
 
         popt.SetDisableGerberMacros(False)
 
-        if is_nightly(GetBuildVersion()):
-            from pcbnew import DRILL_MARKS_NO_DRILL_SHAPE
-
-            popt.SetDrillMarksType(DRILL_MARKS_NO_DRILL_SHAPE)
-        else:
-            popt.SetDrillMarksType(PCB_PLOT_PARAMS.NO_DRILL_SHAPE)
+        popt.SetDrillMarksType(DRILL_MARKS_NO_DRILL_SHAPE)
 
         popt.SetPlotFrameRef(False)
 

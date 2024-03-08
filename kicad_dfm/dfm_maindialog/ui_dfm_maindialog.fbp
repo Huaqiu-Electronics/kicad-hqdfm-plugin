@@ -481,7 +481,7 @@
                           <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
                             <property name="flag">wxALL|wxEXPAND</property>
-                            <property name="proportion">2</property>
+                            <property name="proportion">21</property>
                             <object class="wxPanel" expanded="true">
                               <property name="BottomDockable">1</property>
                               <property name="LeftDockable">1</property>
@@ -634,7 +634,7 @@
                           <object class="sizeritem" expanded="true">
                             <property name="border">5</property>
                             <property name="flag">wxEXPAND</property>
-                            <property name="proportion">1</property>
+                            <property name="proportion">10</property>
                             <object class="wxBoxSizer" expanded="true">
                               <property name="minimum_size"></property>
                               <property name="name">bSizer7</property>

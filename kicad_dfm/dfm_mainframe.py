@@ -1,17 +1,14 @@
 import os
 import wx
-import wx.grid as gridlib
 import re
 import shutil
 from decimal import Decimal
 import json
-import logging
 import pcbnew
 import tempfile
 from pathlib import Path
 from . import config
 
-from .helpers import is_nightly
 from .create_file import CreateFile
 from .dfm_child_frame import DfmChildFrame
 from .picture import GetImagePath
@@ -21,8 +18,9 @@ from kicad_dfm import GetFilePath
 from kicad_dfm.dfm_maindialog.dfm_maindialog_view import DfmMaindailogView
 from kicad_dfm.settings.pcb_setting import PcbSetting
 from kicad_dfm.manager.rule_manager_view import RuleManagerView
-
 from kicad_dfm.settings.frame_setting import FRAME_SETTING
+from kicad_dfm.settings.single_plugin import SINGLE_PLUGIN
+from kicad_dfm.hole_childframe.hole_childframe_view import HoleChildFrameView
 
 
 class DfmMainframe(wx.Frame):
@@ -32,6 +30,7 @@ class DfmMainframe(wx.Frame):
             title=_("HQ DFM"),
             style=wx.DEFAULT_FRAME_STYLE & ~(wx.MAXIMIZE_BOX) | wx.TAB_TRAVERSAL,
         )
+        SINGLE_PLUGIN.register_main_wind(self)
         self.control = {}
         if pcbnew.GetLanguage() == "简体中文":
             self.control = config.Language_chinese
@@ -48,15 +47,9 @@ class DfmMainframe(wx.Frame):
                 style=wx.ICON_INFORMATION,
             )
             return
-        # 将 DfmMaindailogView 对象添加到 BoxSizer 中
-        self.dfm_maindialog = DfmMaindailogView(self, self.control)
-        self.sizer = wx.BoxSizer(wx.VERTICAL)
-        self.sizer.Add(self.dfm_maindialog, 1, wx.EXPAND)
-        self.SetSizer(self.sizer)
 
         self.line_list = []
         self.have_progress = False
-        self.logger = logging.getLogger(__name__)
         try:
             pcbnew.GetBoard().GetFileName()
             self.board = pcbnew.GetBoard()
@@ -74,14 +67,23 @@ class DfmMainframe(wx.Frame):
         self.analysis_result = {}
         self.unit = pcbnew.GetUserUnits()
         self.kicad_result = {}
-        self.check = False
         self.rule_message_list = []
         self.dfm_analysis = DfmAnalysis()
         self.hole_childframe = None
         self.pcb_setting = PcbSetting(self.board)
 
-        self.SetIcon(wx.Icon(GetImagePath("icon.png"), wx.BITMAP_TYPE_PNG))  # 设置窗口图标
         self.item_result = _("no errors detected")
+        self.SetIcon(wx.Icon(GetImagePath("icon.png"), wx.BITMAP_TYPE_PNG))  # 设置窗口图标
+        # 将 DfmMaindailogView 对象添加到 BoxSizer 中
+        self.dfm_maindialog = DfmMaindailogView(self, self.control)
+        self.sizer = wx.BoxSizer(wx.VERTICAL)
+        self.sizer.Add(self.dfm_maindialog, 1, wx.EXPAND)
+        self.SetSizer(self.sizer)
+
+        self.SetSize(wx.Size(480, 830))
+        self.Layout()
+        self.Centre(wx.BOTH)
+        self.add_temp_json()
 
         self.dfm_maindialog.dfm_run_button.Bind(
             wx.EVT_BUTTON, self.on_select_export_gerber
@@ -142,14 +144,10 @@ class DfmMainframe(wx.Frame):
         )
         self.Bind(wx.EVT_CLOSE, self.on_close)
 
-        self.SetSize(wx.Size(500, 830))
-        self.Layout()
-        self.Centre(wx.BOTH)
-        self.add_temp_json()
-
     def on_close(self, event):
         for line in self.line_list:
             self.board.Delete(line)
+        SINGLE_PLUGIN.register_main_wind(None)
         self.Destroy()
 
     def add_temp_json(self):
@@ -202,9 +200,9 @@ class DfmMainframe(wx.Frame):
             _("Special Drill Holes"),
             _("Holes on SMD Pads"),
             _("Missing SMask Openings"),
-            _("Drill Hole Density"),
             _("Surface Finish Area"),
             _("Test Point Count"),
+            _("Drill Hole Density"),
         ]
         for window in wx.GetTopLevelWindows():
             if window.GetTitle() in title_name:
@@ -219,7 +217,6 @@ class DfmMainframe(wx.Frame):
             title,
             analysis_result,
             jsonfile_string,
-            self.check,
             self.line_list,
             self.board,
             is_kicad_result,
@@ -292,22 +289,17 @@ class DfmMainframe(wx.Frame):
         )
 
     def show_drill_hole_density_button(self, event):
-        for window in wx.GetTopLevelWindows():
-            if window.GetTitle() == "Drill Hole Density":
-                window.Destroy()
-        from kicad_dfm.hole_childframe.hole_childframe_view import HoleChildFrameView
-
-        grid_frame = HoleChildFrameView(
+        self.have_same_class_window()
+        HoleChildFrameView(
             self,
             self.analysis_result["Drill Hole Density"]["display"],
-        )
-        grid_frame.Show()
+        ).Show()
 
     def show_surface_finish_area_button(self, event):
-        self.have_same_class_window()
+        pass
 
     def show_test_point_count_button(self, event):
-        self.have_same_class_window()
+        pass
 
     def on_select_export_gerber(self, event):
         try:
@@ -615,4 +607,7 @@ class DfmMainframe(wx.Frame):
                         if rule_result not in rule_item[item]:
                             rule_item[item].append(rule_result)
                             item_size += 1
+        for window in wx.GetTopLevelWindows():
+            if window.GetTitle() in _("Rule View"):
+                window.Destroy()
         RuleManagerView(self, rule_item, item_size, self.unit).Show()

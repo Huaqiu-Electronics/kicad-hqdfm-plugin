@@ -10,22 +10,21 @@
 import wx
 import wx.xrc
 
-
 ###########################################################################
 ## Class UiHoleChildframe
 ###########################################################################
 
 
-class UiHoleChildframe(wx.Frame):
+class UiHoleChildframe(wx.Dialog):
     def __init__(self, parent):
-        wx.Frame.__init__(
+        wx.Dialog.__init__(
             self,
             parent,
             id=wx.ID_ANY,
             title=_("Drill Hole Density"),
             pos=wx.DefaultPosition,
             size=wx.Size(650, 350),
-            style=wx.DEFAULT_FRAME_STYLE | wx.MAXIMIZE_BOX | wx.TAB_TRAVERSAL,
+            style=wx.DEFAULT_DIALOG_STYLE | wx.MAXIMIZE_BOX | wx.RESIZE_BORDER,
         )
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)

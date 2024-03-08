@@ -11,7 +11,6 @@ import wx
 import wx.xrc
 import wx.grid
 
-
 ###########################################################################
 ## Class UiDfmMaindialog
 ###########################################################################
@@ -162,7 +161,7 @@ class UiDfmMaindialog(wx.Panel):
         self.grid_panel.SetSizer(bSizer10)
         self.grid_panel.Layout()
         bSizer10.Fit(self.grid_panel)
-        bSizer6.Add(self.grid_panel, 2, wx.ALL | wx.EXPAND, 5)
+        bSizer6.Add(self.grid_panel, 21, wx.ALL | wx.EXPAND, 5)
 
         bSizer7 = wx.BoxSizer(wx.VERTICAL)
 
@@ -358,7 +357,7 @@ class UiDfmMaindialog(wx.Panel):
         )
         bSizer7.Add(self.test_point_count_button, 0, wx.ALIGN_CENTER | wx.ALL, 3)
 
-        bSizer6.Add(bSizer7, 1, wx.EXPAND, 5)
+        bSizer6.Add(bSizer7, 10, wx.EXPAND, 5)
 
         self.m_panel3.SetSizer(bSizer6)
         self.m_panel3.Layout()
