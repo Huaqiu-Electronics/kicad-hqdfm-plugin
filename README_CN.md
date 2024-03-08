@@ -1,5 +1,7 @@
 # HQ DFM analysis
 
+### 接口使用说明
+用json文件画好某个层的图形，然后通过图形坐标拿到boarditem，获得item自带的m_uuid,此时获取到pcb板子上图形自带的uuid。然后通过SetBrightened()设置高亮，通过FocusOnItem移动指针。
 
 ### 在 KiCad 中 HQ DFM实现一键分析PCB设计隐患
 

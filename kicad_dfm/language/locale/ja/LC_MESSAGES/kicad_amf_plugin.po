@@ -1,0 +1,1507 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2024-02-23 18:22+0800\n"
+"PO-Revision-Date: 2024-02-23 18:31+0800\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 3.4.2\n"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\app_base.py:39
+msgid "Unsupported layer count!"
+msgstr "ボードレイヤーの数はサポートされていません!"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:107
+msgid " HQ NextPCB "
+msgstr " HQ NextPCB "
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:129
+msgid "Preparing for your order"
+msgstr "ご注文の準備中"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:130
+msgid "The browser will be launched automatically while ready"
+msgstr "準備が整うとブラウザが自動的に起動します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:426
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:456
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:524
+msgid "No available url for querying price in current region"
+msgstr "現在の地域の価格を照会するための使用可能なURLがありません"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:446
+msgid "Incorrect form parameter: "
+msgstr "フォームパラメータが正しくありません: "
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:474
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:491
+msgid "Return false"
+msgstr "偽戻る"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:509
+msgid "No available url for placing order in current region"
+msgstr "現在の地域で注文するための利用可能なURLがありません"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\main_frame.py:527
+msgid "Place perform \"BOM Match\""
+msgstr "場所実行\"Bom Match\""
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\bom_price_model.py:11
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:94
+msgid "BOM"
+msgstr "BOM"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\order_summary_model.py:14
+msgid "days"
+msgstr "日"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\order_summary_model.py:14
+msgid "hours"
+msgstr "時"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:7
+msgid "testfee"
+msgstr "受験料"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:8
+msgid "plate"
+msgstr "撮影料"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:9
+msgid "clc"
+msgstr "ボード料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:10
+msgid "gch"
+msgstr "エンジニアリングコスト"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:11
+msgid "bgafee"
+msgstr "bga料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:12
+msgid "impendancefee"
+msgstr "インピーダンス料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:13
+msgid "pin"
+msgstr "賦課手数料"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:14
+msgid "copperfee"
+msgstr "銅厚料"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:15
+msgid "colorfee"
+msgstr "カラー料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:16
+msgid "sprayfee"
+msgstr "スパッタリング料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:17
+msgid "extraurgentfee"
+msgstr "迅速な料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:18
+msgid "viasfee"
+msgstr "ビア料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:19
+msgid "bankongfee"
+msgstr "半穴料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:20
+msgid "utilizationfee"
+msgstr "利用料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:21
+msgid "discountfee"
+msgstr "優待額"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:22
+msgid "boardfee"
+msgstr "貨物"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:23
+msgid "difficultyfee"
+msgstr "難易度クラフト料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:24
+msgid "coverfee"
+msgstr "はんだマスク適用料"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:25
+msgid "blindfee"
+msgstr "ブラインド埋葬料"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:26
+msgid "pressingfee"
+msgstr "ラミネート料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:27
+msgid "cjfee"
+msgstr "沈没料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:28
+msgid "pthfee"
+msgstr "めっきスルーホール料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:29
+msgid "viainpadfee"
+msgstr "プレート内穴料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:30
+msgid "reportfee"
+msgstr "報告料"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:31
+msgid "populerfee"
+msgstr "人気のないクラフト料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:32
+msgid "paperfee"
+msgstr "論文代"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:33
+msgid "userstampfee"
+msgstr "ゲスト編集料なし"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:34
+msgid "acceptancefee"
+msgstr "受入基準料"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:35
+msgid "crossfee"
+msgstr "フォークボード料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:36
+msgid "invoicefee"
+msgstr "請求手数料"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:37
+msgid "insurancefee"
+msgstr "保険"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:38
+msgid "zkfee"
+msgstr "掘削料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:39
+msgid "cutfee"
+msgstr "カット料金"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:40
+msgid "luocao"
+msgstr "グルーブマークアップ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\pcb_price_model.py:41
+msgid "luocheng"
+msgstr "ロチェンマークアップ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\smt_price_model.py:190
+msgid "total_fee"
+msgstr "総費用です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\smt_price_model.py:191
+msgid "total"
+msgstr "総計です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\smt_price_model.py:192
+msgid "smt_goods_fee_tax"
+msgstr "SMT原価対応税金です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\smt_price_model.py:226
+msgid "SMT"
+msgstr "SMT"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:30
+msgid "Mainland China"
+msgstr "中国本土です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:31
+msgid "Worldwide (English)"
+msgstr "グローバル（英語）"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:32
+msgid "Worldwide (Japanese)"
+msgstr "グローバル（日本語）"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:59
+msgid "Designator"
+msgstr "識別子です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:66
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:38
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:49
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:49
+msgid "Value"
+msgstr "値"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:73
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:45
+msgid "Footprint"
+msgstr "パッケージレイアウトです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:82
+msgid "Build Time"
+msgstr "納期"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:89
+msgid "Qty"
+msgstr "量"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:96
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:117
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:62
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:116
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:62
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\part_list_view.py:54
+msgid "Price"
+msgstr "価格"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:110
+msgid "Item"
+msgstr "アイテム"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\summary_panel.py:299
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:52
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:14
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:14
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\part_list_view.py:24
+msgid "MPN"
+msgstr "MPN"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\ui_summary_panel.py:33
+msgid "Preference"
+msgstr "好み"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\ui_summary_panel.py:35
+msgid "Website"
+msgstr "注文サイト"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\ui_summary_panel.py:66
+msgid "BOM View"
+msgstr "BOM観"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\ui_summary_panel.py:74
+msgid "BOM Match"
+msgstr "BOM試合"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\ui_summary_panel.py:82
+msgid "Cost Detail"
+msgstr "コスト詳細"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\ui_summary_panel.py:99
+msgid "Order Summary"
+msgstr "注文の概要"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\ui_summary_panel.py:113
+msgid "Update Price"
+msgstr "価格を更新する"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\gui\summary\ui_summary_panel.py:116
+msgid "Add to Cart"
+msgstr "カートに追加"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad\fabrication_data_generator_thread.py:31
+msgid "Create fabrication data folder"
+msgstr "製作データフォルダーの作成"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad\fabrication_data_generator_thread.py:34
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:77
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:235
+msgid "Fill zones"
+msgstr "フィルゾーン"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad\fabrication_data_generator_thread.py:35
+msgid "Generate gerber"
+msgstr "ガーバーを生成する"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad\fabrication_data_generator_thread.py:37
+msgid "Generate excellon"
+msgstr "エクセロンの生成"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad\fabrication_data_generator_thread.py:41
+msgid "Zip gerber and excellon file"
+msgstr "ガーバーおよび Excellon ファイルを ZIP 化する"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad\fabrication_data_generator_thread.py:67
+msgid "Sending order request"
+msgstr "注文リクエストの送信"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\board_manager.py:25
+msgid "Choose a kicad pcb file"
+msgstr "kicad pcbファイルを選択します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\import_BOM_view\ui_import_list_panel\ui_import_list_panel.py:31
+msgid "Import"
+msgstr "輸入"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\import_BOM_view\ui_import_list_panel\ui_import_list_panel.py:37
+msgid "Export"
+msgstr "輸出"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\import_BOM_view\ui_import_list_panel\ui_import_list_panel.py:43
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_match_part_panel\ui_match_part_panel.py:27
+msgid " Manual Match "
+msgstr "手動試合"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\import_BOM_view\ui_import_list_panel\ui_import_list_panel.py:49
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_match_part_panel\ui_match_part_panel.py:30
+msgid " Remove Assigned MPN "
+msgstr "割り当てられたMPNを取り除く"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:84
+msgid "NextPCB Tools"
+msgstr "NextPCB Tools"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:156
+msgid " Group by: "
+msgstr "迄に："
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:164
+msgid " No Group "
+msgstr "いません"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:164
+msgid " Value & Footprint "
+msgstr "値&パッケージレイアウトです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:169
+msgid "No Group"
+msgstr "いません"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:184
+msgid "Auto Match "
+msgstr "自動車試合"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:186
+msgid "Auto Match MPN number to parts"
+msgstr "部品にmpn番号を自動一致させます"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:193
+msgid " Generate "
+msgstr "生成します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:199
+msgid "Generate fabrication files to the project folder"
+msgstr "プロジェクトフォルダにファブリケーションファイルを生成します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:203
+msgid "Generate fabrication files"
+msgstr "捏造ファイルを生成する"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:226
+msgid "Settings"
+msgstr "設定"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:269
+msgid "   All   "
+msgstr "すべて"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:285
+msgid "Unmanaged"
+msgstr "未管理です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:394
+msgid ""
+"Auto match finished.Some parts might match failed. You can try it again or "
+"match by manual."
+msgstr ""
+"自動車試合終了する。一部の部品が一致しない可能性があります。あなたはそれを再"
+"試行するか、手動で一致させることができます。"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:395
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:954
+msgid "Info"
+msgstr "ベース情報"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:447
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:155
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\part_selector.py:336
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\part_selector.py:378
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:154
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:123
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:130
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:138
+msgid "Error"
+msgstr "エロー"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:865
+msgid "Copy MPN"
+msgstr "コピーMPN"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:869
+msgid "Paste MPN"
+msgstr "ペーストMPN"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:873
+msgid "Manual Match"
+msgstr "手動試合"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:877
+msgid "Remove Assigned MPN"
+msgstr "割り当てられたMPNを取り除く"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\mainwindow.py:881
+msgid "Show Part Details"
+msgstr "詳細を示す一端"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:24
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\part_list_view.py:21
+msgid "index"
+msgstr "索引です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:31
+msgid "Reference"
+msgstr "プリファレンス設定です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:59
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:15
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:15
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\part_list_view.py:27
+msgid "Manufacturer"
+msgstr "メーカー"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:66
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:17
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:17
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\part_list_view.py:39
+msgid "Category"
+msgstr "カテゴリ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:73
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:21
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:21
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\part_list_view.py:45
+msgid "SKU"
+msgstr "SKU"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:80
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:22
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:22
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\part_list_view.py:48
+msgid "Supplier"
+msgstr "サプライヤー"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:87
+msgid "Quantity"
+msgstr "数です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:101
+msgid "POS"
+msgstr "POS"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:108
+msgid "Rotation"
+msgstr "回転します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\foot_print_list.py:115
+msgid "Side"
+msgstr "めんです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:16
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:16
+msgid "Package / Footprint"
+msgstr "パッケージ/パッケージレイアウト"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:18
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:18
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\ui_part_details_panel.py:29
+msgid "Description"
+msgstr "記述"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:23
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:23
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\part_list_view.py:60
+msgid "Stock"
+msgstr "株式"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:43
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:43
+msgid "Property"
+msgstr "財産"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:63
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:136
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:63
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:134
+msgid "Datasheet"
+msgstr "マニュアルデータです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\assigned_part_view.py:91
+msgid "returned data does not have expected part details"
+msgstr "返されるデータには、期待される部品の詳細が含まれていません"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\ui_assigned_part_panel.py:30
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\ui_part_details_panel.py:23
+msgid "Part Details"
+msgstr "部品の詳細です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_assigned_part_panel\ui_assigned_part_panel.py:46
+msgid "Part Picture"
+msgstr "Part Pictureデバイス画像です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_match_part_panel\match_part_view.py:17
+msgid "Export BOM file to the project folder"
+msgstr "bomファイルをプロジェクトフォルダーにエクスポートします"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_match_part_panel\ui_match_part_panel.py:31
+msgid "Remove Assigned MPN "
+msgstr "割り当てられたMPNを取り除く"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\nextpcb_tools_view\ui_match_part_panel\ui_match_part_panel.py:38
+msgid " Epxort... "
+msgstr "導出します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\part_selector.py:33
+msgid "NextPCB Search Online"
+msgstr "NextPCB Search Online"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\part_selector.py:206
+msgid "No corresponding data was matched"
+msgstr "対応するデータが一致しませんでした"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\part_selector.py:214
+msgid "returned JSON data does not have expected 'part' attribute"
+msgstr "返されるjsonデータには期待される'part'属性がありません"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\part_selector.py:230
+msgid "1000 Results (limited)"
+msgstr "1000匹です(限定)"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\part_selector.py:335
+msgid "Failed to get clicked part from NextPCB"
+msgstr "nextpcbからクリックされた部分を取得できませんでした"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\part_selector.py:361
+msgid "Help"
+msgstr "助け"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\part_selector.py:387
+msgid "Select Part"
+msgstr "選択部"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\part_details_view.py:91
+msgid "returned data does not have expected clicked part"
+msgstr "返されるデータは、クリックされた部分が期待されていません"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_details_panel\ui_part_details_panel.py:37
+msgid "Picture"
+msgstr "画像です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\part_list_view.py:33
+msgid "Package/Footprint"
+msgstr "パッケージ/パッケージレイアウト"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\ui_part_list_panel.py:28
+msgid "0 Results"
+msgstr "0匹です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\ui_part_list_panel.py:49
+msgid "Previous"
+msgstr "前のページです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\ui_part_list_panel.py:54
+msgid "0/100"
+msgstr "0/100"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\ui_part_list_panel.py:64
+msgid "Next"
+msgstr "次ページです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_part_list_panel\ui_part_list_panel.py:70
+msgid "Select part"
+msgstr "選択デバイスです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_search_panel\ui_search_panel.py:37
+msgid "MPN: "
+msgstr "MPN: "
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_search_panel\ui_search_panel.py:45
+msgid "Manufacturer: "
+msgstr "メーカー:"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\part_selector_view\ui_search_panel\ui_search_panel.py:56
+msgid "Search"
+msgstr "検索"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:15
+msgid "NextPCB Tools Settings"
+msgstr "NextPCB Tools Settings"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:46
+msgid "Do not tent vias"
+msgstr "テントでビアしない"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:54
+msgid "Whether vias should be coverd by soldermask or not"
+msgstr "ビアをはんだマスクでカバーするかどうか"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:85
+msgid "Whether zones should be filled on gerber generation"
+msgstr "ゾーンはガーバー世代で満たされるべきかどうか"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:108
+msgid "Plot values"
+msgstr "陰謀値"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:116
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:147
+msgid "Whether value should be plotted on gerber generation"
+msgstr "値がガーバー世代にプロットされるべきかどうか"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:139
+msgid "Plot references"
+msgstr "描画の参照です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:172
+msgid "MPN number priority"
+msgstr "MPN番号優先"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:181
+msgid ""
+"Whether nextPCB number from schematic should overrule those in the database"
+msgstr "回路図のnextpcb番号がデータベースのnextpcb番号を上書きするかどうか"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:220
+msgid "Tented vias"
+msgstr "穴に油を通します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:226
+msgid "Untented vias"
+msgstr "覆っていない穴です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:243
+msgid "Don't fill zones"
+msgstr "非充填領域です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:254
+msgid "Plot values on silkscreen"
+msgstr "値をシルクスクリーンにプロットします"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:262
+msgid "Don't plot values on silkscreen"
+msgstr "シルクスクリーン上に値をプロットしないでください"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:271
+msgid "Plot references on silkscreen"
+msgstr "表紙はシルクスクリーン"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:277
+msgid "Don't plot references on silkscreen"
+msgstr "シルクスクリーンに参照をプロットしないでください"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:287
+msgid "MPN numbers from schematic have priority"
+msgstr "回路図のmpn番号が優先されます"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\kicad_nextpcb_new\settings.py:295
+msgid "MPN numbers from database have priority"
+msgstr "データベースのmpn番号が優先されます"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\language\lang_const.py:47
+msgid "Chinese"
+msgstr "簡体字中国語"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\language\lang_const.py:47
+msgid "English"
+msgstr "英語"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\language\lang_const.py:47
+msgid "Japanese"
+msgstr "日本語"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:38
+msgid "Single Piece"
+msgstr "単品出荷"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:39
+msgid "Panel by Customer"
+msgstr "顧客別パネル"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:40
+msgid "Panel by NextPCB"
+msgstr "連続チップ(NextPCBスペル)"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:51
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\special_process_view.py:14
+msgid "N/A"
+msgstr "N/A"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:52
+msgid "Left & Right"
+msgstr "左と右"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:53
+msgid "Top & Bottom"
+msgstr "トップ＆ボトム"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:54
+msgid "All 4 sides"
+msgstr "全4面"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:122
+msgid "Panel Type X value isn't valid. Please input valid value."
+msgstr "スライスの長さが無効です。有効な整数を入力してください。"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:129
+msgid "Panel Type Y value isn't valid. Please input valid value."
+msgstr "連続幅が無効なため、有効な整数を入力してください。"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:137
+msgid "Break-away Rail value isn't valid. Please input valid value."
+msgstr "プロセスフレームサイズが無効なため、有効な数値を入力してください。"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:331
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:207
+msgid "Size (single)"
+msgstr "サイズ（シングル）"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:332
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:162
+msgid "Qty(single)"
+msgstr "数量(シングル)"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:333
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:191
+msgid "Pcs"
+msgstr "ある"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:335
+msgid "Size (set)"
+msgstr "モノリシック サイズ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:336
+msgid "Qty(Set)"
+msgstr "連続するピースの数"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\base_info_view.py:337
+msgid "Set"
+msgstr "Set"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:38
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:27
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:24
+msgid "Base Info"
+msgstr "ベース情報"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:49
+msgid "Material Type"
+msgstr "素材タイプ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:56
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:70
+msgid "Non-conductive base material"
+msgstr "非導電性基材"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:77
+msgid "Layer Count"
+msgstr "レイヤー数"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:101
+msgid "Board TG"
+msgstr "ボード TG"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:132
+msgid "Board Type"
+msgstr "ボードタイプ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:139
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:154
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:269
+msgid "The finished PCB are by single or by panel"
+msgstr "完成したPCBは単一またはパネルごとです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:219
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:315
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:107
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:213
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:124
+msgid "X:"
+msgstr "X:"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:246
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:287
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:435
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:74
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:120
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:141
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:193
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:137
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:158
+msgid "mm"
+msgstr "mm"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:260
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:356
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:128
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:237
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:145
+msgid "Y:"
+msgstr "Y:"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:303
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:204
+msgid "Panel Type"
+msgstr "パネルの種類"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:342
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:383
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:87
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:229
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:250
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:281
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:104
+msgid "pcs"
+msgstr "pcs"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\base\ui_base_info.py:401
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:178
+msgid "Break-away Rail"
+msgstr "離脱レール"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:13
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:25
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:14
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:24
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:29
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:34
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:39
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:44
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:49
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:54
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:65
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\process_info_view.py:28
+msgid "Need"
+msgstr "必要"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:14
+msgid "Need & Auto Confirm"
+msgstr "&自動確認が必要"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:15
+msgid "Need & Manual Confirm"
+msgstr "&手動確認が必要です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:19
+msgid "Accept"
+msgstr "受け入れる"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:20
+msgid "Reject"
+msgstr "断る"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:26
+msgid "No need"
+msgstr "必須ではありません"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:30
+msgid "Add customer stamp"
+msgstr "顧客番号を追加する"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:31
+msgid "Add it to specified location"
+msgstr "指定した場所にゲスト編集者を追加する"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:32
+msgid "Don't add customer stamp"
+msgstr "ゲスト編集なし"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:36
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\process_info_view.py:16
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\utils\constraint.py:6
+msgid "Yes"
+msgstr "はい"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:37
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:50
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\process_info_view.py:15
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\utils\constraint.py:6
+msgid "No"
+msgstr "いいえ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:42
+msgid "Sample Test Free"
+msgstr "無料サンプルテスト"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:43
+msgid "AOI+Flying Test"
+msgstr "AOI+飛行テスト"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:44
+msgid "AOI+Fixture"
+msgstr "AOI+フィクスチャ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:48
+msgid "Electronic"
+msgstr "電子"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:48
+msgid "Paper"
+msgstr "紙"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:50
+msgid "UL+Week/Year"
+msgstr "UL+週/年"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\personalized_info_view.py:50
+msgid "UL+Year/Week"
+msgstr "UL+年/週"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:35
+msgid "Personalized Service"
+msgstr "パーソナライズされたサービス"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:46
+msgid "Electrical Test"
+msgstr "電気試験"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:70
+msgid "Approve Working Gerber"
+msgstr "作業中のガーバーを承認する"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:94
+msgid "Delivery Report"
+msgstr "送達通知"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:118
+msgid "Microsection Analysis Report"
+msgstr "微細断面分析レポート"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:142
+msgid "Report Format"
+msgstr "レポート形式"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:166
+msgid "UL Mark"
+msgstr "ULマーク"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:190
+msgid "Film"
+msgstr "Film"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:214
+msgid "Cross Board"
+msgstr "フォークプレート"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:238
+msgid "Bulkhead Paper"
+msgstr "バルクヘッド紙"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:262
+msgid "User Stamp Process"
+msgstr "顧客番号処理"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:286
+msgid "HQ Pack"
+msgstr "NextPCB包装"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\personalized\ui_personalized.py:311
+msgid "Special Request"
+msgstr "特別なリクエスト"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:44
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:54
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:83
+msgid "Green"
+msgstr "緑"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:45
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:55
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:84
+msgid "Red"
+msgstr "赤"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:46
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:56
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:85
+msgid "Yellow"
+msgstr "黄"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:47
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:57
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:86
+msgid "Blue"
+msgstr "青"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:48
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:58
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:83
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:84
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:85
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:86
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:87
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:88
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:89
+msgid "White"
+msgstr "白"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:49
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:59
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:88
+msgid "Matte Black"
+msgstr "マットブラック"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:50
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:60
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:87
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:89
+msgid "Black"
+msgstr "黒"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:65
+msgid "Tenting Vias"
+msgstr "テンティングビア"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:66
+msgid "Vias not covered"
+msgstr "ビアはカバーされていません"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:67
+msgid "Solder Mask Plug (IV-B)"
+msgstr "ソルダーマスクプラグ(IV-B)"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:68
+msgid "Non-Conductive Fill"
+msgstr "非導電性充填"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:72
+msgid "HASL"
+msgstr "HASL"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:73
+msgid "Lead free HASL"
+msgstr "鉛フリーHASL"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:74
+msgid "ENIG"
+msgstr "ENIG"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:75
+msgid "OSP"
+msgstr "OSP"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:34
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\ui_process_info.py:23
+msgid "Process info"
+msgstr "プロセス情報"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:45
+msgid "PCB Thickness"
+msgstr "プリント基板の厚さ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:88
+msgid "FInsihed Copper weight"
+msgstr "仕上げられた銅の重量"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:112
+msgid "Inner Copper Weight"
+msgstr "内側の銅の重量"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:136
+msgid "Min Trace/Space Outer"
+msgstr "最小トレース/スペースアウター"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:160
+msgid "Min Drilled Hole"
+msgstr "最小ドリル穴"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:184
+msgid "Solder Mask Color"
+msgstr "はんだマスクの色"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:208
+msgid "Silkscreen"
+msgstr "シルクスクリーン"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:232
+msgid "Via Process"
+msgstr "プロセス経由"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:256
+msgid "Surface Finish"
+msgstr "表面仕上げ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:280
+msgid "Immersion Gold Thickness"
+msgstr "浸漬金の厚さ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\special_process_view.py:14
+msgid "Rank 1"
+msgstr "ランク1"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\special_process_view.py:14
+msgid "Rank 2"
+msgstr "ランク2"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\special_process_view.py:14
+msgid "Rank 3"
+msgstr "ランク3"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\special_process_view.py:16
+msgid "Customer Specified Stack up"
+msgstr "顧客指定のスタックアップ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\special_process_view.py:16
+msgid "No Requirement"
+msgstr "要件なし"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\ui_special_process.py:34
+msgid "Special Process"
+msgstr "特殊加工"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\ui_special_process.py:45
+msgid "Impedance"
+msgstr "インピーダンス"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\ui_special_process.py:69
+msgid "Beveling of G/F"
+msgstr "G/Fの面取り加工"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\ui_special_process.py:93
+msgid "Plated Half Holes"
+msgstr "メッキ半穴"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\ui_special_process.py:117
+msgid "Pad Hole"
+msgstr "パッド穴"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\ui_special_process.py:141
+msgid "HDI(Buried/blind vais)"
+msgstr "HDI(埋没/ブラインドゴーイング)"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\ui_special_process.py:165
+msgid "HDI Structure"
+msgstr "HDIの構造"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\ui_special_process.py:189
+msgid "Stack up"
+msgstr "積み重ねる"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\ui_special_process.py:213
+msgid "Metallized Sides Count"
+msgstr "金属化された側面の数"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:13
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:23
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:28
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:33
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:38
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:43
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:48
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:53
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:58
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:64
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\process_info_view.py:27
+msgid "No Need"
+msgstr "必要はない"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:18
+msgid "General Cleaning"
+msgstr "普通清潔です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:19
+msgid "Precision Cleaning"
+msgstr "精度クリーンです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:59
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:49
+msgid "Single Side"
+msgstr "片面です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:60
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:50
+msgid "Double Side"
+msgstr "両面です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:69
+msgid "Bubble Wrap"
+msgstr "プチプチ包装です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:70
+msgid "Anti-static and Bubble Bag"
+msgstr "静電気防止プラス気泡ポケットです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:71
+msgid "Electrostatic Bag with Knife Card"
+msgstr "静電気バッグにナイフカードです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\personalized_info_view.py:83
+msgid "Lead-free Technology"
+msgstr "鉛フリープロセス"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:25
+msgid "Special Technique"
+msgstr "特別なリクエスト"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:32
+msgid "Process Requirement"
+msgstr "プロセス要件です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:42
+msgid "Erecting Welding"
+msgstr "溶接を組み立てます"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:52
+msgid "X-RAY Boards"
+msgstr "Xレイ単板数です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:60
+msgid "X-RAY Elements"
+msgstr "X−RAYメタ数です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:68
+msgid "Panel Cleaning"
+msgstr "板掃除です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:78
+msgid "Material Baking"
+msgstr "物質ベーキングです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:88
+msgid "Welding or Not"
+msgstr "ワイヤーを溶接しますか"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:98
+msgid "Functional Test"
+msgstr "機能テストです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:108
+msgid "Assembled"
+msgstr "組み立てます"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:118
+msgid "Program Burning"
+msgstr "プログラム焼き付けです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:128
+msgid "Split Shipment"
+msgstr "板をはずして出荷します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:138
+msgid "Line/Pad Tinning"
+msgstr "ワイヤー/ボンディング/スズ付け"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:148
+msgid "Three-proof Paint"
+msgstr "ペンキを塗ります"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:158
+msgid "Sample Drawing Confirm"
+msgstr "サンプル図確認します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:168
+msgid "Packaging Type"
+msgstr "包装タイプです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\personalized\ui_personalized.py:181
+msgid "Postscript"
+msgstr "工程注記です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\process_info_view.py:21
+msgid "Ordinary Steel Mesh"
+msgstr "普通鋼網です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\process_info_view.py:22
+msgid "Stepped Steel Mesh"
+msgstr "階段スチールネット"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\ui_process_info.py:30
+msgid "BOM Material Type"
+msgstr "材料材料BOMの種類です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\ui_process_info.py:38
+msgid "Patch Pad Number"
+msgstr "1枚パッチ点数です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\ui_process_info.py:46
+msgid "Welding Plugin"
+msgstr "溶接プラグイン料"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\ui_process_info.py:56
+msgid "Single Plugin Points"
+msgstr "シングルプラグイン・ポイント"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\ui_process_info.py:64
+msgid "Steel Mesh"
+msgstr "鋼網です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\process\ui_process_info.py:74
+msgid "Steel Follow Delivery"
+msgstr "スチールネットは出荷につきます"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:31
+msgid "Industrial Control Electronics"
+msgstr "制御電子です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:32
+msgid "Automotive Electronics"
+msgstr "カーエレクトロニクス"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:33
+msgid "Medical Electronics"
+msgstr "メディカルエレクトロニクス"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:34
+msgid "New Energy Electronics"
+msgstr "新エネルギー電子です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:35
+msgid "Military Electronics"
+msgstr "軍需電子"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:36
+msgid "Consumer Electronics"
+msgstr "家電製品です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:42
+msgid "Hard Board"
+msgstr "硬い板です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:43
+msgid "Soft Board"
+msgstr "ソフトボードです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:44
+msgid "Combination of Hoft and Hard"
+msgstr "ホフトとハードの組み合わせ"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:54
+msgid "Order Together"
+msgstr "一緒に註文します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:55
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:60
+msgid "Oneself Provide"
+msgstr "自分で提供します"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\base_info_view.py:59
+msgid "Huaqiu Agent Purchasing"
+msgstr "華秋代仕入です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:34
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:31
+msgid "Application Sphere"
+msgstr "応用分野です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:44
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:41
+msgid "PCB Board Type"
+msgstr "PCB基板タイプです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:54
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:51
+msgid "Single/Double Side"
+msgstr "シングル/両面です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:72
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:89
+msgid "Qty(Single)"
+msgstr "シングル枚数です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:75
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:92
+msgid ""
+"The total number of single pieces to be produced, the number of non-"
+"assembled plates"
+msgstr "総生産枚数,非プレハブ枚数です"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:100
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:117
+msgid "Size (Single)"
+msgstr "シングルサイズです"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_base_info.py:266
+msgid "1 SET "
+msgstr "1 SET "
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:61
+msgid "Custom PCB Board"
+msgstr "PCB基板をカスタマイズします"
+
+#: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\smt_pcb_fabrication\smt_base\ui_smt_base_info.py:71
+msgid "BOM Material Purchase"
+msgstr "BOMマテリアルの調達です"
+
+#, fuzzy
+#~| msgid "Price"
+#~ msgid "Price()"
+#~ msgstr "価格"
+
+#~ msgid "HQ NextPCB Active Manufacturing"
+#~ msgstr "HQネクストPCBアクティブ製造"
+
+#~ msgid ""
+#~ "Restart the plugin to apply the new locale ?\n"
+#~ "For full translation(including the options), restarting KiCad is required"
+#~ msgstr ""
+#~ "プラグインを再起動して新しい言語設定を適用しますか?\n"
+#~ "完全な翻訳 (オプションを含む) が必要な場合は、KiCad を再起動してください"
+
+#~ msgid "Tip"
+#~ msgstr "先端"
+
+#~ msgid " is not supported"
+#~ msgstr " がサポートされていない"
+
+#~ msgid "China"
+#~ msgstr "中国"
+
+#~ msgid "Japan"
+#~ msgstr "日本"
+
+#~ msgid "Others"
+#~ msgstr "其它"
+
+#~ msgid "Shipping address"
+#~ msgstr "注文地域"
+
+#~ msgid "Other countries/areas"
+#~ msgstr "その他の国・地域"
+
+#~ msgid "CN"
+#~ msgstr "CN"
+
+#~ msgid "JP"
+#~ msgstr "JP"
+
+#~ msgid "EU/USA"
+#~ msgstr "EU/USA"
+
+#~ msgid "Order Region"
+#~ msgstr "注文地域"
+
+#~ msgid "Restart the plugin to apply the new locale ?"
+#~ msgstr "プラグインを再起動して新しいロケールを適用しますか?"
+
+#~ msgid "en"
+#~ msgstr "英語"
+
+#~ msgid "ja"
+#~ msgstr "日本語"
+
+#~ msgid "zh_CN"
+#~ msgstr "簡体字中国語"
+
+#~ msgid "Time"
+#~ msgstr "時間"
+
+#~ msgid "Cost"
+#~ msgstr "料金"
+
+#~ msgid "$"
+#~ msgstr "$"
+
+#~ msgid "jp"
+#~ msgstr "日本語"

@@ -5,13 +5,12 @@ from decimal import Decimal
 import pcbnew
 from . import config
 from .picture import GetImagePath
+from kicad_dfm.child_frame.ui_child_frame import UiChildFrame
+from kicad_dfm.settings.graphics_setting import GRAPHICS_SETTING
+from kicad_dfm.child_frame.child_frame_model import ChildFrameModel
 
-import gettext
 
-_ = gettext.gettext
-
-
-class ChildFrame(wx.Frame):
+class DfmChildFrame(UiChildFrame):
     def __init__(
         self,
         parent,
@@ -19,18 +18,12 @@ class ChildFrame(wx.Frame):
         result_json,
         json_string,
         check,
-        combo,
         line_list,
-        image_path,
         _board,
         kicad=False,
     ):
         self.temp_layer = {""}
         self.line_list = line_list
-        # for fp in  'C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb',"C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb":
-        #     if os.path.exists(fp):
-        #         self.board = pcbnew.LoadBoard(fp)
-        #     else:
         self.board = _board
         self.unit = pcbnew.GetUserUnits()
         self.result_json = result_json
@@ -41,158 +34,38 @@ class ChildFrame(wx.Frame):
         else:
             self.message_type = config.Language_english
         self.kicad = kicad
-        self.combo = combo
-        super(wx.Frame, self).__init__(parent, title=title, size=(720, 555))
+        self.combo = 1
+        super().__init__(parent)
+        self.SetTitle(title)
         self.result = {}
         self.layer_name = []
         self.item_list = []
         self.delete_value = {}
         self.select_number = -1
 
-        panel = wx.Panel(self)
-        show_box = wx.BoxSizer(wx.VERTICAL)
-        box = wx.BoxSizer(wx.HORIZONTAL)
-        layer_box = wx.BoxSizer(wx.VERTICAL)
-        class_box = wx.BoxSizer(wx.VERTICAL)
-        result_box = wx.BoxSizer(wx.VERTICAL)
-        picture_box = wx.BoxSizer(wx.VERTICAL)
-        button_box = wx.BoxSizer(wx.HORIZONTAL)
-
-        box_panel = wx.Panel(panel)
-        picture_panel = wx.Panel(panel)
-        layer_panel = wx.Panel(box_panel)
-        class_panel = wx.Panel(box_panel)
-        result_panel = wx.Panel(box_panel)
-        button_panel = wx.Panel(result_panel)
-        combos = [self.message_type["show"], "!!"]
-        self.combo_box = wx.ComboBox(layer_panel, size=(180, 40), choices=combos)
-        self.combo_box.SetValue(combos[self.combo])
-        self.dispose_result()
         self.languages = self.get_layer()
         self.analysis_type_data = self.get_type()
         self.analysis_result_data = self.get_result()
-        self.text = wx.TextCtrl(
-            layer_panel,
-            value=self.message_type["layer"],
-            size=(200, 30),
-            style=wx.TE_READONLY | wx.TE_CENTER,
-        )
-        self.lst = wx.ListBox(
-            layer_panel, size=(200, 200), choices=self.languages, style=wx.LB_EXTENDED
-        )
-        self.check_box = wx.CheckBox(
-            layer_panel, label=self.message_type["save_layer"], size=(180, 30)
-        )
-        self.check_box.SetValue(check)
-        self.text_analysis_type = wx.TextCtrl(
-            class_panel,
-            value=self.message_type["type"],
-            size=(300, 30),
-            style=wx.TE_READONLY | wx.TE_CENTER,
-        )
-        self.lst_analysis_type = wx.ListBox(
-            class_panel,
-            size=(300, 270),
-            choices=self.analysis_type_data,
-            style=wx.LB_SINGLE,
-        )
-        self.text_analysis_result = wx.TextCtrl(
-            result_panel,
-            value=self.message_type["result"],
-            size=(200, 30),
-            style=wx.TE_READONLY | wx.TE_CENTER,
-        )
-        self.lst_analysis_result = wx.ListBox(
-            result_panel,
-            size=(200, 250),
-            choices=self.analysis_result_data,
-            style=wx.LB_OWNERDRAW,
-        )
-        first_button = wx.Button(
-            button_panel,
-            wx.ID_ANY,
-            "first",
-            wx.DefaultPosition,
-            wx.Size(50, 20),
-            wx.NO_BORDER,
-        )
-        back_button = wx.Button(
-            button_panel,
-            wx.ID_ANY,
-            "<<",
-            wx.DefaultPosition,
-            wx.Size(50, 20),
-            wx.NO_BORDER,
-        )
-        next_button = wx.Button(
-            button_panel,
-            wx.ID_ANY,
-            ">>",
-            wx.DefaultPosition,
-            wx.Size(50, 20),
-            wx.NO_BORDER,
-        )
-        last_button = wx.Button(
-            button_panel,
-            wx.ID_ANY,
-            "last",
-            wx.DefaultPosition,
-            wx.Size(50, 20),
-            wx.NO_BORDER,
-        )
-        image = wx.Image(self.GetImagePath("none.png"), wx.BITMAP_TYPE_PNG).Rescale(
-            700, 150
-        )
-        self.bmp = wx.StaticBitmap(picture_panel, -1, image)  # 转化为wx.StaticBitmap()形式
-        picture_box.Add(self.bmp, 0, wx.Top, 5)
+        self.lst_analysis_type.Set(self.analysis_type_data)
+        self.lst_analysis_result.Set(self.analysis_result_data)
+        self.lst.Set(self.languages)
 
-        layer_box.Add(self.text, 0, wx.Top, 5)
-        layer_box.Add(self.lst, 0, wx.Top, 5)
-        layer_box.Add(self.check_box, 0, wx.Top, 5)
-        layer_box.Add(self.combo_box, 0, wx.Top, 5)
+        self.lst.Bind(wx.EVT_LISTBOX, self.set_result)
+        self.lst_analysis_type.Bind(wx.EVT_LISTBOX, self.analysis_type)
+        self.lst_analysis_result.Bind(wx.EVT_LISTBOX, self.analysis_result)
+        self.combo_box.Bind(wx.EVT_COMBOBOX, self.read_json)
+        self.Bind(wx.EVT_CLOSE, self.on_close)
+        self.first_button.Bind(wx.EVT_BUTTON, self.select_first)
 
-        class_box.Add(self.text_analysis_type, 0, wx.Top, 5)
-        class_box.Add(self.lst_analysis_type, 0, wx.Top, 5)
+        self.back_button.Bind(wx.EVT_BUTTON, self.select_back)
+        self.next_button.Bind(wx.EVT_BUTTON, self.select_next)
+        self.last_button.Bind(wx.EVT_BUTTON, self.select_last)
 
-        result_box.Add(self.text_analysis_result, 0, wx.Top, 5)
-        result_box.Add(self.lst_analysis_result, 0, wx.Top, 5)
-
-        button_box.Add(first_button, 0, wx.Top, 5)
-        button_box.Add(back_button, 0, wx.Top, 5)
-        button_box.Add(next_button, 0, wx.Top, 5)
-        button_box.Add(last_button, 0, wx.Top, 5)
-        button_panel.SetSizer(button_box)
-
-        result_box.Add(button_panel, 0, wx.EXPAND | wx.Right, 20)
-
-        layer_panel.SetSizer(layer_box)
-        box.Add(layer_panel, 0, wx.EXPAND | wx.Right, 20)
-        class_panel.SetSizer(class_box)
-        box.Add(class_panel, 0, wx.EXPAND | wx.Right, 20)
-        result_panel.SetSizer(result_box)
-        box.Add(result_panel, 0, wx.EXPAND | wx.Right, 20)
-
-        picture_panel.SetSizer(picture_box)
-        box_panel.SetSizer(box)
-
-        show_box.Add(box_panel, 0, wx.EXPAND | wx.Right, 20)
-        show_box.Add(picture_panel, 0, wx.EXPAND | wx.Right, 20)
-
+        self.dispose_result()
         self.set_layer()
         self.set_color_rule()
-        panel.SetSizer(show_box)
-        self.Bind(wx.EVT_LISTBOX, self.set_result, self.lst)
-        self.Bind(wx.EVT_LISTBOX, self.analysis_type, self.lst_analysis_type)
-        self.Bind(wx.EVT_LISTBOX, self.analysis_result, self.lst_analysis_result)
-        self.Bind(wx.EVT_COMBOBOX, self.read_json, self.combo_box)
-        self.Bind(wx.EVT_CLOSE, self.on_close)
-        first_button.Bind(wx.EVT_BUTTON, self.select_first)
 
-        back_button.Bind(wx.EVT_BUTTON, self.select_back)
-        next_button.Bind(wx.EVT_BUTTON, self.select_next)
-        last_button.Bind(wx.EVT_BUTTON, self.select_last)
-        panel.Fit()
-
+        self.Update()
         self.Centre()
         self.Show(True)
 
@@ -457,6 +330,8 @@ class ChildFrame(wx.Frame):
     def set_result(self, event):
         self.set_layer()
         self.set_color_rule()
+        self.lst.Refresh()
+        self.lst.Update()
 
     def set_layer(self):
         if len(self.languages) == 0:
@@ -499,7 +374,10 @@ class ChildFrame(wx.Frame):
         for data in list_data:
             list_string.append(self.lst_analysis_type.GetString(data))
         if len(list_string) == 0 and len(self.languages) != 0:
-            list_string.append(self.lst_analysis_type.GetString(0))
+            if self.lst_analysis_type.GetCount() > 0:
+                list_string.append(self.lst_analysis_type.GetString(0))
+            else:
+                return
             self.lst_analysis_type.SetSelection(0)
             self.picture_path(list_string[0], self.message_type["picture_path"])
 
@@ -551,7 +429,7 @@ class ChildFrame(wx.Frame):
                         + "inch"
                         + ","
                         + str(len(self.result[result]))
-                        + self.message_type["pcs"]
+                        + _("pcs")
                     )
                 elif self.unit == 5:
                     string = (
@@ -561,9 +439,10 @@ class ChildFrame(wx.Frame):
                         + "mils"
                         + ","
                         + str(len(self.result[result]))
-                        + self.message_type["pcs"]
+                        + _("pcs")
                     )
-                elif self.unit == 1:
+                # elif self.unit == 1:
+                else:
                     string = (
                         result
                         + "、"
@@ -571,7 +450,7 @@ class ChildFrame(wx.Frame):
                         + "mm"
                         + ","
                         + str(len(self.result[result]))
-                        + self.message_type["pcs"]
+                        + _("pcs")
                     )
                 self.analysis_result_data.append(string)
             temp_num = 0
@@ -638,7 +517,7 @@ class ChildFrame(wx.Frame):
     def Millimeter2mils(self, millimeter_value):
         return round((millimeter_value * 39.37), 3)
 
-    def analysis_result(self, event):
+    def analysis_result(self):
         if self.lst_analysis_result.GetSelection() != wx.NOT_FOUND:
             string_data = self.lst_analysis_result.GetString(
                 self.lst_analysis_result.GetSelection()
@@ -713,6 +592,7 @@ class ChildFrame(wx.Frame):
                             line.SetWidth(250000)
                             if result["type"] == 0:
                                 if result["et"] == 0:
+                                    # GRAPHICS_SETTING
                                     line = self.set_segment(line, result, x, y)
                                 elif result["et"] == 1:
                                     line = self.set_arc(line, result, x, y)
@@ -736,7 +616,11 @@ class ChildFrame(wx.Frame):
                             line.SetBrightened()
                             if count == len(self.line_list):
                                 pcbnew.FocusOnItem(line, pcbnew.Dwgs_User)
+        self.close_unshow_layer(layer_num)
+
         # 关闭不需要显示的层
+
+    def close_unshow_layer(self, layer_num):
         if self.check_box.GetValue() is False:
             gal_set = self.board.GetVisibleLayers()
             for num in [x for x in gal_set.Seq()]:
@@ -746,42 +630,6 @@ class ChildFrame(wx.Frame):
             self.board.SetVisibleLayers(gal_set)
             pcbnew.UpdateUserInterface()
         pcbnew.Refresh()
-
-    def set_segment(self, line, result, x, y):
-        line.SetShape(pcbnew.S_SEGMENT)
-        line.SetEndX(int(Decimal(result["ex"]) * 1000000) + x)
-        line.SetEndY(y - int(Decimal(result["ey"]) * 1000000))
-        line.SetStartX(int(Decimal(result["sx"]) * 1000000) + x)
-        line.SetStartY(y - int(Decimal(result["sy"]) * 1000000))
-        return line
-
-    def set_arc(self, line, result, x, y):
-        line.SetShape(pcbnew.S_ARC)
-        line.SetEndX(int(Decimal(result["ex"]) * 1000000) + x)
-        line.SetEndY(y - int(Decimal(result["ey"]) * 1000000))
-        line.SetStartX(int(Decimal(result["sx"]) * 1000000) + x)
-        line.SetStartY(y - int(Decimal(result["sy"]) * 1000000))
-        line.SetCenter(
-            int(Decimal(result["cx"]) * 1000000) + x,
-            y - int(Decimal(result["cy"]) * 1000000),
-        )
-        return line
-
-    def set_rect(self, line, result, x, y):
-        line.SetShape(pcbnew.S_RECT)
-        line.SetStartX(int(Decimal(result["cx"]) * 1000000) - 250000 + x)
-        line.SetStartY(y - int(Decimal(result["cy"]) * 1000000) - 250000)
-        line.SetEndX(int(Decimal(result["cx"]) * 1000000) + 250000 + x)
-        line.SetEndY(y - int(Decimal(result["cy"]) * 1000000) + 250000)
-        return line
-
-    def set_rect_list(self, line, result, x, y):
-        line.SetShape(pcbnew.S_RECT)
-        line.SetStartX(int(Decimal(result["result"][0]) * 1000000) + x)
-        line.SetStartY(y - int(Decimal(result["result"][3]) * 1000000))
-        line.SetEndX(int(Decimal(result["result"][1]) * 1000000) + x)
-        line.SetEndY(y - int(Decimal(result["result"][2]) * 1000000))
-        return line
 
     def get_layer(self):
         layer = []
@@ -846,3 +694,39 @@ class ChildFrame(wx.Frame):
 
     def GetImagePath(self, bitmap_path):
         return GetImagePath(bitmap_path)
+
+    def set_segment(self, line, result, x, y):
+        line.SetShape(pcbnew.S_SEGMENT)
+        line.SetEndX(int(Decimal(result["ex"]) * 1000000) + x)
+        line.SetEndY(y - int(Decimal(result["ey"]) * 1000000))
+        line.SetStartX(int(Decimal(result["sx"]) * 1000000) + x)
+        line.SetStartY(y - int(Decimal(result["sy"]) * 1000000))
+        return line
+
+    def set_arc(self, line, result, x, y):
+        line.SetShape(pcbnew.S_ARC)
+        line.SetEndX(int(Decimal(result["ex"]) * 1000000) + x)
+        line.SetEndY(y - int(Decimal(result["ey"]) * 1000000))
+        line.SetStartX(int(Decimal(result["sx"]) * 1000000) + x)
+        line.SetStartY(y - int(Decimal(result["sy"]) * 1000000))
+        line.SetCenter(
+            int(Decimal(result["cx"]) * 1000000) + x,
+            y - int(Decimal(result["cy"]) * 1000000),
+        )
+        return line
+
+    def set_rect(self, line, result, x, y):
+        line.SetShape(pcbnew.S_RECT)
+        line.SetStartX(int(Decimal(result["cx"]) * 1000000) - 250000 + x)
+        line.SetStartY(y - int(Decimal(result["cy"]) * 1000000) - 250000)
+        line.SetEndX(int(Decimal(result["cx"]) * 1000000) + 250000 + x)
+        line.SetEndY(y - int(Decimal(result["cy"]) * 1000000) + 250000)
+        return line
+
+    def set_rect_list(self, line, result, x, y):
+        line.SetShape(pcbnew.S_RECT)
+        line.SetStartX(int(Decimal(result["result"][0]) * 1000000) + x)
+        line.SetStartY(y - int(Decimal(result["result"][3]) * 1000000))
+        line.SetEndX(int(Decimal(result["result"][1]) * 1000000) + x)
+        line.SetEndY(y - int(Decimal(result["result"][2]) * 1000000))
+        return line

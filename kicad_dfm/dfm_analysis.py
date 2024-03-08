@@ -7,6 +7,7 @@ import os
 import sys
 import time
 from . import config
+from kicad_dfm import GetFilePath
 
 
 class DfmAnalysis:
@@ -15,15 +16,12 @@ class DfmAnalysis:
 
     def download_file(self, zip_path, title_name):
         progress = wx.ProgressDialog(
-            "sum in progress",
-            "please wait",
+            _("Upload DFM analysis file"),
+            _("Please wait"),
             maximum=100,
             style=wx.PD_SMOOTH | wx.PD_AUTO_HIDE,
         )
-
         progress.Update(5)
-        time.sleep(1)
-        progress.SetTitle("上传文件中")
         url_path = open(zip_path, "rb")
         request_data = {
             "region": (None, "us"),
@@ -37,20 +35,20 @@ class DfmAnalysis:
         try:
             response = requests.post(url, files=request_data)
         except requests.exceptions.ConnectionError as e:
-            wx.MessageBox("网络连接错误", "Help", style=wx.ICON_INFORMATION)
+            wx.MessageBox(
+                _("Network connection error"), _("Help"), style=wx.ICON_INFORMATION
+            )
             progress.Update(90)
             time.sleep(1)
-            progress.Update(100)
-            return ""
+            return
         progress.Update(20)
-        time.sleep(1)
-        progress.SetTitle("分析文件中")
+        progress.SetTitle(_("Analysis file"))
         json_id = ""
         kicad_id = ""
         id_url = "https://www.nextpcb.com/DfmView/getParseResult"
         json_temp = response.json()
         if json_temp["status"] is False:
-            return ""
+            return
         id_rule = re.compile(r"(?<=(\?id=))[A-Za-z0-9]+(?=&kicadid=)")
         kicad_rule = re.compile(r"(?<=(&kicadid=))[A-Za-z0-9]+")
         analyse_url = json_temp["data"]["analyse_url"]
@@ -63,23 +61,23 @@ class DfmAnalysis:
         if json_id == "" or kicad_id == "":
             progress.Update(90)
             time.sleep(1)
-            progress.Update(100)
             return
         params = {"id": json_id, "kicadid": kicad_id}
         # json_file = requests.get(json_temp["data"]["analyse_url"].encode("utf8"))
         number = 30
         while 1:
-            progress.SetTitle("分析中")
+            progress.SetTitle(_("Analytical phase"))
             if number < 80:
                 number += 2
             try:
                 json_file = requests.get(id_url, params=params)
             except requests.exceptions.ConnectionError as e:
-                wx.MessageBox("网络连接错误", "Help", style=wx.ICON_INFORMATION)
+                wx.MessageBox(
+                    _("Network connection error"), _("Help"), style=wx.ICON_INFORMATION
+                )
                 progress.Update(90)
                 time.sleep(1)
-                progress.Update(100)
-                return ""
+                return
             file_path = json_file.json()
             progress.Update(number)
             if file_path["code"] == 200:
@@ -88,14 +86,12 @@ class DfmAnalysis:
             if file_path["code"] != 22006:
                 progress.Destroy()
                 break
-            time.sleep(1)
 
         if len(file_path["data"]) == 0:
-            return ""
+            return
         file_url = file_path["data"]["analyse_url"]
-        current_file = os.path.abspath(os.path.dirname(__file__))
-        filename = current_file + "\\temp.json"
-        temp_filename = current_file + "\\name.json"
+        filename = GetFilePath("temp.json")
+        temp_filename = GetFilePath("name.json")
         urllib.request.urlretrieve(file_url, filename)
 
         data = {"name": title_name}
@@ -110,13 +106,11 @@ class DfmAnalysis:
             )
 
         url_path.close()
-        progress.Update(90)
-        time.sleep(1)
         progress.Update(100)
         if os.path.exists(zip_path):
             os.remove(zip_path)
         else:
-            return ""
+            return
         return filename
 
     def analysis_json(self, json_path, transformation=False):
@@ -126,12 +120,12 @@ class DfmAnalysis:
             try:
                 data = json.loads(content)
             except json.decoder.JSONDecodeError as e:
-                return ""
+                return
             try:
                 json.loads(content)
             except ValueError as e:
                 os.remove(json_path)
-                return ""
+                return
             json_name = [
                 "Signal Integrity",
                 "Smallest Trace Width",
