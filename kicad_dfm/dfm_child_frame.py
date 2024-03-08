@@ -18,13 +18,14 @@ class DfmChildFrame(UiChildFrame):
         result_json,
         json_string,
         line_list,
+        _unit,
         _board,
         kicad=False,
     ):
         self.temp_layer = {""}
         self.line_list = line_list
         self.board = _board
-        self.unit = pcbnew.GetUserUnits()
+        self.unit = _unit
         self.result_json = result_json
         self.json_string = json_string
         self.message_type = {}

@@ -66,6 +66,7 @@ class DfmMainframe(wx.Frame):
         self.name = self.board_name.split(".")[0]
         self.analysis_result = {}
         self.unit = pcbnew.GetUserUnits()
+        self.unit = 0
         self.kicad_result = {}
         self.rule_message_list = []
         self.dfm_analysis = DfmAnalysis()
@@ -218,6 +219,7 @@ class DfmMainframe(wx.Frame):
             analysis_result,
             jsonfile_string,
             self.line_list,
+            self.unit,
             self.board,
             is_kicad_result,
         )
@@ -584,7 +586,7 @@ class DfmMainframe(wx.Frame):
     def unit_conversion(self, str_value):
         if self.unit == 0:
             iu_value = float(str_value) / 25.4
-            return str(round(iu_value), 3) + "inch"
+            return str(round(iu_value, 3)) + "inch"
         elif self.unit == 5:
             mils_value = float(str_value) * 39.37
             return str(round(mils_value, 3)) + "mils"

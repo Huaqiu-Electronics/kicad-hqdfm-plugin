@@ -93,7 +93,7 @@ class RuleManagerView(UiRuleManager):
 
         if self.unit == 0:
             iu_value = float(rule_string) / 25.4
-            return str(round(iu_value), 3)
+            return str(round(iu_value, 3))
         elif self.unit == 5:
             mils_value = float(rule_string) * 39.37
             return str(round(mils_value, 3))
