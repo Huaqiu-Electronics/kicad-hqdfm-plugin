@@ -56,7 +56,7 @@ class DfmMainframe(wx.Frame):
         except Exception as e:
             for fp in (
                 "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
-                "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
+                "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\video\\video.kicad_pcb",
             ):
                 if os.path.exists(fp):
                     self.board = pcbnew.LoadBoard(fp)
@@ -66,7 +66,7 @@ class DfmMainframe(wx.Frame):
         self.name = self.board_name.split(".")[0]
         self.analysis_result = {}
         self.unit = pcbnew.GetUserUnits()
-        self.unit = 0
+        self.unit = 1
         self.kicad_result = {}
         self.rule_message_list = []
         self.dfm_analysis = DfmAnalysis()
@@ -205,25 +205,31 @@ class DfmMainframe(wx.Frame):
             _("Test Point Count"),
             _("Drill Hole Density"),
         ]
-        for window in wx.GetTopLevelWindows():
-            if window.GetTitle() in title_name:
-                window.Destroy()
+        # WINDOWS = wx.GetTopLevelWindows()
+        for win in wx.GetTopLevelWindows():
+            if win.GetTitle() in title_name:
+                win.Destroy()
 
     def create_child_frame(
         self, title, analysis_result, jsonfile_string, is_kicad_result=False
     ):
-        self.have_same_class_window()
-        child_frame = DfmChildFrame(
-            self,
-            title,
-            analysis_result,
-            jsonfile_string,
-            self.line_list,
-            self.unit,
-            self.board,
-            is_kicad_result,
-        )
-        child_frame.Show()
+        try:
+            wx.BeginBusyCursor()
+            self.have_same_class_window()
+            child_frame = DfmChildFrame(
+                self,
+                title,
+                analysis_result,
+                jsonfile_string,
+                self.line_list,
+                self.unit,
+                self.board,
+                is_kicad_result,
+            )
+
+            child_frame.Show()
+        finally:
+            wx.EndBusyCursor()
 
     # 每个查看按钮
     def show_signal_integrity_button(self, event):
@@ -338,7 +344,6 @@ class DfmMainframe(wx.Frame):
     def add_all_item(self):
         if self.analysis_result == {}:
             return
-
         # kicad项 分析
         minmum_line_width = MinimumLineWidth(self.control, self.board)
         self.kicad_result["Smallest Trace Width"] = minmum_line_width.get_line_width(

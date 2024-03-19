@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2024-03-08 11:26+0800\n"
-"PO-Revision-Date: 2024-03-08 11:27+0800\n"
+"POT-Creation-Date: 2024-03-19 09:38+0800\n"
+"PO-Revision-Date: 2024-03-19 09:44+0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
@@ -16,50 +16,65 @@ msgstr ""
 "Generated-By: pygettext.py 1.5\n"
 "X-Generator: Poedit 3.4.2\n"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:52
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:37
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:202
 msgid "Layer"
 msgstr "图层"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:73
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:44
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:209
 msgid "Keep selected layers"
 msgstr "保留选择层"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:80
-msgid "!!"
-msgstr "!!"
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:47
+msgid "!! (Alarm)"
+msgstr "!!（警报项）"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:80
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:84
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:47
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:48
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:212
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:213
 msgid "Show all"
 msgstr "显示所有"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:110
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:61
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:226
 msgid "Problem"
 msgstr "分析类别"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:145
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:77
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:242
 msgid "Occurrences(Click to view)"
 msgstr "分析结果（点击查看位置）"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:168
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:85
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:251
 msgid "First"
 msgstr "第一"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:176
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:88
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:254
 msgid "<<"
 msgstr "<<"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:181
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:91
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:257
 msgid ">>"
 msgstr ">>"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:188
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:94
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:260
 msgid "Last"
 msgstr "最后"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:217
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:117
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:283
 msgid "Rule description"
 msgstr "规则描述"
+
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\child_frame\ui_child_frame.py:212
+msgid "!!"
+msgstr "!!"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:19
 msgid "Upload DFM analysis file"
@@ -76,8 +91,8 @@ msgstr "网络连接错误"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:39
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_analysis.py:76
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:47
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:174
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:46
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:173
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:338
 msgid "Help"
 msgstr "帮助"
@@ -90,6 +105,10 @@ msgstr "DFM分析"
 msgid "Analytical phase"
 msgstr "分析中"
 
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_child_frame.py:51
+msgid "Item"
+msgstr "项目"
+
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:14
 msgid "Layer Count"
 msgstr "板子层数"
@@ -99,144 +118,144 @@ msgid "Dimensions"
 msgstr "板子尺寸"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:16
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:191
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:232
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:190
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:237
 msgid "Signal Integrity"
 msgstr "电气信号"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:17
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:192
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:237
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:191
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:242
 msgid "Smallest Trace Width"
 msgstr "最小线宽"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:18
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:193
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:242
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:192
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:247
 msgid "Smallest Trace Spacing"
 msgstr "最小间距"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:19
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:194
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:246
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:193
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:251
 msgid "Pad size"
 msgstr "焊盘大小"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:20
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:195
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:249
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:194
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:254
 msgid "Pad Spacing"
 msgstr "SMD间距"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:21
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:196
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:253
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:195
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:258
 msgid "Hatched Copper Pour"
 msgstr "网格铺铜"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:22
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:197
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:258
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:196
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:263
 msgid "Hole Diameter"
 msgstr "钻孔直径"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:23
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:198
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:262
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:197
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:267
 msgid "RingHole"
 msgstr "孔环大小"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:24
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:199
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:266
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:198
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:271
 msgid "Drill Hole Spacing"
 msgstr "孔到孔"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:25
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:200
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:271
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:199
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:276
 msgid "Drill to Copper"
 msgstr "孔到线"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:26
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:201
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:276
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:200
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:281
 msgid "Board Edge Clearance"
 msgstr "板边距离"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:27
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:202
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:281
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:201
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:286
 msgid "Special Drill Holes"
 msgstr "特殊孔"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:28
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:203
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:286
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:202
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:291
 msgid "Holes on SMD Pads"
 msgstr "孔上焊盘"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:29
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:204
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:291
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:203
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:296
 msgid "Missing SMask Openings"
 msgstr "阻焊开窗"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:30
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:205
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\ui_hole_childframe.py:25
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:206
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\ui_hole_childframe.py:24
 msgid "Drill Hole Density"
 msgstr "孔密度"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:31
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:206
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:204
 msgid "Surface Finish Area"
 msgstr "沉金面积"
 
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:32
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:207
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:205
 msgid "Test Point Count"
 msgstr "飞针点数"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:57
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:36
 msgid "DFM Analysis"
 msgstr "DFM 分析"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:67
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:39
 msgid "Rule Manager"
 msgstr "规则管理"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:194
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:204
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:214
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:224
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:234
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:244
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:254
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:264
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:274
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:284
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:294
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:304
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:314
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:324
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:334
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:111
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:114
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:117
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:120
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:123
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:126
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:129
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:132
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:135
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:138
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:141
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:144
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:147
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:150
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:153
 msgid "Check"
 msgstr "检查"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:32
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:30
 msgid "HQ DFM"
 msgstr "HQ DFM"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:46
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:45
 msgid "The language you selected is currently not supported"
 msgstr "当前不支持您选择的语言"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:84
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:76
 msgid "no errors detected"
 msgstr "正常"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:173
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:172
 msgid "File parsing failed. Please click dfm analysis"
 msgstr "文件分析失败。请点击DFM分析"
 
@@ -244,32 +263,37 @@ msgstr "文件分析失败。请点击DFM分析"
 msgid "File analysis failure"
 msgstr "文件分析失败"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:379
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:378
 msgid "Error(s) detected"
 msgstr "异常"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:39
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\dfm_mainframe.py:618
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\ui_rule_manager.py:25
+msgid "Rule View"
+msgstr "规则查看"
+
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:16
 msgid "Laser hole number 0; "
 msgstr "激光孔数 0;"
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:40
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:17
 msgid "\"Pcs / SET\"The number of holes is : "
 msgstr "“Pcs / SET”钻孔数为："
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:42
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:51
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:19
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:28
 msgid "; \"Hole density\" is : "
 msgstr "; “孔密度”为："
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:47
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:24
 msgid "Laser hole number "
 msgstr "激光孔数 "
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:49
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\hole_childframe_view.py:26
 msgid "; \"Pcs / SET\"The number of holes is : "
 msgstr "; “Pcs / SET”钻孔数为："
 
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\ui_hole_childframe.py:68
+#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\hole_childframe\ui_hole_childframe.py:67
 msgid " Rule description"
 msgstr "规则描述"
 
@@ -304,10 +328,6 @@ msgstr "规则参数"
 #: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\rule_manager_view.py:49
 msgid "Unit"
 msgstr "单位"
-
-#: C:\Users\haf\Desktop\kicad-dfm-plugin\kicad_dfm\manager\ui_rule_manager.py:29
-msgid "Rule View"
-msgstr "规则查看"
 
 #~ msgid "Upload file"
 #~ msgstr "上传文件"

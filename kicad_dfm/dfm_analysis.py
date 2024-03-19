@@ -147,10 +147,7 @@ class DfmAnalysis:
             ]
 
             for name in json_name:
-                have_red = False
-                have_yellow = False
                 item_result = {}
-                info_list = []
                 if name not in data:
                     json_result[name] = ""
                     continue
@@ -173,181 +170,157 @@ class DfmAnalysis:
                     else:
                         json_result[name] = ""
                     continue
-                for item_check in item_json["check"]:
-                    for item_info in item_check["info"]:
-                        item = item_info["item"]
-                        if transformation:
-                            if item.lower() in config.Language_chinese:
-                                item = config.Language_chinese[item.lower()]
-                        rule = item_info["rule"]
-                        rule_string1 = rule.partition(",")
-                        rule_string2 = rule_string1[2].partition(",")
-                        rule_string3 = rule_string2[2].partition(",")
-                        rule_string4 = rule_string3[2].partition(",")
-                        for item_info_info in item_info["info"]:
-                            result_list = {}
-                            item_layer_list = []
-                            if "Top Layer" in item_info_info["layer"]:
-                                item_layer_list.append("Top Layer")
-                            if "Bot Layer" in item_info_info["layer"]:
-                                item_layer_list.append("Bot Layer")
-                            for item_layer in item_info_info["layer"]:
-                                if item_layer in item_layer_list:
-                                    continue
-                                item_layer_list.append(item_layer)
-                            # 设置显示的颜色
-                            if rule_string2[0] == "-" or rule_string1[0] == "-":
-                                have_red = True
-                                color = "red"
-                            else:
-                                if rule_string4[0] != "1":
-                                    rule1 = float(rule_string1[0])
-                                    rule2 = float(rule_string2[0])
-                                else:
-                                    rule1 = rule_string1[0]
-                                    rule2 = rule_string2[0]
-                                    if "%" in rule1:
-                                        rule1 = float(rule1.strip("%")) / 100
-                                        rule2 = float(rule2.strip("%")) / 100
-                                    else:
-                                        rule1 = float(rule1)
-                                        rule2 = float(rule2)
 
-                                if rule1 < rule2:
-                                    if float(item_info_info["val"]) < rule1:
-                                        color = "red"
-                                        have_red = True
-                                    elif rule2 > float(item_info_info["val"]) > rule1:
-                                        color = "orange"
-                                        have_yellow = True
-                                    else:
-                                        color = "black"
-                                else:
-                                    if float(item_info_info["val"]) > rule1:
-                                        color = "red"
-                                        have_red = True
-                                    elif rule2 < float(item_info_info["val"]) < rule1:
-                                        color = "orange"
-                                        have_yellow = True
-                                    else:
-                                        color = "black"
-                            item_list = []
-                            if item_info_info["type"] == 0:
-                                for item_info_info_result in item_info_info["result"]:
-                                    item_info_list = {}
-                                    item_info_list["item"] = item
-                                    item_info_list["rule"] = rule
-                                    item_info_list["layer"] = item_layer_list
-                                    item_info_list["value"] = item_info_info["val"]
-                                    item_info_list["type"] = 0
-                                    item_info_list["color"] = color
-                                    if item_info_info_result["et"] == 0:
-                                        item_info_list["et"] = item_info_info_result[
-                                            "et"
-                                        ]
-                                        item_info_list["sx"] = item_info_info_result[
-                                            "coord"
-                                        ]["sx"]
-                                        item_info_list["sy"] = item_info_info_result[
-                                            "coord"
-                                        ]["sy"]
-                                        item_info_list["ex"] = item_info_info_result[
-                                            "coord"
-                                        ]["ex"]
-                                        item_info_list["ey"] = item_info_info_result[
-                                            "coord"
-                                        ]["ey"]
-                                        item_list.append(item_info_list)
-                                    elif item_info_info_result["et"] == 1:
-                                        item_info_list["et"] = item_info_info_result[
-                                            "et"
-                                        ]
-                                        item_info_list["sx"] = item_info_info_result[
-                                            "coord"
-                                        ]["sx"]
-                                        item_info_list["sy"] = item_info_info_result[
-                                            "coord"
-                                        ]["sy"]
-                                        item_info_list["ex"] = item_info_info_result[
-                                            "coord"
-                                        ]["ex"]
-                                        item_info_list["ey"] = item_info_info_result[
-                                            "coord"
-                                        ]["ey"]
-                                        item_info_list["cx"] = item_info_info_result[
-                                            "coord"
-                                        ]["cx"]
-                                        item_info_list["cy"] = item_info_info_result[
-                                            "coord"
-                                        ]["cy"]
-                                        item_list.append(item_info_list)
-                                    else:
-                                        item_info_list["et"] = item_info_info_result[
-                                            "et"
-                                        ]
-                                        item_info_list["cx"] = item_info_info_result[
-                                            "coord"
-                                        ]["cx"]
-                                        item_info_list["cy"] = item_info_info_result[
-                                            "coord"
-                                        ]["cy"]
-                                        item_list.append(item_info_list)
-                            elif item_info_info["type"] == 2:
-                                item_info_list = {}
-                                item_info_list["item"] = item
-                                item_info_list["rule"] = rule
-                                item_info_list["layer"] = item_layer_list
-                                item_info_list["value"] = item_info_info["val"]
-                                item_info_list["type"] = 0
-                                item_info_list["type"] = 2
-                                item_info_list["color"] = color
-                                item_info_list["sx"] = item_info_info["result"][
-                                    "coord"
-                                ]["spt"]["x"]
-                                item_info_list["ex"] = item_info_info["result"][
-                                    "coord"
-                                ]["ept"]["x"]
-                                item_info_list["sy"] = item_info_info["result"][
-                                    "coord"
-                                ]["spt"]["y"]
-                                item_info_list["ey"] = item_info_info["result"][
-                                    "coord"
-                                ]["ept"]["y"]
-                                item_list.append(item_info_list)
-                            else:
-                                item_info_list = {}
-                                item_info_list["item"] = item
-                                item_info_list["rule"] = rule
-                                item_info_list["layer"] = item_layer_list
-                                item_info_list["value"] = item_info_info["val"]
-                                item_info_list["type"] = 0
-                                item_info_list["color"] = color
-                                signal_integrity_result = []
-                                item_info_list["type"] = 3
-                                for signal_integrity_info_info_result in item_info_info[
-                                    "result"
-                                ]:
-                                    signal_integrity_result.append(
-                                        signal_integrity_info_info_result
-                                    )
-                                    item_info_list["result"] = signal_integrity_result
-                                item_list.append(item_info_list)
-                            result_list["result"] = item_list
-                            info_list.append(result_list)
+                self.analysis_every_item(
+                    json_result, item_json, name, item_result, transformation
+                )
 
-                item_result["check"] = info_list
-                if len(info_list) == 0:
-                    item_result["display"] = ""
-                    item_result["display_inch"] = ""
-                else:
-                    item_result["display"] = item_json["display"]
-                    item_result["display_inch"] = item_json["display_inch"]
-                if have_red:
-                    item_result["color"] = "red"
-                elif have_yellow:
-                    item_result["color"] = "orange"
-                else:
-                    item_result["color"] = "black"
-                json_result[name] = item_result
         f.close()
+        # with open("output.json", "w") as f:
+        #     json.dump(json_result, f)
         return json_result
+
+    def analysis_every_item(
+        self, json_result, item_json, name, item_result, transformation=False
+    ):
+        have_red = False
+        have_yellow = False
+        info_list = []
+        for item_check in item_json["check"]:
+            dfm_show_layer = item_check["layer"]
+            for item_info in item_check["info"]:
+                item = item_info["item"]
+                if transformation:
+                    if item.lower() in config.Language_chinese:
+                        item = config.Language_chinese[item.lower()]
+                rule = item_info["rule"]
+                rule_string1 = rule.partition(",")
+                rule_string2 = rule_string1[2].partition(",")
+                rule_string3 = rule_string2[2].partition(",")
+                rule_string4 = rule_string3[2].partition(",")
+                for item_info_info in item_info["info"]:
+                    result_list = {}
+                    item_layer_list = []
+                    item_layer_list.append(dfm_show_layer)
+                    for item_layer in item_info_info["layer"]:
+                        item_layer_list.append(item_layer)
+                    # 设置显示的颜色
+                    if rule_string2[0] == "-" or rule_string1[0] == "-":
+                        have_red = True
+                        color = "red"
+                    else:
+                        if rule_string4[0] != "1":
+                            rule1 = float(rule_string1[0])
+                            rule2 = float(rule_string2[0])
+                        else:
+                            rule1 = rule_string1[0]
+                            rule2 = rule_string2[0]
+                            if "%" in rule1:
+                                rule1 = float(rule1.strip("%")) / 100
+                                rule2 = float(rule2.strip("%")) / 100
+                            else:
+                                rule1 = float(rule1)
+                                rule2 = float(rule2)
+
+                        if rule1 < rule2:
+                            if float(item_info_info["val"]) < rule1:
+                                color = "red"
+                                have_red = True
+                            elif rule2 > float(item_info_info["val"]) > rule1:
+                                color = "gold"
+                                have_yellow = True
+                            else:
+                                color = "black"
+                        else:
+                            if float(item_info_info["val"]) > rule1:
+                                color = "red"
+                                have_red = True
+                            elif rule2 < float(item_info_info["val"]) < rule1:
+                                color = "gold"
+                                have_yellow = True
+                            else:
+                                color = "black"
+                    result_list["result"] = self.anaylsis_dfm_type_info(
+                        item_info_info, item, rule, item_layer_list, color
+                    )
+                    info_list.append(result_list)
+
+        item_result["check"] = info_list
+        if len(info_list) == 0:
+            item_result["display"] = ""
+            item_result["display_inch"] = ""
+        else:
+            item_result["display"] = item_json["display"]
+            item_result["display_inch"] = item_json["display_inch"]
+        if have_red:
+            item_result["color"] = "red"
+        elif have_yellow:
+            item_result["color"] = "gold"
+        else:
+            item_result["color"] = "black"
+        json_result[name] = item_result
+        return json_result
+
+    def anaylsis_dfm_type_info(
+        self, item_info_info, item, rule, item_layer_list, color
+    ):
+        item_list = []
+        if item_info_info["type"] == 0:
+            for item_info_info_result in item_info_info["result"]:
+                item_info_list = {}
+                item_info_list["item"] = item
+                item_info_list["rule"] = rule
+                item_info_list["layer"] = item_layer_list
+                item_info_list["value"] = item_info_info["val"]
+                item_info_list["type"] = 0
+                item_info_list["color"] = color
+                if item_info_info_result["et"] == 0:
+                    item_info_list["et"] = item_info_info_result["et"]
+                    item_info_list["sx"] = item_info_info_result["coord"]["sx"]
+                    item_info_list["sy"] = item_info_info_result["coord"]["sy"]
+                    item_info_list["ex"] = item_info_info_result["coord"]["ex"]
+                    item_info_list["ey"] = item_info_info_result["coord"]["ey"]
+                    item_list.append(item_info_list)
+                elif item_info_info_result["et"] == 1:
+                    item_info_list["et"] = item_info_info_result["et"]
+                    item_info_list["sx"] = item_info_info_result["coord"]["sx"]
+                    item_info_list["sy"] = item_info_info_result["coord"]["sy"]
+                    item_info_list["ex"] = item_info_info_result["coord"]["ex"]
+                    item_info_list["ey"] = item_info_info_result["coord"]["ey"]
+                    item_info_list["cx"] = item_info_info_result["coord"]["cx"]
+                    item_info_list["cy"] = item_info_info_result["coord"]["cy"]
+                    item_list.append(item_info_list)
+                else:
+                    item_info_list["et"] = item_info_info_result["et"]
+                    item_info_list["cx"] = item_info_info_result["coord"]["cx"]
+                    item_info_list["cy"] = item_info_info_result["coord"]["cy"]
+                    item_list.append(item_info_list)
+        elif item_info_info["type"] == 2:
+            item_info_list = {}
+            item_info_list["item"] = item
+            item_info_list["rule"] = rule
+            item_info_list["layer"] = item_layer_list
+            item_info_list["value"] = item_info_info["val"]
+            item_info_list["type"] = 0
+            item_info_list["type"] = 2
+            item_info_list["color"] = color
+            item_info_list["sx"] = item_info_info["result"]["coord"]["spt"]["x"]
+            item_info_list["ex"] = item_info_info["result"]["coord"]["ept"]["x"]
+            item_info_list["sy"] = item_info_info["result"]["coord"]["spt"]["y"]
+            item_info_list["ey"] = item_info_info["result"]["coord"]["ept"]["y"]
+            item_list.append(item_info_list)
+        else:
+            item_info_list = {}
+            item_info_list["item"] = item
+            item_info_list["rule"] = rule
+            item_info_list["layer"] = item_layer_list
+            item_info_list["value"] = item_info_info["val"]
+            item_info_list["type"] = 0
+            item_info_list["color"] = color
+            signal_integrity_result = []
+            item_info_list["type"] = 3
+            for signal_integrity_info_info_result in item_info_info["result"]:
+                signal_integrity_result.append(signal_integrity_info_info_result)
+                item_info_list["result"] = signal_integrity_result
+            item_list.append(item_info_list)
+        return item_list

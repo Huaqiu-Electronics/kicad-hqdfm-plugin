@@ -145,6 +145,9 @@ class UiDfmMaindialog(wx.Panel):
         )
 
         # Cell Defaults
+        self.grid.SetDefaultCellBackgroundColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+        )
         self.grid.SetDefaultCellFont(
             wx.Font(
                 9,
@@ -156,6 +159,13 @@ class UiDfmMaindialog(wx.Panel):
             )
         )
         self.grid.SetDefaultCellAlignment(wx.ALIGN_CENTER, wx.ALIGN_CENTER)
+        self.grid.SetForegroundColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVEBORDER)
+        )
+        self.grid.SetBackgroundColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_BACKGROUND)
+        )
+
         bSizer10.Add(self.grid, 1, wx.ALL, 5)
 
         self.grid_panel.SetSizer(bSizer10)

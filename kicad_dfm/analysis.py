@@ -86,7 +86,7 @@ class MinimumLineWidth:
                     )
                     if pad_value["color"] == "red":
                         have_red = True
-                    elif pad_value["color"] == "orange":
+                    elif pad_value["color"] == "gold":
                         have_yellow = True
                     else:
                         pad_value["color"] = "black"
@@ -102,7 +102,7 @@ class MinimumLineWidth:
         if have_red:
             pad_result["color"] = "red"
         elif have_yellow:
-            pad_result["color"] = "orange"
+            pad_result["color"] = "gold"
         else:
             pad_result["color"] = "black"
         return pad_result
@@ -139,7 +139,7 @@ class MinimumLineWidth:
                 )
                 if annular_ring["color"] == "red":
                     have_red = True
-                elif annular_ring["color"] == "orange":
+                elif annular_ring["color"] == "gold":
                     have_yellow = True
                 item_list.append(annular_ring)
                 result["result"] = item_list
@@ -176,7 +176,7 @@ class MinimumLineWidth:
                     )
                     if annular_ring["color"] == "red":
                         have_red = True
-                    elif annular_ring["color"] == "orange":
+                    elif annular_ring["color"] == "gold":
                         have_yellow = True
                     item_list.append(annular_ring)
                     result["result"] = item_list
@@ -191,7 +191,7 @@ class MinimumLineWidth:
         if have_red is True:
             annular_ring_result["color"] = "red"
         elif have_yellow is True:
-            annular_ring_result["color"] = "orange"
+            annular_ring_result["color"] = "gold"
         else:
             annular_ring_result["color"] = "black"
 
@@ -230,7 +230,7 @@ class MinimumLineWidth:
                 )
                 if line_width["color"] == "red":
                     have_red = True
-                elif line_width["color"] == "orange":
+                elif line_width["color"] == "gold":
                     have_yellow = True
                 item_list.append(line_width)
                 result["result"] = item_list
@@ -246,7 +246,7 @@ class MinimumLineWidth:
         if have_red is True:
             line_width_result["color"] = "red"
         elif have_yellow is True:
-            line_width_result["color"] = "orange"
+            line_width_result["color"] = "gold"
         else:
             line_width_result["color"] = "black"
         return line_width_result
@@ -295,7 +295,7 @@ class MinimumLineWidth:
                     )
                     if zone_attribute["color"] == "red":
                         have_red = True
-                    elif zone_attribute["color"] == "orange":
+                    elif zone_attribute["color"] == "gold":
                         have_yellow = True
                 if minimum_value == -1 or zone.GetHatchThickness() < minimum_value:
                     minimum_value = thickness
@@ -312,7 +312,7 @@ class MinimumLineWidth:
         if have_red is True:
             zone_attribute_result["color"] = "red"
         elif have_yellow is True:
-            zone_attribute_result["color"] = "orange"
+            zone_attribute_result["color"] = "gold"
         else:
             zone_attribute_result["color"] = "black"
         return zone_attribute_result

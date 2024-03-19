@@ -93,10 +93,10 @@ def natural_sort_collation(a, b):
     def convert(text):
         return int(text) if text.isdigit() else text.lower()
 
-    def alphanum_key(key):
+    def yellownum_key(key):
         return [convert(c) for c in re.split("([0-9]+)", key)]
 
-    natorder = sorted([a, b], key=alphanum_key)
+    natorder = sorted([a, b], key=yellownum_key)
     return -1 if natorder.index(a) == 0 else 1
 
 

@@ -19,13 +19,13 @@ class ColorRule:
             if different < float(rule_string1[0]):
                 return "red"
             elif float(rule_string2[0]) > different > float(rule_string1[0]):
-                return "orange"
+                return "gold"
             else:
                 return "black"
         else:
             if different > float(rule_string1[0]):
                 return "red"
             elif float(rule_string2[0]) < different < float(rule_string1[0]):
-                return "orange"
+                return "gold"
             else:
                 return "black"

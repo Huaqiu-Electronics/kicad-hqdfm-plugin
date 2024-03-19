@@ -68,7 +68,7 @@ class RuleManagerView(UiRuleManager):
                 number += 1
                 data = [
                     str(number),
-                    item,
+                    _(item),
                     list(result.keys())[0],
                     self.dispose_json_rule(result[list(result.keys())[0]]),
                     unit,

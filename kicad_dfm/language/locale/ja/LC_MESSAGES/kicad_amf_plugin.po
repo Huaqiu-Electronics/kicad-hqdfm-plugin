@@ -1026,7 +1026,7 @@ msgstr "赤"
 #: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:46
 #: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:56
 #: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:85
-msgid "Yellow"
+msgid "gold"
 msgstr "黄"
 
 #: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\process_info_view.py:47
@@ -1134,7 +1134,7 @@ msgid "Surface Finish"
 msgstr "表面仕上げ"
 
 #: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\process\ui_process_info.py:280
-msgid "Immersion Gold Thickness"
+msgid "Immersion gold Thickness"
 msgstr "浸漬金の厚さ"
 
 #: C:\Users\haf\Desktop\kicad-amf-plugin\kicad_amf_plugin\pcb_fabrication\special_process\special_process_view.py:14
