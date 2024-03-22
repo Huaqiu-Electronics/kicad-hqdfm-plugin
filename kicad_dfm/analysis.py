@@ -78,9 +78,11 @@ class MinimumLineWidth:
                 layer_list.append(str(pad.GetLayerName()))
                 pad_value["layer"] = layer_list
                 if different > 1.2:
-                    pad_value["item"] = self.language["long_pads"]
+                    # pad_value["item"] = self.language["long_pads"]
+                    pad_value["item"] = _("Long Pads")
                 else:
-                    pad_value["item"] = self.language["short_pads"]
+                    # pad_value["item"] = self.language["short_pads"]
+                    pad_value["item"] = _("Short Pads")
                     pad_value["color"] = ColorRule().get_rule(
                         analysis_result, "Pad size", pad_value["item"], different
                     )
@@ -133,7 +135,8 @@ class MinimumLineWidth:
                 annular_ring["pad_diameter"] = width
                 annular_ring["hole_diameter"] = drill
                 annular_ring["layer"] = annular_ring_layer
-                annular_ring["item"] = self.language["via_ring"]
+                # annular_ring["item"] = self.language["via_ring"]
+                annular_ring["item"] = _("Via Annular Ring")
                 annular_ring["color"] = ColorRule().get_rule(
                     analysis_result, "RingHole", "Via Annular Ring", value
                 )
@@ -170,7 +173,8 @@ class MinimumLineWidth:
                     annular_ring["pad_diameter"] = size_x
                     annular_ring["hole_diameter"] = drill_x
                     annular_ring["layer"] = annular_ring_layer
-                    annular_ring["item"] = self.language["pth_ring"]
+                    # annular_ring["item"] = self.language["pth_ring"]
+                    annular_ring["item"] = _("PTH Annular Ring")
                     annular_ring["color"] = ColorRule().get_rule(
                         analysis_result, "RingHole", "PTH Annular Ring", value
                     )
@@ -221,7 +225,7 @@ class MinimumLineWidth:
                 line_width["layer"] = line_width_layer
                 line_width["value"] = str(width)
                 line_width["info"] = item.m_Uuid
-                line_width["item"] = self.language["line_width"]
+                line_width["item"] = _("Smallest Trace Width")
                 line_width["color"] = ColorRule().get_rule(
                     analysis_result,
                     "Smallest Trace Width",
@@ -277,7 +281,8 @@ class MinimumLineWidth:
 
                 if zone.GetHatchThickness() < zone.GetHatchGap():
                     zone_attribute["value"] = str(gap)
-                    zone_attribute["item"] = self.language["grid_spacing"]
+                    # zone_attribute["item"] = self.language["grid_spacing"]
+                    zone_attribute["item"] = _("Grid Spacing")
                     zone_attribute["color"] = ColorRule().get_rule(
                         analysis_result,
                         "Hatched Copper Pour",
@@ -286,7 +291,8 @@ class MinimumLineWidth:
                     )
                 else:
                     zone_attribute["value"] = str(thickness)
-                    zone_attribute["item"] = self.language["grid_width"]
+                    # zone_attribute["item"] = self.language["grid_width"]
+                    zone_attribute["item"] = _("Grid Width")
                     zone_attribute["color"] = ColorRule().get_rule(
                         analysis_result,
                         "Hatched Copper Pour",

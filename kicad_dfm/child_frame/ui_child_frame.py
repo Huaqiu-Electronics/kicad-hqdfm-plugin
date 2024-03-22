@@ -11,8 +11,10 @@ import wx
 import wx.xrc
 from kicad_dfm.settings.single_plugin import SINGLE_PLUGIN
 import wx.dataview
-from kicad_dfm.custom_contral.custom_listbox import CustomListBox
 
+import gettext
+
+_ = gettext.gettext
 
 ###########################################################################
 ## Class UiChildDialog
@@ -28,7 +30,7 @@ class UiChildDialog(wx.Dialog):
             title=wx.EmptyString,
             pos=wx.DefaultPosition,
             size=wx.Size(750, 600),
-            style=wx.DEFAULT_DIALOG_STYLE,
+            style=wx.DEFAULT_DIALOG_STYLE | wx.STAY_ON_TOP,
         )
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
@@ -246,83 +248,6 @@ class UiChildDialog(wx.Dialog):
 
 
 ###########################################################################
-## Class MyDialog2
-###########################################################################
-
-
-class MyDialog2(wx.Dialog):
-    def __init__(self, parent):
-        wx.Dialog.__init__(
-            self,
-            parent,
-            id=wx.ID_ANY,
-            title=wx.EmptyString,
-            pos=wx.DefaultPosition,
-            size=wx.Size(282, 349),
-            style=wx.DEFAULT_DIALOG_STYLE,
-        )
-
-        self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
-
-        bSizer15 = wx.BoxSizer(wx.VERTICAL)
-
-        lst_analysis_resultChoices = []
-        self.lst_analysis_result = wx.ListBox(
-            self,
-            wx.ID_ANY,
-            wx.DefaultPosition,
-            wx.DefaultSize,
-            lst_analysis_resultChoices,
-            wx.LB_SINGLE,
-        )
-        bSizer15.Add(self.lst_analysis_result, 1, wx.ALL | wx.EXPAND, 0)
-
-        bSizer16 = wx.BoxSizer(wx.VERTICAL)
-
-        bSizer15.Add(bSizer16, 1, wx.EXPAND, 5)
-
-        lst_analysis_resultChoices = []
-        self.lst_analysis_result = CustomListBox(
-            self.result_panel,
-            wx.ID_ANY,
-            wx.DefaultPosition,
-            wx.DefaultSize,
-            lst_analysis_resultChoices,
-            wx.LB_SINGLE,
-        )
-
-        bSizer15.Add(self.lst_analysis_result2, 1, wx.ALL | wx.EXPAND, 0)
-
-        self.lst_analysis_result1 = wx.dataview.DataViewListCtrl(
-            self,
-            wx.ID_ANY,
-            wx.DefaultPosition,
-            wx.DefaultSize,
-            wx.dataview.DV_NO_HEADER | wx.dataview.DV_ROW_LINES | wx.dataview.DV_SINGLE,
-        )
-        self.lst_analysis_result1.SetFont(
-            wx.Font(
-                9,
-                wx.FONTFAMILY_DEFAULT,
-                wx.FONTSTYLE_NORMAL,
-                wx.FONTWEIGHT_NORMAL,
-                False,
-                "宋体",
-            )
-        )
-
-        bSizer15.Add(self.lst_analysis_result1, 1, wx.ALL | wx.EXPAND, 0)
-
-        self.SetSizer(bSizer15)
-        self.Layout()
-
-        self.Centre(wx.BOTH)
-
-    def __del__(self):
-        pass
-
-
-###########################################################################
 ## Class UiChildFrame
 ###########################################################################
 
@@ -357,7 +282,7 @@ class UiChildFrame(wx.Frame):
         )
         bSizer3 = wx.BoxSizer(wx.VERTICAL)
 
-        self.text = wx.TextCtrl(
+        self.text_layer = wx.TextCtrl(
             self.layer_panel,
             wx.ID_ANY,
             _("Layer"),
@@ -365,18 +290,18 @@ class UiChildFrame(wx.Frame):
             wx.DefaultSize,
             wx.TE_CENTER,
         )
-        bSizer3.Add(self.text, 0, wx.EXPAND, 0)
+        bSizer3.Add(self.text_layer, 0, wx.EXPAND, 0)
 
-        lstChoices = []
-        self.lst = wx.ListBox(
+        lst_layerChoices = []
+        self.lst_layer = wx.ListBox(
             self.layer_panel,
             wx.ID_ANY,
             wx.DefaultPosition,
             wx.DefaultSize,
-            lstChoices,
-            0,
+            lst_layerChoices,
+            wx.LB_EXTENDED,
         )
-        bSizer3.Add(self.lst, 1, wx.ALL | wx.EXPAND, 0)
+        bSizer3.Add(self.lst_layer, 1, wx.ALL | wx.EXPAND, 0)
 
         self.check_box = wx.CheckBox(
             self.layer_panel,
@@ -388,7 +313,7 @@ class UiChildFrame(wx.Frame):
         )
         bSizer3.Add(self.check_box, 0, wx.ALL, 5)
 
-        combo_boxChoices = [_("Show all"), _("!!")]
+        combo_boxChoices = [_("Show all"), _("!! (Alarm)")]
         self.combo_box = wx.ComboBox(
             self.layer_panel,
             wx.ID_ANY,
@@ -432,7 +357,7 @@ class UiChildFrame(wx.Frame):
             wx.DefaultPosition,
             wx.DefaultSize,
             lst_analysis_typeChoices,
-            0,
+            wx.LB_EXTENDED,
         )
         bSizer4.Add(self.lst_analysis_type, 1, wx.ALL | wx.EXPAND, 0)
 
@@ -460,16 +385,14 @@ class UiChildFrame(wx.Frame):
         )
         bSizer5.Add(self.text_analysis_result, 0, wx.ALL | wx.EXPAND, 0)
 
-        lst_analysis_resultChoices = []
-        self.lst_analysis_result = wx.ListBox(
+        self.lst_analysis_result1 = wx.dataview.DataViewListCtrl(
             self.result_panel,
             wx.ID_ANY,
             wx.DefaultPosition,
             wx.DefaultSize,
-            lst_analysis_resultChoices,
-            0,
+            wx.dataview.DV_NO_HEADER | wx.dataview.DV_ROW_LINES | wx.dataview.DV_SINGLE,
         )
-        bSizer5.Add(self.lst_analysis_result, 1, wx.ALL | wx.EXPAND, 0)
+        bSizer5.Add(self.lst_analysis_result1, 1, wx.ALL | wx.EXPAND, 0)
 
         bSizer6 = wx.BoxSizer(wx.HORIZONTAL)
 
@@ -513,7 +436,7 @@ class UiChildFrame(wx.Frame):
         self.m_panel1.SetSizer(bSizer2)
         self.m_panel1.Layout()
         bSizer2.Fit(self.m_panel1)
-        bSizer1.Add(self.m_panel1, 2, wx.EXPAND | wx.ALL, 0)
+        bSizer1.Add(self.m_panel1, 1, wx.ALL | wx.EXPAND, 0)
 
         self.m_panel5 = wx.Panel(
             self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL

@@ -6,14 +6,14 @@ import pcbnew
 import threading
 from . import config
 from .picture import GetImagePath
-from kicad_dfm.child_frame.ui_child_frame import UiChildDialog
+from kicad_dfm.child_frame.ui_child_frame import UiChildFrame
 from kicad_dfm.settings.graphics_setting import GRAPHICS_SETTING
 from kicad_dfm.child_frame.child_frame_model import ChildFrameModel
 import wx.dataview as dv
 from kicad_dfm.child_frame.picture_match_path import PICTURE_MATCH_PATH
 
 
-class DfmChildFrame(UiChildDialog):
+class DfmChildFrame(UiChildFrame):
     def __init__(
         self,
         parent,
@@ -208,7 +208,6 @@ class DfmChildFrame(UiChildDialog):
         for data in list_data:
             list_string.append(self.lst_analysis_type.GetString(data))
         if len(list_string) == 0 and len(self.get_layer) != 0:
-            tpye = self.lst_analysis_type.GetString(0)
             list_string.append(self.lst_analysis_type.GetString(0))
             self.lst_analysis_type.SetSelection(0)
             self.bmp.SetBitmap(
@@ -265,7 +264,7 @@ class DfmChildFrame(UiChildDialog):
                         + "inch"
                         + ","
                         + str(len(self.result[result]))
-                        + self.message_type["pcs"]
+                        + _("pcs")
                     )
                 elif self.unit == 5:
                     string = (
@@ -275,7 +274,7 @@ class DfmChildFrame(UiChildDialog):
                         + "mils"
                         + ","
                         + str(len(self.result[result]))
-                        + self.message_type["pcs"]
+                        + _("pcs")
                     )
                 else:
                     string = (
@@ -285,7 +284,7 @@ class DfmChildFrame(UiChildDialog):
                         + "mm"
                         + ","
                         + str(len(self.result[result]))
-                        + self.message_type["pcs"]
+                        + _("pcs")
                     )
                 self.analysis_result_data.append(string)
             temp_num = 0
@@ -382,6 +381,7 @@ class DfmChildFrame(UiChildDialog):
         y = settings.GetAuxOrigin().y
         for clear_item in self.item_list:
             clear_item.ClearBrightened()
+            # clear_item.ClearSelected()
         self.item_list = []
         pattern = re.compile(r"(\d+(?=(\、)))")
         search_res = pattern.search(string_data)
@@ -400,6 +400,7 @@ class DfmChildFrame(UiChildDialog):
                     for result in self.result[result_list]:
                         item = self.board.GetItem(result["id"])
                         item.SetBrightened()
+                        # item.SetSelected()
                         self.item_list.append(item)
                         for layer in result["layer"]:
                             layer_num.append(self.board.GetLayerID(layer))
@@ -428,6 +429,7 @@ class DfmChildFrame(UiChildDialog):
                         for layer in self.result[result_list][0]["layer"]:
                             layer_num.append(self.board.GetLayerID(layer))
                         item.SetBrightened()
+                        # item.SetSelected()
                         self.item_list.append(item)
                     # dfm分析项
                     else:
@@ -438,7 +440,9 @@ class DfmChildFrame(UiChildDialog):
                         for result in self.result[result_list]["result"]:
                             # 多种的数据格式
                             line = pcbnew.PCB_SHAPE()
-                            line.SetLayer(pcbnew.Dwgs_User)
+                            # line.SetLayer(pcbnew.Dwgs_User)
+                            # line.SetLayer(pcbnew.LAYER_MARKER_SHADOWS)
+                            line.SetLayer(pcbnew.LAYER_DRC_WARNING)
                             line.SetWidth(250000)
                             if result["type"] == 0:
                                 if result["et"] == 0:
@@ -472,6 +476,7 @@ class DfmChildFrame(UiChildDialog):
                         for line in self.line_list:
                             count += 1
                             self.board.Add(line)
+                            # line.SetSelected()
                             line.SetBrightened()
                             if count == len(self.line_list):
                                 pcbnew.FocusOnItem(line, pcbnew.Dwgs_User)
@@ -482,6 +487,8 @@ class DfmChildFrame(UiChildDialog):
                 if num in layer_num:
                     continue
                 gal_set.removeLayer(num)
+            # shadow_layer_id = self.board.GetLayerID(pcbnew.LAYER_LOCKED_ITEM_SHADOW)
+            # # gal_set.removeLayer(shadow_layer_id)
             self.board.SetVisibleLayers(gal_set)
             pcbnew.UpdateUserInterface()
         pcbnew.Refresh()

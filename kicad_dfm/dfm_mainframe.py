@@ -47,7 +47,6 @@ class DfmMainframe(wx.Frame):
                 style=wx.ICON_INFORMATION,
             )
             return
-
         self.line_list = []
         self.have_progress = False
         try:
@@ -66,7 +65,6 @@ class DfmMainframe(wx.Frame):
         self.name = self.board_name.split(".")[0]
         self.analysis_result = {}
         self.unit = pcbnew.GetUserUnits()
-        self.unit = 1
         self.kicad_result = {}
         self.rule_message_list = []
         self.dfm_analysis = DfmAnalysis()
@@ -205,7 +203,6 @@ class DfmMainframe(wx.Frame):
             _("Test Point Count"),
             _("Drill Hole Density"),
         ]
-        # WINDOWS = wx.GetTopLevelWindows()
         for win in wx.GetTopLevelWindows():
             if win.GetTitle() in title_name:
                 win.Destroy()

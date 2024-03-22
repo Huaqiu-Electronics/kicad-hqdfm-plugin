@@ -176,12 +176,16 @@ class DfmAnalysis:
                 )
 
         f.close()
+        # wx.MessageBox(
+        #     _(f"{json_result}"),
+        #     _("Help"), style=wx.ICON_INFORMATION,
+        # )
         # with open("output.json", "w") as f:
         #     json.dump(json_result, f)
         return json_result
 
     def analysis_every_item(
-        self, json_result, item_json, name, item_result, transformation=False
+        self, json_result, item_json, name, item_result, transformation
     ):
         have_red = False
         have_yellow = False
@@ -202,6 +206,8 @@ class DfmAnalysis:
                     result_list = {}
                     item_layer_list = []
                     item_layer_list.append(dfm_show_layer)
+                    if dfm_show_layer == "Bot Paste" or dfm_show_layer == "Top Paste":
+                        item_layer_list.append("Outline")
                     for item_layer in item_info_info["layer"]:
                         item_layer_list.append(item_layer)
                     # 设置显示的颜色
