@@ -9,7 +9,7 @@
 
 import wx
 import wx.xrc
-import wx.grid
+import wx.dataview
 
 ###########################################################################
 ## Class UiDfmMaindialog
@@ -92,86 +92,21 @@ class UiDfmMaindialog(wx.Panel):
         )
         bSizer6 = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.grid_panel = wx.Panel(
+        bSizer8 = wx.BoxSizer(wx.VERTICAL)
+
+        self.mainframe_data_view = wx.dataview.DataViewCtrl(
             self.m_panel3,
             wx.ID_ANY,
             wx.DefaultPosition,
-            wx.DefaultSize,
-            wx.TAB_TRAVERSAL,
+            wx.Size(-1, 670),
+            wx.dataview.DV_HORIZ_RULES
+            | wx.dataview.DV_NO_HEADER
+            | wx.dataview.DV_ROW_LINES
+            | wx.dataview.DV_VERT_RULES,
         )
-        bSizer10 = wx.BoxSizer(wx.HORIZONTAL)
+        bSizer8.Add(self.mainframe_data_view, 10, wx.EXPAND, 5)
 
-        self.grid = wx.grid.Grid(
-            self.grid_panel, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, 0
-        )
-
-        # Grid
-        self.grid.CreateGrid(19, 2)
-        self.grid.EnableEditing(False)
-        self.grid.EnableGridLines(True)
-        self.grid.SetGridLineColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNSHADOW)
-        )
-        self.grid.EnableDragGridSize(True)
-        self.grid.SetMargins(0, 0)
-
-        # Columns
-        self.grid.AutoSizeColumns()
-        self.grid.EnableDragColMove(False)
-        self.grid.EnableDragColSize(False)
-        self.grid.SetColLabelSize(1)
-        self.grid.SetColLabelAlignment(wx.ALIGN_CENTER, wx.ALIGN_CENTER)
-
-        # Rows
-        self.grid.SetRowSize(0, 30)
-        self.grid.AutoSizeRows()
-        self.grid.EnableDragRowSize(False)
-        self.grid.SetRowLabelSize(1)
-        self.grid.SetRowLabelAlignment(wx.ALIGN_RIGHT, wx.ALIGN_CENTER)
-
-        # Label Appearance
-        self.grid.SetLabelBackgroundColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT)
-        )
-        self.grid.SetLabelFont(
-            wx.Font(
-                11,
-                wx.FONTFAMILY_SWISS,
-                wx.FONTSTYLE_NORMAL,
-                wx.FONTWEIGHT_NORMAL,
-                False,
-                "微软雅黑",
-            )
-        )
-
-        # Cell Defaults
-        self.grid.SetDefaultCellBackgroundColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
-        )
-        self.grid.SetDefaultCellFont(
-            wx.Font(
-                9,
-                wx.FONTFAMILY_SWISS,
-                wx.FONTSTYLE_NORMAL,
-                wx.FONTWEIGHT_NORMAL,
-                False,
-                "微软雅黑",
-            )
-        )
-        self.grid.SetDefaultCellAlignment(wx.ALIGN_CENTER, wx.ALIGN_CENTER)
-        self.grid.SetForegroundColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVEBORDER)
-        )
-        self.grid.SetBackgroundColour(
-            wx.SystemSettings.GetColour(wx.SYS_COLOUR_BACKGROUND)
-        )
-
-        bSizer10.Add(self.grid, 1, wx.ALL, 5)
-
-        self.grid_panel.SetSizer(bSizer10)
-        self.grid_panel.Layout()
-        bSizer10.Fit(self.grid_panel)
-        bSizer6.Add(self.grid_panel, 21, wx.ALL | wx.EXPAND, 5)
+        bSizer6.Add(bSizer8, 8, wx.ALL, 5)
 
         bSizer7 = wx.BoxSizer(wx.VERTICAL)
 
@@ -367,7 +302,7 @@ class UiDfmMaindialog(wx.Panel):
         )
         bSizer7.Add(self.test_point_count_button, 0, wx.ALIGN_CENTER | wx.ALL, 3)
 
-        bSizer6.Add(bSizer7, 10, wx.EXPAND, 5)
+        bSizer6.Add(bSizer7, 3, wx.EXPAND, 5)
 
         self.m_panel3.SetSizer(bSizer6)
         self.m_panel3.Layout()

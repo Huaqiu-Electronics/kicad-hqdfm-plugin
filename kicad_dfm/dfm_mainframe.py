@@ -21,6 +21,7 @@ from kicad_dfm.manager.rule_manager_view import RuleManagerView
 from kicad_dfm.settings.frame_setting import FRAME_SETTING
 from kicad_dfm.settings.single_plugin import SINGLE_PLUGIN
 from kicad_dfm.hole_childframe.hole_childframe_view import HoleChildFrameView
+from kicad_dfm.settings.timestamp import TimeStamp
 
 
 class DfmMainframe(wx.Frame):
@@ -72,6 +73,7 @@ class DfmMainframe(wx.Frame):
         self.pcb_setting = PcbSetting(self.board)
 
         self.item_result = _("no errors detected")
+        self.json_analysis_map = {}
         self.SetIcon(wx.Icon(GetImagePath("icon.png"), wx.BITMAP_TYPE_PNG))  # 设置窗口图标
         # 将 DfmMaindailogView 对象添加到 BoxSizer 中
         self.dfm_maindialog = DfmMaindailogView(self, self.control)
@@ -79,10 +81,10 @@ class DfmMainframe(wx.Frame):
         self.sizer.Add(self.dfm_maindialog, 1, wx.EXPAND)
         self.SetSizer(self.sizer)
 
-        self.SetSize(wx.Size(480, 830))
+        self.SetSize(wx.Size(490, 830))
         self.Layout()
         self.Centre(wx.BOTH)
-        self.add_temp_json()
+        self.init_data_view()
 
         self.dfm_maindialog.dfm_run_button.Bind(
             wx.EVT_BUTTON, self.on_select_export_gerber
@@ -142,6 +144,31 @@ class DfmMainframe(wx.Frame):
             wx.EVT_BUTTON, self.show_test_point_count_button
         )
         self.Bind(wx.EVT_CLOSE, self.on_close)
+
+    def init_data_view(self):
+        self.json_analysis_map = {
+            _("Layer Count"): {"display": "", "color": ""},
+            _("Dimensions"): {"display": "", "color": ""},
+            _("Signal Integrity"): {"display": "", "color": ""},
+            _("Smallest Trace Width"): {"display": "", "color": ""},
+            _("Smallest Trace Spacing"): {"display": "", "color": ""},
+            _("Pad size"): {"display": "", "color": ""},
+            _("Pad Spacing"): {"display": "", "color": ""},
+            _("Hatched Copper Pour"): {"display": "", "color": ""},
+            _("Hole Diameter"): {"display": "", "color": ""},
+            _("RingHole"): {"display": "", "color": ""},
+            _("Drill Hole Spacing"): {"display": "", "color": ""},
+            _("Drill to Copper"): {"display": "", "color": ""},
+            _("Board Edge Clearance"): {"display": "", "color": ""},
+            _("Special Drill Holes"): {"display": "", "color": ""},
+            _("Holes on SMD Pads"): {"display": "", "color": ""},
+            _("Missing SMask Openings"): {"display": "", "color": ""},
+            _("Drill Hole Density"): {"display": "", "color": ""},
+            _("Surface Finish Area"): {"display": "", "color": ""},
+            _("Test Point Count"): {"display": "", "color": ""},
+        }
+        self.dfm_maindialog.init_data_view(self.json_analysis_map)
+        self.add_temp_json()
 
     def on_close(self, event):
         for line in self.line_list:
@@ -214,7 +241,7 @@ class DfmMainframe(wx.Frame):
             wx.BeginBusyCursor()
             self.have_same_class_window()
             child_frame = DfmChildFrame(
-                self,
+                None,
                 title,
                 analysis_result,
                 jsonfile_string,
@@ -313,7 +340,6 @@ class DfmMainframe(wx.Frame):
         except PermissionError as e:
             gerber_dir = os.path.join(tempfile.gettempdir(), "dfm", "gerber")
             Path(gerber_dir).mkdir(parents=True, exist_ok=True)
-
         creat_file = CreateFile(self.board)
         creat_file.export_gerber(gerber_dir)
         creat_file.export_drl(gerber_dir)
@@ -334,6 +360,7 @@ class DfmMainframe(wx.Frame):
                 wx.MessageBox(
                     _("File analysis failure"), _("Help"), style=wx.ICON_INFORMATION
                 )
+
         self.have_progress = False
         self.add_all_item()
 
@@ -354,227 +381,311 @@ class DfmMainframe(wx.Frame):
         )
         self.kicad_result["Pad size"] = minmum_line_width.get_pad(self.analysis_result)
 
-        # 板子层数
-        self.dfm_maindialog.grid.SetCellValue(
-            0, 1, str(self.board.GetCopperLayerCount())
+        # 板子层数 # 板子尺寸
+        self.json_analysis_map[_("Layer Count")]["display"] = str(
+            self.board.GetCopperLayerCount()
         )
-
-        # 板子尺寸
-        self.dfm_maindialog.grid.SetCellValue(
-            1, 1, str(self.pcb_setting.get_layer_size())
+        self.json_analysis_map[_("Layer Count")]["color"] = ""
+        self.json_analysis_map[_("Dimensions")]["display"] = str(
+            self.pcb_setting.get_layer_size()
         )
+        self.json_analysis_map[_("Dimensions")]["color"] = ""
 
         # 电气信号
         if self.analysis_result["Signal Integrity"] == "":
-            self.dfm_maindialog.grid.SetCellValue(2, 1, self.item_result)
-
-            self.dfm_maindialog.signal_integrity_button.SetBackgroundColour(wx.GREEN)
+            self.json_analysis_map[_("Signal Integrity")]["display"] = self.item_result
+            self.json_analysis_map[_("Signal Integrity")]["color"] = ""
         else:
             data = self.analysis_result["Signal Integrity"]["display"]
             if data is not None:
-                self.dfm_maindialog.grid.SetCellValue(2, 1, _("Error(s) detected"))
-                self.dfm_maindialog.grid.SetCellTextColour(
-                    2, 1, self.analysis_result["Signal Integrity"]["color"]
+                self.json_analysis_map[_("Signal Integrity")]["display"] = _(
+                    "Error(s) detected"
                 )
+                self.json_analysis_map[_("Signal Integrity")][
+                    "color"
+                ] = self.analysis_result["Signal Integrity"]["color"]
             else:
-                self.dfm_maindialog.grid.SetCellValue(2, 1, self.item_result)
-                self.dfm_maindialog.signal_integrity_button.SetBackgroundColour(
-                    wx.GREEN
-                )
+                self.json_analysis_map[_("Signal Integrity")][
+                    "display"
+                ] = self.item_result
+                self.json_analysis_map[_("Signal Integrity")]["color"] = ""
+
+        # 最小线宽
+        if self.kicad_result["Smallest Trace Width"] == "":
+            self.json_analysis_map[_("Smallest Trace Width")][
+                "display"
+            ] = self.item_result
+            self.json_analysis_map[_("Smallest Trace Width")]["color"] = ""
+        else:
+            minimum_value = self.kicad_result["Smallest Trace Width"]["display"]
+            self.json_analysis_map[_("Smallest Trace Width")][
+                "display"
+            ] = self.unit_conversion(minimum_value)
+            self.json_analysis_map[_("Smallest Trace Width")][
+                "color"
+            ] = self.kicad_result["Smallest Trace Width"]["color"]
 
         # 最小间距
         if self.analysis_result["Smallest Trace Spacing"] == "":
-            self.dfm_maindialog.grid.SetCellValue(4, 1, self.item_result)
+            self.json_analysis_map[_("Smallest Trace Spacing")][
+                "display"
+            ] = self.item_result
+            self.json_analysis_map[_("Smallest Trace Spacing")]["color"] = ""
         else:
             data = self.get_data(
                 self.analysis_result["Smallest Trace Spacing"]["display"]
             )
             if data is not None:
-                self.dfm_maindialog.grid.SetCellValue(4, 1, self.unit_conversion(data))
-                self.dfm_maindialog.grid.SetCellTextColour(
-                    4, 1, self.analysis_result["Smallest Trace Spacing"]["color"]
-                )
+                self.json_analysis_map[_("Smallest Trace Spacing")][
+                    "display"
+                ] = self.unit_conversion(data)
+                self.json_analysis_map[_("Smallest Trace Spacing")][
+                    "color"
+                ] = self.analysis_result["Smallest Trace Spacing"]["color"]
+
             else:
-                self.dfm_maindialog.grid.SetCellValue(4, 1, self.item_result)
+                self.json_analysis_map[_("Smallest Trace Spacing")][
+                    "display"
+                ] = self.item_result
+                self.json_analysis_map[_("Smallest Trace Spacing")]["color"] = ""
+
+        # 最小焊盘
+        if self.kicad_result["Pad size"] == "":
+            self.json_analysis_map[_("Pad size")]["display"] = self.item_result
+            self.json_analysis_map[_("Pad size")]["color"] = ""
+        else:
+            minimum_value = self.kicad_result["Pad size"]["display"]
+            self.json_analysis_map[_("Pad size")]["display"] = self.unit_conversion(
+                minimum_value
+            )
+            self.json_analysis_map[_("Pad size")]["color"] = self.kicad_result[
+                "Pad size"
+            ]["color"]
 
         # smd间距
         if self.analysis_result["Pad Spacing"] == "":
-            self.dfm_maindialog.grid.SetCellValue(6, 1, self.item_result)
+            self.json_analysis_map[_("Pad Spacing")]["display"] = self.item_result
+            self.json_analysis_map[_("Pad Spacing")]["color"] = ""
         else:
             data = self.get_data(self.analysis_result["Pad Spacing"]["display"])
             if data is not None:
-                self.dfm_maindialog.grid.SetCellValue(6, 1, self.unit_conversion(data))
-                self.dfm_maindialog.grid.SetCellTextColour(
-                    6, 1, self.analysis_result["Pad Spacing"]["color"]
-                )
+                self.json_analysis_map[_("Pad Spacing")][
+                    "display"
+                ] = self.unit_conversion(data)
+                self.json_analysis_map[_("Pad Spacing")][
+                    "color"
+                ] = self.analysis_result["Pad Spacing"]["color"]
+
             else:
-                self.dfm_maindialog.grid.SetCellValue(6, 1, self.item_result)
+                self.json_analysis_map[_("Pad Spacing")]["display"] = self.item_result
+                self.json_analysis_map[_("Pad Spacing")]["color"] = ""
+
+        # 网格铺铜
+        if self.kicad_result["Hatched Copper Pour"] == "":
+            self.json_analysis_map[_("Hatched Copper Pour")][
+                "display"
+            ] = self.item_result
+            self.json_analysis_map[_("Hatched Copper Pour")]["color"] = ""
+        else:
+            minimum_value = self.kicad_result["Hatched Copper Pour"]["display"]
+            self.json_analysis_map[_("Hatched Copper Pour")][
+                "display"
+            ] = self.unit_conversion(minimum_value)
+            self.json_analysis_map[_("Hatched Copper Pour")][
+                "color"
+            ] = self.kicad_result["Hatched Copper Pour"]["color"]
 
         # 孔大小
         if self.analysis_result["Hole Diameter"] == "":
-            self.dfm_maindialog.grid.SetCellValue(8, 1, self.item_result)
+            self.json_analysis_map[_("Hole Diameter")]["display"] = self.item_result
+            self.json_analysis_map[_("Hole Diameter")]["color"] = ""
         else:
             data = self.get_data(self.analysis_result["Hole Diameter"]["display"])
             if data is not None:
-                self.dfm_maindialog.grid.SetCellValue(8, 1, self.unit_conversion(data))
-                self.dfm_maindialog.grid.SetCellTextColour(
-                    8, 1, self.analysis_result["Hole Diameter"]["color"]
-                )
+                self.json_analysis_map[_("Hole Diameter")][
+                    "display"
+                ] = self.unit_conversion(data)
+                self.json_analysis_map[_("Hole Diameter")][
+                    "color"
+                ] = self.analysis_result["Hole Diameter"]["color"]
+
             else:
-                self.dfm_maindialog.grid.SetCellValue(8, 1, self.item_result)
+                self.json_analysis_map[_("Hole Diameter")]["display"] = self.item_result
+                self.json_analysis_map[_("Hole Diameter")]["color"] = ""
+
+        # 孔环
+        if self.kicad_result["RingHole"] == "":
+            self.json_analysis_map[_("RingHole")]["display"] = self.item_result
+            self.json_analysis_map[_("RingHole")]["color"] = ""
+        else:
+            minimum_value = self.kicad_result["RingHole"]["display"]
+            self.json_analysis_map[_("RingHole")]["display"] = self.unit_conversion(
+                minimum_value
+            )
+            self.json_analysis_map[_("RingHole")]["color"] = self.kicad_result[
+                "RingHole"
+            ]["color"]
 
         # 孔到孔
         if self.analysis_result["Drill Hole Spacing"] == "":
-            self.dfm_maindialog.grid.SetCellValue(10, 1, self.item_result)
+            self.json_analysis_map[_("Drill Hole Spacing")][
+                "display"
+            ] = self.item_result
+            self.json_analysis_map[_("Drill Hole Spacing")]["color"] = ""
         else:
             data = self.get_data(self.analysis_result["Drill Hole Spacing"]["display"])
             if data is not None:
-                self.dfm_maindialog.grid.SetCellValue(10, 1, self.unit_conversion(data))
-                self.dfm_maindialog.grid.SetCellTextColour(
-                    10, 1, self.analysis_result["Drill Hole Spacing"]["color"]
-                )
+                self.json_analysis_map[_("Drill Hole Spacing")][
+                    "display"
+                ] = self.unit_conversion(data)
+                self.json_analysis_map[_("Drill Hole Spacing")][
+                    "color"
+                ] = self.analysis_result["Drill Hole Spacing"]["color"]
             else:
-                self.dfm_maindialog.grid.SetCellValue(10, 1, self.item_result)
+                self.json_analysis_map[_("Drill Hole Spacing")][
+                    "display"
+                ] = self.item_result
+                self.json_analysis_map[_("Drill Hole Spacing")]["color"] = ""
 
         # 孔到线
         if self.analysis_result["Drill to Copper"] == "":
-            self.dfm_maindialog.grid.SetCellValue(11, 1, self.item_result)
+            self.json_analysis_map[_("Drill to Copper")]["display"] = self.item_result
+            self.json_analysis_map[_("Drill to Copper")]["color"] = ""
         else:
             data = self.get_data(self.analysis_result["Drill to Copper"]["display"])
             if data is not None:
-                self.dfm_maindialog.grid.SetCellValue(11, 1, self.unit_conversion(data))
-                self.dfm_maindialog.grid.SetCellTextColour(
-                    11, 1, self.analysis_result["Drill to Copper"]["color"]
-                )
+                self.json_analysis_map[_("Drill to Copper")][
+                    "display"
+                ] = self.unit_conversion(data)
+                self.json_analysis_map[_("Drill to Copper")][
+                    "color"
+                ] = self.analysis_result["Drill to Copper"]["color"]
             else:
-                self.dfm_maindialog.grid.SetCellValue(11, 1, self.item_result)
+                self.json_analysis_map[_("Drill to Copper")][
+                    "display"
+                ] = self.item_result
+                self.json_analysis_map[_("Drill to Copper")]["color"] = ""
+
         # 板边距离
         if self.analysis_result["Board Edge Clearance"] == "":
-            self.dfm_maindialog.grid.SetCellValue(12, 1, self.item_result)
+            self.json_analysis_map[_("Board Edge Clearance")][
+                "display"
+            ] = self.item_result
+            self.json_analysis_map[_("Board Edge Clearance")]["color"] = ""
         else:
             data = self.get_data(
                 self.analysis_result["Board Edge Clearance"]["display"]
             )
             if data is not None:
-                self.dfm_maindialog.grid.SetCellValue(12, 1, self.unit_conversion(data))
-                self.dfm_maindialog.grid.SetCellTextColour(
-                    12, 1, self.analysis_result["Board Edge Clearance"]["color"]
-                )
+                self.json_analysis_map[_("Board Edge Clearance")][
+                    "display"
+                ] = self.unit_conversion(data)
+                self.json_analysis_map[_("Board Edge Clearance")][
+                    "color"
+                ] = self.analysis_result["Board Edge Clearance"]["color"]
             else:
-                self.dfm_maindialog.grid.SetCellValue(12, 1, self.item_result)
+                self.json_analysis_map[_("Board Edge Clearance")][
+                    "display"
+                ] = self.item_result
+                self.json_analysis_map[_("Board Edge Clearance")]["color"] = ""
 
         # 特殊孔
         if self.analysis_result["Special Drill Holes"] == "":
-            self.dfm_maindialog.grid.SetCellValue(13, 1, self.item_result)
+            self.json_analysis_map[_("Special Drill Holes")][
+                "display"
+            ] = self.item_result
+            self.json_analysis_map[_("Special Drill Holes")]["color"] = ""
         else:
             data = self.get_data(self.analysis_result["Special Drill Holes"]["display"])
             if data is not None:
-                self.dfm_maindialog.grid.SetCellValue(13, 1, self.unit_conversion(data))
-                self.dfm_maindialog.grid.SetCellTextColour(
-                    13, 1, self.analysis_result["Special Drill Holes"]["color"]
-                )
+                self.json_analysis_map[_("Special Drill Holes")][
+                    "display"
+                ] = self.unit_conversion(data)
+                self.json_analysis_map[_("Special Drill Holes")][
+                    "color"
+                ] = self.analysis_result["Special Drill Holes"]["color"]
             else:
-                self.dfm_maindialog.grid.SetCellValue(13, 1, self.item_result)
+                self.json_analysis_map[_("Special Drill Holes")][
+                    "display"
+                ] = self.item_result
+                self.json_analysis_map[_("Special Drill Holes")]["color"] = ""
 
-        # 孔环
-        if self.kicad_result["RingHole"] == "":
-            self.dfm_maindialog.grid.SetCellValue(9, 1, self.item_result)
-        else:
-            minimum_value = self.kicad_result["RingHole"]["display"]
-            self.dfm_maindialog.grid.SetCellValue(
-                9, 1, self.unit_conversion(minimum_value)
-            )
-            self.dfm_maindialog.grid.SetCellTextColour(
-                9, 1, self.kicad_result["RingHole"]["color"]
-            )
-
-        # 最小焊盘
-        if self.kicad_result["Pad size"] == "":
-            self.dfm_maindialog.grid.SetCellValue(5, 1, self.item_result)
-        else:
-            minimum_value = self.kicad_result["Pad size"]["display"]
-            self.dfm_maindialog.grid.SetCellValue(
-                5, 1, self.unit_conversion(minimum_value)
-            )
-            self.dfm_maindialog.grid.SetCellTextColour(
-                5, 1, self.kicad_result["Pad size"]["color"]
-            )
-
-        # 最小线宽
-        if self.kicad_result["Smallest Trace Width"] == "":
-            self.dfm_maindialog.grid.SetCellValue(3, 1, self.item_result)
-        else:
-            minimum_value = self.kicad_result["Smallest Trace Width"]["display"]
-            self.dfm_maindialog.grid.SetCellValue(
-                3, 1, self.unit_conversion(minimum_value)
-            )
-            self.dfm_maindialog.grid.SetCellTextColour(
-                3, 1, self.kicad_result["Smallest Trace Width"]["color"]
-            )
-
-        # 网格铺铜
-        if self.kicad_result["Hatched Copper Pour"] == "":
-            self.dfm_maindialog.grid.SetCellValue(7, 1, self.item_result)
-        else:
-            minimum_value = self.kicad_result["Hatched Copper Pour"]["display"]
-            self.dfm_maindialog.grid.SetCellValue(
-                7, 1, self.unit_conversion(minimum_value)
-            )
-            self.dfm_maindialog.grid.SetCellTextColour(
-                7, 1, self.kicad_result["Hatched Copper Pour"]["color"]
-            )
-
-            # 孔上焊盘
+        # 孔上焊盘
         if self.analysis_result["Holes on SMD Pads"] == "":
-            self.dfm_maindialog.grid.SetCellValue(14, 1, self.item_result)
+            self.json_analysis_map[_("Holes on SMD Pads")]["display"] = self.item_result
+            self.json_analysis_map[_("Holes on SMD Pads")]["color"] = ""
         else:
             data = self.analysis_result["Holes on SMD Pads"]["display"]
             if data is not None:
-                self.dfm_maindialog.grid.SetCellValue(14, 1, str(data))
-                self.dfm_maindialog.grid.SetCellTextColour(
-                    14, 1, self.analysis_result["Holes on SMD Pads"]["color"]
-                )
+                self.json_analysis_map[_("Holes on SMD Pads")]["display"] = str(data)
+                self.json_analysis_map[_("Holes on SMD Pads")][
+                    "color"
+                ] = self.analysis_result["Holes on SMD Pads"]["color"]
             else:
-                self.dfm_maindialog.grid.SetCellValue(14, 1, self.item_result)
+                self.json_analysis_map[_("Holes on SMD Pads")][
+                    "display"
+                ] = self.item_result
+                self.json_analysis_map[_("Holes on SMD Pads")]["color"] = ""
 
             # 阻焊开窗
         if self.analysis_result["Missing SMask Openings"] == "":
-            self.dfm_maindialog.grid.SetCellValue(15, 1, self.item_result)
+            self.json_analysis_map[_("Missing SMask Openings")][
+                "display"
+            ] = self.item_result
+            self.json_analysis_map[_("Missing SMask Openings")]["color"] = ""
         else:
             data = self.get_data(
                 self.analysis_result["Missing SMask Openings"]["display"]
             )
             if data is not None:
-                self.dfm_maindialog.grid.SetCellValue(15, 1, str(data))
-                self.dfm_maindialog.grid.SetCellTextColour(
-                    15, 1, self.analysis_result["Missing SMask Openings"]["color"]
+                self.json_analysis_map[_("Missing SMask Openings")]["display"] = str(
+                    data
                 )
-            else:
-                self.dfm_maindialog.grid.SetCellValue(15, 1, self.item_result)
+                self.json_analysis_map[_("Missing SMask Openings")][
+                    "color"
+                ] = self.analysis_result["Missing SMask Openings"]["color"]
 
-            # 孔密度
+            else:
+                self.json_analysis_map[_("Missing SMask Openings")][
+                    "display"
+                ] = self.item_result
+                self.json_analysis_map[_("Missing SMask Openings")]["color"] = ""
+
+        # 孔密度
         if self.analysis_result["Drill Hole Density"] == "":
-            self.dfm_maindialog.grid.SetCellValue(16, 1, self.item_result)
+            self.json_analysis_map[_("Drill Hole Density")][
+                "display"
+            ] = self.item_result
+            self.json_analysis_map[_("Drill Hole Density")]["color"] = ""
         else:
-            self.dfm_maindialog.grid.SetCellValue(
-                16, 1, str(self.analysis_result["Drill Hole Density"]["display"])
+            self.json_analysis_map[_("Drill Hole Density")]["display"] = str(
+                self.analysis_result["Drill Hole Density"]["display"]
             )
+            self.json_analysis_map[_("Drill Hole Density")]["color"] = ""
 
             # 沉金面积
         if self.analysis_result["Surface Finish Area"] == "":
-            self.dfm_maindialog.grid.SetCellValue(17, 1, self.item_result)
+            self.json_analysis_map[_("Surface Finish Area")][
+                "display"
+            ] = self.item_result
+            self.json_analysis_map[_("Surface Finish Area")]["color"] = ""
         else:
-            self.dfm_maindialog.grid.SetCellValue(
-                17, 1, str(self.analysis_result["Surface Finish Area"]["display"])
+            self.json_analysis_map[_("Surface Finish Area")]["display"] = str(
+                self.analysis_result["Surface Finish Area"]["display"]
             )
+            self.json_analysis_map[_("Surface Finish Area")]["color"] = ""
 
             # 飞针点数
         if self.analysis_result["Test Point Count"] == "":
-            self.dfm_maindialog.grid.SetCellValue(18, 1, self.item_result)
+            self.json_analysis_map[_("Test Point Count")]["display"] = self.item_result
+            self.json_analysis_map[_("Test Point Count")]["color"] = ""
         else:
-            self.dfm_maindialog.grid.SetCellValue(
-                18, 1, str(self.analysis_result["Test Point Count"]["display"])
+            self.json_analysis_map[_("Test Point Count")]["display"] = str(
+                self.analysis_result["Test Point Count"]["display"]
             )
+            self.json_analysis_map[_("Test Point Count")]["color"] = ""
+
+        self.dfm_maindialog.init_data_view(self.json_analysis_map)
 
     # 只获取数据
     def get_data(self, data_string):

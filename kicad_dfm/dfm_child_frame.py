@@ -11,6 +11,7 @@ from kicad_dfm.settings.graphics_setting import GRAPHICS_SETTING
 from kicad_dfm.child_frame.child_frame_model import ChildFrameModel
 import wx.dataview as dv
 from kicad_dfm.child_frame.picture_match_path import PICTURE_MATCH_PATH
+from kicad_dfm.settings.timestamp import TimeStamp
 
 
 class DfmChildFrame(UiChildFrame):
@@ -61,8 +62,12 @@ class DfmChildFrame(UiChildFrame):
         self.lst_layer.Bind(wx.EVT_LISTBOX, self.set_result)
         self.lst_analysis_type.Bind(wx.EVT_LISTBOX, self.analysis_type)
         self.lst_analysis_result1.Bind(
-            dv.EVT_DATAVIEW_SELECTION_CHANGED, self.analysis_result
+            dv.EVT_DATAVIEW_SELECTION_CHANGED, self.on_analysis_result
         )
+        self.lst_analysis_result1.Bind(
+            dv.EVT_DATAVIEW_ITEM_ACTIVATED, self.on_analysis_result
+        )
+
         self.combo_box.Bind(wx.EVT_COMBOBOX, self.read_json)
         self.Bind(wx.EVT_CLOSE, self.on_close)
 
@@ -349,10 +354,6 @@ class DfmChildFrame(UiChildFrame):
         self.lst_analysis_result1.DeleteAllItems()
         for value in self.analysis_result_data:
             self.lst_analysis_result1.AppendItem([value])
-        # self.lst_analysis_result1.GetModel().ItemToObject(value)  SetColour("blue")
-        # self.lst_analysis_result1.SetBold(True)
-        # item_attr = dv.DataViewItemAttr()
-        # item_attr.SetColour(wx.BLUE)
 
     def Millimeter2iu(self, millimeter_value):
         return round(millimeter_value / 25.4, 3)
@@ -360,19 +361,13 @@ class DfmChildFrame(UiChildFrame):
     def Millimeter2mils(self, millimeter_value):
         return round((millimeter_value * 39.37), 3)
 
-    def analysis_result(self, event):
+    def on_analysis_result(self, event):
         selection = self.lst_analysis_result1.GetSelectedRow()
-        if selection != -1:
-            if self.process_lock.acquire(blocking=False):
-                try:
-                    # Get the data from the selected row
-                    item_data = self.lst_analysis_result1.GetValue(selection, 0)
-                    # Assuming item_data is the data associated with the selected row
-                    # Start the analysis process synchronously
-                    self.analysis_process(item_data)
-                finally:
-                    # Release the lock
-                    self.process_lock.release()
+        item_data = self.lst_analysis_result1.GetValue(selection, 0)
+        # Assuming item_data is the data associated with the selected row
+        # Start the analysis process synchronously
+        self.analysis_process(item_data)
+        event.Skip()
 
     # 通过选中行的string去查找到对应的item
     def analysis_process(self, string_data):
@@ -381,7 +376,6 @@ class DfmChildFrame(UiChildFrame):
         y = settings.GetAuxOrigin().y
         for clear_item in self.item_list:
             clear_item.ClearBrightened()
-            # clear_item.ClearSelected()
         self.item_list = []
         pattern = re.compile(r"(\d+(?=(\、)))")
         search_res = pattern.search(string_data)
@@ -429,7 +423,6 @@ class DfmChildFrame(UiChildFrame):
                         for layer in self.result[result_list][0]["layer"]:
                             layer_num.append(self.board.GetLayerID(layer))
                         item.SetBrightened()
-                        # item.SetSelected()
                         self.item_list.append(item)
                     # dfm分析项
                     else:
@@ -440,8 +433,6 @@ class DfmChildFrame(UiChildFrame):
                         for result in self.result[result_list]["result"]:
                             # 多种的数据格式
                             line = pcbnew.PCB_SHAPE()
-                            # line.SetLayer(pcbnew.Dwgs_User)
-                            # line.SetLayer(pcbnew.LAYER_MARKER_SHADOWS)
                             line.SetLayer(pcbnew.LAYER_DRC_WARNING)
                             line.SetWidth(250000)
                             if result["type"] == 0:
@@ -487,11 +478,9 @@ class DfmChildFrame(UiChildFrame):
                 if num in layer_num:
                     continue
                 gal_set.removeLayer(num)
-            # shadow_layer_id = self.board.GetLayerID(pcbnew.LAYER_LOCKED_ITEM_SHADOW)
-            # # gal_set.removeLayer(shadow_layer_id)
             self.board.SetVisibleLayers(gal_set)
-            pcbnew.UpdateUserInterface()
-        pcbnew.Refresh()
+            wx.CallAfter(pcbnew.UpdateUserInterface)
+        wx.CallAfter(pcbnew.Refresh)
 
     @property
     def get_layer(self):

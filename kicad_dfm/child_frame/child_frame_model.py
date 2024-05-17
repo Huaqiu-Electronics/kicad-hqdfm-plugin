@@ -1,5 +1,4 @@
 import pcbnew
-from kicad_dfm.custom_contral.custom_listbox import CustomListBox
 
 
 class ChildFrameModel:

@@ -8,6 +8,7 @@ import sys
 import time
 from . import config
 from kicad_dfm import GetFilePath
+from kicad_dfm.settings.timestamp import TimeStamp
 
 
 class DfmAnalysis:
@@ -21,6 +22,7 @@ class DfmAnalysis:
             maximum=100,
             style=wx.PD_SMOOTH | wx.PD_AUTO_HIDE,
         )
+
         progress.Update(5)
         url_path = open(zip_path, "rb")
         request_data = {
@@ -39,7 +41,7 @@ class DfmAnalysis:
                 _("Network connection error"), _("Help"), style=wx.ICON_INFORMATION
             )
             progress.Update(90)
-            time.sleep(1)
+            # time.sleep(1)
             return
         progress.Update(20)
         progress.SetTitle(_("Analysis file"))
@@ -60,7 +62,7 @@ class DfmAnalysis:
             kicad_id = ret.group()
         if json_id == "" or kicad_id == "":
             progress.Update(90)
-            time.sleep(1)
+            # time.sleep(1)
             return
         params = {"id": json_id, "kicadid": kicad_id}
         # json_file = requests.get(json_temp["data"]["analyse_url"].encode("utf8"))
@@ -88,7 +90,13 @@ class DfmAnalysis:
                 break
 
         if len(file_path["data"]) == 0:
+            wx.MessageBox(
+                _("Request data error,please request again"),
+                _("Info"),
+                style=wx.ICON_INFORMATION,
+            )
             return
+
         file_url = file_path["data"]["analyse_url"]
         filename = GetFilePath("temp.json")
         temp_filename = GetFilePath("name.json")
