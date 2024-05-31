@@ -1,7 +1,7 @@
 import pcbnew
 
 
-class ChildFrameModel:
+class ChildFrameSetting:
     def __init__(self, result_json, json_string, kicad=False):
         self.result_json = result_json
         self.json_string = json_string

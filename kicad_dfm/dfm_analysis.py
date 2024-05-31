@@ -9,48 +9,64 @@ import time
 from . import config
 from kicad_dfm import GetFilePath
 from kicad_dfm.settings.timestamp import TimeStamp
+import logging
+from requests.exceptions import Timeout, ConnectionError, HTTPError
 
 
 class DfmAnalysis:
     def __init__(self):
         self.board_layer_count = None
 
-    def download_file(self, zip_path, title_name):
-        progress = wx.ProgressDialog(
-            _("Upload DFM analysis file"),
-            _("Please wait"),
-            maximum=100,
-            style=wx.PD_SMOOTH | wx.PD_AUTO_HIDE,
-        )
-
-        progress.Update(5)
+    def guonei_download_dfm_file(self, zip_path, title_name):
+        self.start_progress_bar()
         url_path = open(zip_path, "rb")
-        request_data = {
+        files = {"file": ("gerber.zip", url_path, "application/zip", {"Expires": "0"})}
+        data = {"type": "kicad"}
+        url = "https://dfm.hqpcb.com/api/kicadView/upfile"
+        response = self.api_request_interface(url, files, data)
+        json_temp = response.json()
+        if not json_temp:
+            self.report_part_search_error(
+                _("Failed to upload file. Plaese request again")
+            )
+            return
+        if json_temp["code"] != 2000:
+            self.report_part_search_error(_("HTTP request error. Plaese request again"))
+            return
+        analyse_url = json_temp["data"]
+        analyse_id = analyse_url.get("analyse_id", "")
+        kicad_id = analyse_url.get("kicad_id", "")
+        if analyse_id == "" or kicad_id == "":
+            self.report_part_search_error(_("Not dfm data. Plaese request again"))
+            return
+        url_path.close()
+
+        id_url = "http://dfm.hqpcb.com/api/KicadView/getParseResult"
+        params = {"id": analyse_id, "kicadid": kicad_id}
+        filename = self.requset_dfm_analysis_file(id_url, params, zip_path, title_name)
+        self.progress.Update(100)
+        self.progress.Destroy()
+        return filename
+
+    def haiwai_download_dfm_file(self, zip_path, title_name):
+        self.start_progress_bar()
+        url_path = open(zip_path, "rb")
+        files = {"file": ("gerber.zip", url_path, "application/zip", {"Expires": "0"})}
+        data = {
             "region": (None, "us"),
-            "file": ("gerber.zip", url_path, "application/zip"),
             "type": (None, "dfm"),
             "bcount": (None, 10),
         }
-        # headers = {'content-type': 'application/json'}
 
         url = "https://www.nextpcb.com/upfile/kiCadUpFile"
-        try:
-            response = requests.post(url, files=request_data)
-        except requests.exceptions.ConnectionError as e:
-            wx.MessageBox(
-                _("Network connection error"), _("Help"), style=wx.ICON_INFORMATION
-            )
-            progress.Update(90)
-            # time.sleep(1)
-            return
-        progress.Update(20)
-        progress.SetTitle(_("Analysis file"))
-        json_id = ""
-        kicad_id = ""
-        id_url = "https://www.nextpcb.com/DfmView/getParseResult"
+        response = self.api_request_interface(url, files, data)
         json_temp = response.json()
         if json_temp["status"] is False:
             return
+        url_path.close()
+        json_id = ""
+        kicad_id = ""
+
         id_rule = re.compile(r"(?<=(\?id=))[A-Za-z0-9]+(?=&kicadid=)")
         kicad_rule = re.compile(r"(?<=(&kicadid=))[A-Za-z0-9]+")
         analyse_url = json_temp["data"]["analyse_url"]
@@ -61,34 +77,44 @@ class DfmAnalysis:
         if ret is not None:
             kicad_id = ret.group()
         if json_id == "" or kicad_id == "":
-            progress.Update(90)
-            # time.sleep(1)
+            self.report_part_search_error(_("Not dfm data. Plaese request again"))
             return
+
+        id_url = "https://www.nextpcb.com/DfmView/getParseResult"
         params = {"id": json_id, "kicadid": kicad_id}
-        # json_file = requests.get(json_temp["data"]["analyse_url"].encode("utf8"))
+        filename = self.requset_dfm_analysis_file(id_url, params, zip_path, title_name)
+        self.progress.Update(100)
+        self.progress.Destroy()
+        return filename
+
+    def start_progress_bar(self):
+        self.progress = wx.ProgressDialog(
+            _("Upload DFM analysis file"),
+            _("Please wait"),
+            maximum=100,
+            style=wx.PD_SMOOTH | wx.PD_AUTO_HIDE,
+        )
+        self.progress.Update(5)
+
+    def requset_dfm_analysis_file(self, id_url, params, zip_path, title_name):
         number = 30
         while 1:
-            progress.SetTitle(_("Analytical phase"))
-            if number < 80:
+            self.progress.SetTitle(_("Analytical phase"))
+            if number < 90:
                 number += 2
             try:
                 json_file = requests.get(id_url, params=params)
+                time.sleep(1.5)
             except requests.exceptions.ConnectionError as e:
-                wx.MessageBox(
-                    _("Network connection error"), _("Help"), style=wx.ICON_INFORMATION
+                self.report_part_search_error(
+                    _("Network connection error. Plaese request again")
                 )
-                progress.Update(90)
-                time.sleep(1)
-                return
             file_path = json_file.json()
-            progress.Update(number)
-            if file_path["code"] == 200:
-                progress.Destroy()
+            self.progress.Update(number)
+            if file_path["code"] == 2000 or file_path["code"] == 200:
                 break
             if file_path["code"] != 22006:
-                progress.Destroy()
                 break
-
         if len(file_path["data"]) == 0:
             wx.MessageBox(
                 _("Request data error,please request again"),
@@ -112,14 +138,40 @@ class DfmAnalysis:
                 separators=(",", ":"),
                 sort_keys=True,
             )
-
-        url_path.close()
-        progress.Update(100)
         if os.path.exists(zip_path):
             os.remove(zip_path)
         else:
             return
         return filename
+
+    def api_request_interface(self, url, files, data):
+        try:
+            response = requests.post(url, files=files, data=data)
+            response.raise_for_status()
+            self.progress.Update(20)
+            self.progress.SetTitle(_("Analysis file"))
+            return response
+        except Timeout:
+            self.report_part_search_error(_("HTTP request timed out"))
+        except (ConnectionError, HTTPError) as e:
+            self.report_part_search_error(
+                _("HTTP error occurred: {error}").format(error=e)
+            )
+        except Exception as e:
+            self.report_part_search_error(
+                _("An unexpected HTTP error occurred: {error}").format(error=e)
+            )
+
+    def report_part_search_error(self, reason):
+        wx.MessageBox(
+            _("Failed to request dfm analysis data: \r\n{reasons}\r\n").format(
+                reasons=reason
+            ),
+            _("Error"),
+            style=wx.ICON_ERROR,
+        )
+        self.progress.Update(100)
+        self.progress.Destroy()
 
     def analysis_json(self, json_path, transformation=False):
         json_result = {}
@@ -182,12 +234,7 @@ class DfmAnalysis:
                 self.analysis_every_item(
                     json_result, item_json, name, item_result, transformation
                 )
-
         f.close()
-        # wx.MessageBox(
-        #     _(f"{json_result}"),
-        #     _("Help"), style=wx.ICON_INFORMATION,
-        # )
         # with open("output.json", "w") as f:
         #     json.dump(json_result, f)
         return json_result

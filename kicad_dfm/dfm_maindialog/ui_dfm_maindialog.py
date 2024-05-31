@@ -11,6 +11,7 @@ import wx
 import wx.xrc
 import wx.dataview
 
+
 ###########################################################################
 ## Class UiDfmMaindialog
 ###########################################################################
@@ -53,21 +54,25 @@ class UiDfmMaindialog(wx.Panel):
         self.dfm_run_button = wx.Button(
             self.m_panel9,
             wx.ID_ANY,
-            _("DFM Analysis"),
+            _("   DFM Analysis   "),
             wx.DefaultPosition,
-            wx.Size(110, 35),
+            wx.Size(-1, -1),
             0,
         )
+        self.dfm_run_button.SetMinSize(wx.Size(-1, 40))
+
         bSizer2.Add(self.dfm_run_button, 0, wx.ALL | wx.EXPAND, 15)
 
         self.rule_manager_button = wx.Button(
             self.m_panel9,
             wx.ID_ANY,
-            _("Rule Manager"),
+            _("   Rule Manager   "),
             wx.DefaultPosition,
-            wx.Size(110, 35),
+            wx.Size(-1, -1),
             0,
         )
+        self.rule_manager_button.SetMinSize(wx.Size(-1, 40))
+
         bSizer2.Add(self.rule_manager_button, 0, wx.ALL | wx.EXPAND, 15)
 
         bSizer2.Add((0, 0), 1, wx.EXPAND, 5)
@@ -98,12 +103,14 @@ class UiDfmMaindialog(wx.Panel):
             self.m_panel3,
             wx.ID_ANY,
             wx.DefaultPosition,
-            wx.Size(-1, 670),
+            wx.Size(-1, -1),
             wx.dataview.DV_HORIZ_RULES
             | wx.dataview.DV_NO_HEADER
             | wx.dataview.DV_ROW_LINES
             | wx.dataview.DV_VERT_RULES,
         )
+        self.mainframe_data_view.SetMinSize(wx.Size(-1, 670))
+
         bSizer8.Add(self.mainframe_data_view, 10, wx.EXPAND, 5)
 
         bSizer6.Add(bSizer8, 8, wx.ALL, 5)

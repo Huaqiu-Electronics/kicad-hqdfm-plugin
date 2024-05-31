@@ -10,7 +10,7 @@ from pathlib import Path
 from . import config
 
 from .create_file import CreateFile
-from .dfm_child_frame import DfmChildFrame
+from .child_frame.dfm_child_frame import DfmChildFrame
 from .picture import GetImagePath
 from .analysis import MinimumLineWidth
 from .dfm_analysis import DfmAnalysis
@@ -21,7 +21,9 @@ from kicad_dfm.manager.rule_manager_view import RuleManagerView
 from kicad_dfm.settings.frame_setting import FRAME_SETTING
 from kicad_dfm.settings.single_plugin import SINGLE_PLUGIN
 from kicad_dfm.hole_childframe.hole_childframe_view import HoleChildFrameView
-from kicad_dfm.settings.timestamp import TimeStamp
+import threading
+import requests
+import time
 
 
 class DfmMainframe(wx.Frame):
@@ -56,6 +58,7 @@ class DfmMainframe(wx.Frame):
         except Exception as e:
             for fp in (
                 "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
+                "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\ecc83\\ecc83-pp.kicad_pcb",
                 "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\video\\video.kicad_pcb",
             ):
                 if os.path.exists(fp):
@@ -71,6 +74,7 @@ class DfmMainframe(wx.Frame):
         self.dfm_analysis = DfmAnalysis()
         self.hole_childframe = None
         self.pcb_setting = PcbSetting(self.board)
+        self.country = None
 
         self.item_result = _("no errors detected")
         self.json_analysis_map = {}
@@ -85,6 +89,7 @@ class DfmMainframe(wx.Frame):
         self.Layout()
         self.Centre(wx.BOTH)
         self.init_data_view()
+        threading.Thread(target=self.get_current_location).start()
 
         self.dfm_maindialog.dfm_run_button.Bind(
             wx.EVT_BUTTON, self.on_select_export_gerber
@@ -334,6 +339,22 @@ class DfmMainframe(wx.Frame):
         pass
 
     def on_select_export_gerber(self, event):
+        messageDialog = wx.MessageDialog(
+            self,
+            _("Do you want to save pcb file?"),
+            _("Info"),
+            wx.YES_NO | wx.ICON_INFORMATION | wx.NO_DEFAULT,
+        )
+
+        messageDialog.SetYesNoLabels(_("Yes"), _("No"))
+        if messageDialog.ShowModal() == wx.ID_YES:
+            fullfilepath = self.board.GetFileName()
+            # fullfilepath = self.path+'\\save.kicad_pcb'
+            save_result = pcbnew.SaveBoard(fullfilepath, self.board)
+            if not save_result:
+                wx.MessageBox(_(" Fialed to save pcb file"), _("Info"))
+                return
+        messageDialog.Destroy()
         try:
             gerber_dir = os.path.join(self.path, "dfm", "gerber")
             Path(gerber_dir).mkdir(parents=True, exist_ok=True)
@@ -350,16 +371,28 @@ class DfmMainframe(wx.Frame):
         if self.have_progress is False:
             self.have_progress = True
             # 下载json文件
-            json_path = self.dfm_analysis.download_file(archived, self.name)
+            if self.country == "CN":
+                json_path = self.dfm_analysis.guonei_download_dfm_file(
+                    archived, self.name
+                )
+            else:
+                json_path = self.dfm_analysis.haiwai_download_dfm_file(
+                    archived, self.name
+                )
             # 解析json文件，保存到结果中
+
             if pcbnew.GetLanguage() == "简体中文":
                 self.analysis_result = self.dfm_analysis.analysis_json(json_path, True)
             else:
                 self.analysis_result = self.dfm_analysis.analysis_json(json_path)
             if self.analysis_result == "":
                 wx.MessageBox(
-                    _("File analysis failure"), _("Help"), style=wx.ICON_INFORMATION
+                    _("File analysis failure!"), _("Info"), style=wx.ICON_INFORMATION
                 )
+            else:
+                wx.MessageDialog(
+                    self, _("Analysis success!"), _("Info"), wx.OK | wx.ICON_INFORMATION
+                ).ShowModal()
 
         self.have_progress = False
         self.add_all_item()
@@ -726,3 +759,22 @@ class DfmMainframe(wx.Frame):
             if window.GetTitle() in _("Rule View"):
                 window.Destroy()
         RuleManagerView(self, rule_item, item_size, self.unit).Show()
+
+    def get_current_location(self):
+        try:
+            attempts = 0
+            max_attempts = 5
+            while attempts < max_attempts:
+                response = requests.get("https://ipinfo.io/json")
+                if response.status_code == 200:
+                    location = response.json()
+                    if location:
+                        self.country = location.get("country", "None")
+                        # 这里可以处理更多的位置信息，例如城市、地区等
+                        print(f"Country: {self.country}")
+                    return self.country
+                time.sleep(1)
+                attempts += 1
+        except Exception as e:
+            print(f"Error fetching location: {e}")
+        return None

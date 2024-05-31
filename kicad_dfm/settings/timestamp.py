@@ -11,12 +11,12 @@ class TimeStamp:
     def _setup_logging(self):
         # 设置日志的配置信息
         try:
-            # log_file_path = "C:\\Users\\haf\\Documents\\KiCad\\8.0\\scripting\\plugins\\kicad-dfm-plugin\\plugin.log"
+            log_file_path = "C:\\Users\\haf\\Documents\\KiCad\\8.0\\scripting\\plugins\\kicad-dfm-plugin\\plugin.log"
             logging.basicConfig(
                 level=logging.INFO,
                 format="%(asctime)s - %(levelname)s - %(message)s",
                 datefmt=None,  # 使用自定义格式，因此这里设置为None
-                filename="plugin.log",
+                filename=log_file_path,
                 filemode="a",  # 追加模式
             )
         except Exception as e:

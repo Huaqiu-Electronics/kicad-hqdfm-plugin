@@ -3,15 +3,15 @@ import wx
 import re
 from decimal import Decimal
 import pcbnew
-import threading
-from . import config
-from .picture import GetImagePath
+from .. import config
+from ..picture import GetImagePath
 from kicad_dfm.child_frame.ui_child_frame import UiChildFrame
 from kicad_dfm.settings.graphics_setting import GRAPHICS_SETTING
-from kicad_dfm.child_frame.child_frame_model import ChildFrameModel
+from kicad_dfm.child_frame.child_frame_setting import ChildFrameSetting
 import wx.dataview as dv
 from kicad_dfm.child_frame.picture_match_path import PICTURE_MATCH_PATH
 from kicad_dfm.settings.timestamp import TimeStamp
+from .dfm_child_frame_model import DfmChildFrameModel
 
 
 class DfmChildFrame(UiChildFrame):
@@ -46,7 +46,6 @@ class DfmChildFrame(UiChildFrame):
         self.item_list = []
         self.delete_value = {}
         self.select_number = -1
-        self.process_lock = threading.Lock()
 
         self.analysis_result_data = self.get_result()
         self.lst_analysis_result1.AppendTextColumn(
@@ -76,6 +75,7 @@ class DfmChildFrame(UiChildFrame):
         self.next_button.Bind(wx.EVT_BUTTON, self.select_next)
         self.last_button.Bind(wx.EVT_BUTTON, self.select_last)
 
+        self.data_view_binding()
         self.dispose_result()
         self.set_layer()
         self.set_color_rule()
@@ -203,8 +203,7 @@ class DfmChildFrame(UiChildFrame):
     def set_color_rule(self):
         if self.result_json[self.json_string] == "":
             return
-        self.analysis_result_data = []
-        result_flag_list = {}
+        results_list = []
         self.result = {}  # 展示的结果集
         if self.lst_analysis_type.GetSelections() != wx.NOT_FOUND:
             list_data = self.lst_analysis_type.GetSelections()
@@ -291,20 +290,11 @@ class DfmChildFrame(UiChildFrame):
                         + str(len(self.result[result]))
                         + _("pcs")
                     )
-                self.analysis_result_data.append(string)
-            temp_num = 0
-            for result_flag in result_flag_list:
-                if self.result[result_flag]["color"] == "red":
-                    self.lst_analysis_result1.AssociateModel()
-                elif self.result[result_flag]["color"] == "gold":
-                    self.lst_analysis_result1.SetItemForegroundColour(
-                        temp_num, wx.YELLOW
-                    )
-                elif self.result[result_flag]["color"] == "black":
-                    self.lst_analysis_result1.SetItemForegroundColour(
-                        temp_num, wx.BLACK
-                    )
-                temp_num += 1
+
+                value = self.result[result][0]["value"]
+                color = self.result[result][0]["color"]
+                results_list.append([string, color])
+
         else:
             for result_list in self.result_json[self.json_string]["check"]:
                 for result in result_list["result"]:
@@ -315,10 +305,20 @@ class DfmChildFrame(UiChildFrame):
                     ):
                         num += 1
                         if self.json_string == "Holes on SMD Pads":
-                            result_flag_list[str(num)] = result["value"]
+                            results_list.append(
+                                [
+                                    self.string_conversion(num, result["value"]),
+                                    result["color"],
+                                ]
+                            )
                         elif result["item"] == "Aspect Ratio":
                             millimeter_value = round(float(result["value"]), 2)
-                            result_flag_list[str(num)] = result["value"]
+                            results_list.append(
+                                [
+                                    self.string_conversion(num, result["value"]),
+                                    result["color"],
+                                ]
+                            )
                             board_thickness = round(
                                 (
                                     self.board.GetDesignSettings().GetBoardThickness()
@@ -327,7 +327,7 @@ class DfmChildFrame(UiChildFrame):
                                 2,
                             )
                             hole_diameter = round(board_thickness / millimeter_value, 2)
-                            result_flag_list[str(num)] = (
+                            values = (
                                 str(millimeter_value)
                                 + "("
                                 + str(board_thickness)
@@ -335,25 +335,53 @@ class DfmChildFrame(UiChildFrame):
                                 + str(hole_diameter)
                                 + ")"
                             )
+                            results_list.append(
+                                [self.string_conversion(num, values), result["color"]]
+                            )
                         else:
                             millimeter_value = round(float(result["value"]), 3)
                             iu_value = self.Millimeter2iu(millimeter_value)
                             mils_value = self.Millimeter2mils(millimeter_value)
                             if self.unit == 0:
-                                result_flag_list[str(num)] = str(iu_value) + "inch"
+                                results_list.append(
+                                    [
+                                        self.string_conversion(
+                                            num, str(iu_value) + "inch"
+                                        ),
+                                        result["color"],
+                                    ]
+                                )
                             elif self.unit == 5:
-                                result_flag_list[str(num)] = str(mils_value) + "mil"
+                                results_list.append(
+                                    [
+                                        self.string_conversion(
+                                            num, str(mils_value) + "mil"
+                                        ),
+                                        result["color"],
+                                    ]
+                                )
                             else:
-                                result_flag_list[str(num)] = result["value"] + "mm"
+                                results_list.append(
+                                    [
+                                        self.string_conversion(
+                                            num, result["value"] + "mm"
+                                        ),
+                                        result["color"],
+                                    ]
+                                )
                         self.result[str(num)] = result_list
                         break
-            for flag in result_flag_list:
-                string = flag + "、 " + result_flag_list.get(flag)
-                self.analysis_result_data.append(string)
 
-        self.lst_analysis_result1.DeleteAllItems()
-        for value in self.analysis_result_data:
-            self.lst_analysis_result1.AppendItem([value])
+        self.dfm_child_frame_model.Update(results_list)
+
+    def string_conversion(self, num, value):
+        string = str(num) + "、" + value
+        return string
+
+    def data_view_binding(self):
+        self.dfm_child_frame_model = DfmChildFrameModel(self.analysis_result_data)
+        self.lst_analysis_result1.AssociateModel(self.dfm_child_frame_model)
+        wx.CallAfter(self.lst_analysis_result1.Refresh)
 
     def Millimeter2iu(self, millimeter_value):
         return round(millimeter_value / 25.4, 3)
@@ -378,7 +406,10 @@ class DfmChildFrame(UiChildFrame):
             clear_item.ClearBrightened()
         self.item_list = []
         pattern = re.compile(r"(\d+(?=(\、)))")
-        search_res = pattern.search(string_data)
+        try:
+            search_res = pattern.search(string_data)
+        except TypeError as e:
+            return
         layer_num = []
         self.board.ClearSelected()
         self.board.SetVisibleAlls()
@@ -514,7 +545,8 @@ class DfmChildFrame(UiChildFrame):
         for result_list in self.result_json[self.json_string]["check"]:
             for result in result_list["result"]:
                 if result["value"] not in analysis_result:
-                    analysis_result.append(result["value"])
+                    analysis_result.append([result["value"], result["color"]])
+                    # analysis_result.append( result["value"] )
         return analysis_result
 
     def layer_conversion(self, layer_result):
