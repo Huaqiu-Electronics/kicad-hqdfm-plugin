@@ -1,5 +1,5 @@
 import json
-import requests
+
 import re
 import wx
 import urllib.request
@@ -10,6 +10,7 @@ from . import config
 from kicad_dfm import GetFilePath
 from kicad_dfm.settings.timestamp import TimeStamp
 import logging
+import requests
 from requests.exceptions import Timeout, ConnectionError, HTTPError
 
 

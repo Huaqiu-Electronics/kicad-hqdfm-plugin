@@ -7,7 +7,7 @@ from .. import config
 from ..picture import GetImagePath
 from kicad_dfm.child_frame.ui_child_frame import UiChildFrame
 from kicad_dfm.settings.graphics_setting import GRAPHICS_SETTING
-from kicad_dfm.child_frame.child_frame_setting import ChildFrameSetting
+from kicad_dfm.child_frame.child_frame_model import ChildFrameSetting
 import wx.dataview as dv
 from kicad_dfm.child_frame.picture_match_path import PICTURE_MATCH_PATH
 from kicad_dfm.settings.timestamp import TimeStamp
