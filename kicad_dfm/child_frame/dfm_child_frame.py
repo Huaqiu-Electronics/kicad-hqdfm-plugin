@@ -12,6 +12,7 @@ import wx.dataview as dv
 from kicad_dfm.child_frame.picture_match_path import PICTURE_MATCH_PATH
 from kicad_dfm.settings.timestamp import TimeStamp
 from .dfm_child_frame_model import DfmChildFrameModel
+import sys
 
 
 class DfmChildFrame(UiChildFrame):
@@ -26,6 +27,10 @@ class DfmChildFrame(UiChildFrame):
         _board,
         kicad=False,
     ):
+        super().__init__(parent)
+        # tip = _("  Close this window before saving the PCB file ")
+        # self.tip = wx.ToolTip(tip)
+        # self.SetToolTip(self.tip)
         self.temp_layer = {""}
         self.line_list = line_list
         self.board = _board
@@ -39,7 +44,7 @@ class DfmChildFrame(UiChildFrame):
             self.message_type = config.Language_english
         self.kicad = kicad
         self.combo = 1
-        super().__init__(parent)
+
         self.SetTitle(title)
         self.result = {}
         self.layer_name = []
@@ -74,6 +79,7 @@ class DfmChildFrame(UiChildFrame):
         self.back_button.Bind(wx.EVT_BUTTON, self.select_back)
         self.next_button.Bind(wx.EVT_BUTTON, self.select_next)
         self.last_button.Bind(wx.EVT_BUTTON, self.select_last)
+        # 设置事件处理程序
 
         self.data_view_binding()
         self.dispose_result()
@@ -84,15 +90,41 @@ class DfmChildFrame(UiChildFrame):
         self.Centre()
         self.Show(True)
 
-    # 关闭窗口时清空在kicad上的处理
-    def on_close(self, event):
+        self.timer = wx.Timer(self)  # 创建定时器
+        self.Bind(wx.EVT_TIMER, self.on_timer_tick, self.timer)
+        # self.timer.Start(2000)  # 每100毫秒触发一次定时器
+
+    def on_timer_tick(self, event):
+        # 定时器触发时检查鼠标位置
+        # 获取当前鼠标位置
+        pt = wx.GetMousePosition()
+        window_pos = self.ClientToScreen(wx.Point(0, 0))
+        window_size = self.GetClientSize()
+
+        # 检查鼠标是否在窗口内
+        if not (
+            window_pos.x <= pt.x <= window_pos.x + window_size.width
+            and window_pos.y <= pt.y <= window_pos.y + window_size.height
+        ):
+            self.timer.Stop()
+            self.remove_added_line(event)
+            # 鼠标不在窗口内，执行相应操作
+            print("鼠标不在当前窗口上移动")
+            # 这里可以添加鼠标不在窗口上移动时的处理逻辑
+
+    def remove_added_line(self, event):
         if len(self.line_list) != 0:
             for line in self.line_list:
                 self.board.Delete(line)
-        self.line_list.clear()
+            self.line_list.clear()
+            wx.CallAfter(pcbnew.Refresh)
+        event.Skip()
+
+    # 关闭窗口时清空在kicad上的处理
+    def on_close(self, event):
+        self.remove_added_line(event)
         for item in self.item_list:
             item.ClearBrightened()
-        # pcbnew.Refresh()
         self.Destroy()
 
     def select_first(self, event):
@@ -103,7 +135,8 @@ class DfmChildFrame(UiChildFrame):
         string_data = self.lst_analysis_result1.GetTextValue(
             self.lst_analysis_result1.GetSelectedRow(), 0
         )
-        self.analysis_process(string_data)
+        self.analysis_process(string_data, event)
+        event.Skip()
 
     def select_back(self, event):
         if len(self.get_layer) == 0:
@@ -114,7 +147,8 @@ class DfmChildFrame(UiChildFrame):
             self.select_number = 0
         self.lst_analysis_result1.SelectRow(self.select_number)
         string_data = self.lst_analysis_result1.GetTextValue(self.select_number, 0)
-        self.analysis_process(string_data)
+        self.analysis_process(string_data, event)
+        event.Skip()
 
     def select_next(self, event):
         if len(self.get_layer) == 0:
@@ -125,7 +159,8 @@ class DfmChildFrame(UiChildFrame):
             self.select_number = self.lst_analysis_result1.GetItemCount() - 1
         self.lst_analysis_result1.SelectRow(self.select_number)
         string_data = self.lst_analysis_result1.GetTextValue(self.select_number, 0)
-        self.analysis_process(string_data)
+        self.analysis_process(string_data, event)
+        event.Skip()
 
     def select_last(self, event):
         if len(self.get_layer) == 0:
@@ -133,7 +168,8 @@ class DfmChildFrame(UiChildFrame):
         self.select_number = self.lst_analysis_result1.GetItemCount() - 1
         self.lst_analysis_result1.SelectRow(self.select_number)
         string_data = self.lst_analysis_result1.GetTextValue(self.select_number, 0)
-        self.analysis_process(string_data)
+        self.analysis_process(string_data, event)
+        event.Skip()
 
     def dispose_result(self):
         if self.combo_box.GetSelection() == 1:
@@ -164,10 +200,12 @@ class DfmChildFrame(UiChildFrame):
         self.get_result()
         self.set_layer()
         self.set_color_rule()
+        event.Skip()
 
     def set_result(self, event):
         self.set_layer()
         self.set_color_rule()
+        event.Skip()
 
     def set_layer(self):
         if len(self.get_layer) == 0:
@@ -199,6 +237,7 @@ class DfmChildFrame(UiChildFrame):
 
     def analysis_type(self, event):
         self.set_color_rule()
+        event.Skip()
 
     def set_color_rule(self):
         if self.result_json[self.json_string] == "":
@@ -394,11 +433,11 @@ class DfmChildFrame(UiChildFrame):
         item_data = self.lst_analysis_result1.GetValue(selection, 0)
         # Assuming item_data is the data associated with the selected row
         # Start the analysis process synchronously
-        self.analysis_process(item_data)
+        self.analysis_process(item_data, event)
         event.Skip()
 
     # 通过选中行的string去查找到对应的item
-    def analysis_process(self, string_data):
+    def analysis_process(self, string_data, event):
         settings = self.board.GetDesignSettings()
         x = settings.GetAuxOrigin().x
         y = settings.GetAuxOrigin().y
@@ -447,7 +486,7 @@ class DfmChildFrame(UiChildFrame):
                     # kicad分析项
                     if (
                         self.json_string == "Hatched Copper Pour"
-                        and self.json_string == "Pad size"
+                        or self.json_string == "Pad size"
                     ):
                         item = self.board.GetItem(self.result[result_list][0]["id"])
                         pcbnew.FocusOnItem(item, self.board.GetLayerID(item.GetLayer()))
@@ -455,6 +494,7 @@ class DfmChildFrame(UiChildFrame):
                             layer_num.append(self.board.GetLayerID(layer))
                         item.SetBrightened()
                         self.item_list.append(item)
+
                     # dfm分析项
                     else:
                         if len(self.line_list) != 0:
@@ -465,6 +505,7 @@ class DfmChildFrame(UiChildFrame):
                             # 多种的数据格式
                             line = pcbnew.PCB_SHAPE()
                             line.SetLayer(pcbnew.LAYER_DRC_WARNING)
+
                             line.SetWidth(250000)
                             if result["type"] == 0:
                                 if result["et"] == 0:
@@ -488,20 +529,26 @@ class DfmChildFrame(UiChildFrame):
                                     self, line, result, x, y
                                 )
                             self.line_list.append(line)
-                            layer_num.append(pcbnew.Dwgs_User)
+                            # layer_num.append(pcbnew.LAYER_FP_REFERENCES)
+
                         # 显示的层
                         for result in self.result[result_list]["result"]:
                             for layer in result["layer"]:
                                 layer_num.append(self.board.GetLayerID(layer))
                         count = 0
+
                         # 定位
                         for line in self.line_list:
                             count += 1
                             self.board.Add(line)
-                            # line.SetSelected()
+                            # line.SetSelected() LAYER_MARKER_SHADOWS
+                            # mistake_mark.SetMarkerType(mistake_mark.MARKER_DRC)
+                            # line.IsSelected()
                             line.SetBrightened()
                             if count == len(self.line_list):
-                                pcbnew.FocusOnItem(line, pcbnew.Dwgs_User)
+                                pcbnew.FocusOnItem(line, layer_num[0])
+                        self.timer.Start(2000)
+
         # 关闭不需要显示的层
         if self.check_box.GetValue() is False:
             gal_set = self.board.GetVisibleLayers()
@@ -510,8 +557,8 @@ class DfmChildFrame(UiChildFrame):
                     continue
                 gal_set.removeLayer(num)
             self.board.SetVisibleLayers(gal_set)
-            wx.CallAfter(pcbnew.UpdateUserInterface)
         wx.CallAfter(pcbnew.Refresh)
+        event.Skip()
 
     @property
     def get_layer(self):

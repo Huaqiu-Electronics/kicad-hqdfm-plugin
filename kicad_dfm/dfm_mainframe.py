@@ -28,11 +28,12 @@ import time
 
 class DfmMainframe(wx.Frame):
     def __init__(self, parent):
-        super(wx.Frame, self).__init__(
+        super(DfmMainframe, self).__init__(
             parent,
             title=_("HQ DFM"),
             style=wx.DEFAULT_FRAME_STYLE & ~(wx.MAXIMIZE_BOX) | wx.TAB_TRAVERSAL,
         )
+
         SINGLE_PLUGIN.register_main_wind(self)
         self.control = {}
         if pcbnew.GetLanguage() == "简体中文":
@@ -403,9 +404,13 @@ class DfmMainframe(wx.Frame):
             return
         # kicad项 分析
         minmum_line_width = MinimumLineWidth(self.control, self.board)
+        # self.kicad_result["Signal Integrity"] = minmum_line_width.get_signal_integrity(
+        #     self.analysis_result
+        # )
         self.kicad_result["Smallest Trace Width"] = minmum_line_width.get_line_width(
             self.analysis_result
         )
+
         self.kicad_result["RingHole"] = minmum_line_width.get_annular_ring(
             self.analysis_result
         )
@@ -442,6 +447,24 @@ class DfmMainframe(wx.Frame):
                     "display"
                 ] = self.item_result
                 self.json_analysis_map[_("Signal Integrity")]["color"] = ""
+        # # 电气信号
+        # if self.kicad_result["Signal Integrity"] == "":
+        #     self.json_analysis_map[_("Signal Integrity")]["display"] = self.item_result
+        #     self.json_analysis_map[_("Signal Integrity")]["color"] = ""
+        # else:
+        #     data = self.kicad_result["Signal Integrity"]["display"]
+        #     if data is not None:
+        #         self.json_analysis_map[_("Signal Integrity")]["display"] = _(
+        #             "Error(s) detected"
+        #         )
+        #         self.json_analysis_map[_("Signal Integrity")][
+        #             "color"
+        #         ] = self.kicad_result["Signal Integrity"]["color"]
+        #     else:
+        #         self.json_analysis_map[_("Signal Integrity")][
+        #             "display"
+        #         ] = self.item_result
+        #         self.json_analysis_map[_("Signal Integrity")]["color"] = ""
 
         # 最小线宽
         if self.kicad_result["Smallest Trace Width"] == "":
@@ -546,7 +569,7 @@ class DfmMainframe(wx.Frame):
                 self.json_analysis_map[_("Hole Diameter")]["display"] = self.item_result
                 self.json_analysis_map[_("Hole Diameter")]["color"] = ""
 
-        # 孔环
+        # 孔环大小
         if self.kicad_result["RingHole"] == "":
             self.json_analysis_map[_("RingHole")]["display"] = self.item_result
             self.json_analysis_map[_("RingHole")]["color"] = ""

@@ -31,13 +31,13 @@ class UiHoleChildframe(wx.Dialog):
 
         bSizer2 = wx.BoxSizer(wx.VERTICAL)
 
-        self.m_panel2 = wx.Panel(
+        self.main_panel = wx.Panel(
             self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, wx.TAB_TRAVERSAL
         )
         bSizer3 = wx.BoxSizer(wx.VERTICAL)
 
         self.text = wx.TextCtrl(
-            self.m_panel2,
+            self.main_panel,
             wx.ID_ANY,
             wx.EmptyString,
             wx.DefaultPosition,
@@ -64,7 +64,8 @@ class UiHoleChildframe(wx.Dialog):
         bSizer3.Add(self.text, 1, wx.ALL | wx.EXPAND, 5)
 
         sbSizer1 = wx.StaticBoxSizer(
-            wx.StaticBox(self.m_panel2, wx.ID_ANY, _(" Rule description")), wx.VERTICAL
+            wx.StaticBox(self.main_panel, wx.ID_ANY, _(" Rule description")),
+            wx.VERTICAL,
         )
 
         self.bitmap = wx.StaticBitmap(
@@ -79,10 +80,10 @@ class UiHoleChildframe(wx.Dialog):
 
         bSizer3.Add(sbSizer1, 2, wx.ALL | wx.EXPAND, 5)
 
-        self.m_panel2.SetSizer(bSizer3)
-        self.m_panel2.Layout()
-        bSizer3.Fit(self.m_panel2)
-        bSizer2.Add(self.m_panel2, 1, wx.EXPAND | wx.ALL, 0)
+        self.main_panel.SetSizer(bSizer3)
+        self.main_panel.Layout()
+        bSizer3.Fit(self.main_panel)
+        bSizer2.Add(self.main_panel, 1, wx.EXPAND | wx.ALL, 0)
 
         self.SetSizer(bSizer2)
         self.Layout()

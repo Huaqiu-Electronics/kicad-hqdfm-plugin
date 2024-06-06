@@ -201,6 +201,61 @@ class MinimumLineWidth:
 
         return annular_ring_result
 
+    # 电气信号
+    def get_signal_integrity(self, analysis_result):
+        line_width_result = {}
+        result_list = []
+        line_width_minimum = -1
+        have_red = False
+        have_yellow = False
+        if (
+            analysis_result["Signal Integrity"] == ""
+            or analysis_result["Signal Integrity"]["check"] is None
+        ):
+            return ""
+
+        for item in self.board.GetTracks():  # Can be VIA or TRACK
+            if type(item) is pcbnew.PCB_TRACK:
+                line_width = {}
+                result = {}
+                item_list = []
+                line_width_layer = []
+                line_width["id"] = item.m_Uuid
+                width = round(float(item.GetWidth()) / 1000000, 3)  # 外径
+                line_width_layer.append(item.GetLayerName())
+                line_width["layer"] = line_width_layer
+                line_width["value"] = str(width)
+                line_width["info"] = item.m_Uuid
+                line_width["item"] = _("Signal Integrity")
+                line_width["color"] = ColorRule().get_rule(
+                    analysis_result,
+                    "Signal Integrity",
+                    "Signal Integrity",
+                    width,
+                )
+                if line_width["color"] == "red":
+                    have_red = True
+                elif line_width["color"] == "gold":
+                    have_yellow = True
+                item_list.append(line_width)
+                result["result"] = item_list
+                result_list.append(result)
+                if width < line_width_minimum or line_width_minimum == -1:
+                    line_width_minimum = width
+        if line_width_minimum == -1:
+            line_width_result["display"] = "正常"
+        else:
+            line_width_result["display"] = line_width_minimum
+
+        line_width_result["check"] = result_list
+        if have_red is True:
+            line_width_result["color"] = "red"
+        elif have_yellow is True:
+            line_width_result["color"] = "gold"
+        else:
+            line_width_result["color"] = "black"
+        return line_width_result
+
     # 最小线宽
     def get_line_width(self, analysis_result):
         line_width_result = {}
