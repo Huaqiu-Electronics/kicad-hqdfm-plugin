@@ -200,7 +200,7 @@ class DfmMainframe(wx.Frame):
                         )
                     if self.analysis_result == "":
                         wx.MessageBox(
-                            _("File parsing failed. Please click dfm analysis"),
+                            _("File parsing failed. Please click dfm analysis."),
                             _("Help"),
                             style=wx.ICON_INFORMATION,
                         )
@@ -342,7 +342,7 @@ class DfmMainframe(wx.Frame):
     def on_select_export_gerber(self, event):
         messageDialog = wx.MessageDialog(
             self,
-            _("Do you want to save pcb file?"),
+            _("Do you want to save PCB file?"),
             _("Info"),
             wx.YES_NO | wx.ICON_INFORMATION | wx.NO_DEFAULT,
         )
@@ -353,7 +353,7 @@ class DfmMainframe(wx.Frame):
             # fullfilepath = self.path+'\\save.kicad_pcb'
             save_result = pcbnew.SaveBoard(fullfilepath, self.board)
             if not save_result:
-                wx.MessageBox(_(" Fialed to save pcb file"), _("Info"))
+                wx.MessageBox(_(" Fialed to save PCB file."), _("Info"))
                 return
         messageDialog.Destroy()
         try:

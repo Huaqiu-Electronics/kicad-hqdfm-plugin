@@ -11,10 +11,6 @@ import wx
 import wx.xrc
 import wx.dataview
 
-import gettext
-
-_ = gettext.gettext
-
 ###########################################################################
 ## Class UiChildFrame
 ###########################################################################
@@ -34,7 +30,7 @@ class UiChildFrame(wx.Frame):
 
         self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
         self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_MENU))
-        self.SetToolTip(_("Close this window before saving the PCB file"))
+        self.SetToolTip(_(" Close this window before saving the PCB file. "))
 
         bSizer1 = wx.BoxSizer(wx.VERTICAL)
 
@@ -268,7 +264,7 @@ class UiChildFrame(wx.Frame):
         self.m_panel7.SetSizer(bSizer10)
         self.m_panel7.Layout()
         bSizer10.Fit(self.m_panel7)
-        bSizer1.Add(self.m_panel7, 1, wx.EXPAND | wx.ALL, 0)
+        bSizer1.Add(self.m_panel7, 1, wx.EXPAND | wx.ALL, 5)
 
         self.SetSizer(bSizer1)
         self.Layout()

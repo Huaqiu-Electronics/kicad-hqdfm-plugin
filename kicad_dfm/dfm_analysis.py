@@ -28,17 +28,19 @@ class DfmAnalysis:
         json_temp = response.json()
         if not json_temp:
             self.report_part_search_error(
-                _("Failed to upload file. Plaese request again")
+                _("Failed to upload file. Please request again.")
             )
             return
         if json_temp["code"] != 2000:
-            self.report_part_search_error(_("HTTP request error. Plaese request again"))
+            self.report_part_search_error(
+                _("HTTP request error. Please request again.")
+            )
             return
         analyse_url = json_temp["data"]
         analyse_id = analyse_url.get("analyse_id", "")
         kicad_id = analyse_url.get("kicad_id", "")
         if analyse_id == "" or kicad_id == "":
-            self.report_part_search_error(_("Not dfm data. Plaese request again"))
+            self.report_part_search_error(_("Not dfm data. Please request again."))
             return
         url_path.close()
 
@@ -78,7 +80,7 @@ class DfmAnalysis:
         if ret is not None:
             kicad_id = ret.group()
         if json_id == "" or kicad_id == "":
-            self.report_part_search_error(_("Not dfm data. Plaese request again"))
+            self.report_part_search_error(_("Not dfm data. Please request again."))
             return
 
         id_url = "https://www.nextpcb.com/DfmView/getParseResult"
@@ -108,7 +110,7 @@ class DfmAnalysis:
                 time.sleep(1.5)
             except requests.exceptions.ConnectionError as e:
                 self.report_part_search_error(
-                    _("Network connection error. Plaese request again")
+                    _("Network connection error. Please request again.")
                 )
             file_path = json_file.json()
             self.progress.Update(number)
@@ -118,7 +120,7 @@ class DfmAnalysis:
                 break
         if len(file_path["data"]) == 0:
             wx.MessageBox(
-                _("Request data error,please request again"),
+                _("Request data error,please request again."),
                 _("Info"),
                 style=wx.ICON_INFORMATION,
             )
@@ -153,7 +155,7 @@ class DfmAnalysis:
             self.progress.SetTitle(_("Analysis file"))
             return response
         except Timeout:
-            self.report_part_search_error(_("HTTP request timed out"))
+            self.report_part_search_error(_("HTTP request timed out."))
         except (ConnectionError, HTTPError) as e:
             self.report_part_search_error(
                 _("HTTP error occurred: {error}").format(error=e)

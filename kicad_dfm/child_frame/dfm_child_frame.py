@@ -20,7 +20,7 @@ class DfmChildFrame(UiChildFrame):
         self,
         parent,
         title,
-        result_json,
+        analysis_result,
         json_string,
         line_list,
         _unit,
@@ -28,14 +28,11 @@ class DfmChildFrame(UiChildFrame):
         kicad=False,
     ):
         super().__init__(parent)
-        # tip = _("  Close this window before saving the PCB file ")
-        # self.tip = wx.ToolTip(tip)
-        # self.SetToolTip(self.tip)
         self.temp_layer = {""}
         self.line_list = line_list
         self.board = _board
         self.unit = _unit
-        self.result_json = result_json
+        self.result_json = analysis_result
         self.json_string = json_string
         self.message_type = {}
         if pcbnew.GetLanguage() == "简体中文":
@@ -108,8 +105,7 @@ class DfmChildFrame(UiChildFrame):
         ):
             self.timer.Stop()
             self.remove_added_line(event)
-            # 鼠标不在窗口内，执行相应操作
-            print("鼠标不在当前窗口上移动")
+            wx.CallAfter(pcbnew.Refresh)
             # 这里可以添加鼠标不在窗口上移动时的处理逻辑
 
     def remove_added_line(self, event):
@@ -117,7 +113,6 @@ class DfmChildFrame(UiChildFrame):
             for line in self.line_list:
                 self.board.Delete(line)
             self.line_list.clear()
-            wx.CallAfter(pcbnew.Refresh)
         event.Skip()
 
     # 关闭窗口时清空在kicad上的处理
@@ -352,12 +347,6 @@ class DfmChildFrame(UiChildFrame):
                             )
                         elif result["item"] == "Aspect Ratio":
                             millimeter_value = round(float(result["value"]), 2)
-                            results_list.append(
-                                [
-                                    self.string_conversion(num, result["value"]),
-                                    result["color"],
-                                ]
-                            )
                             board_thickness = round(
                                 (
                                     self.board.GetDesignSettings().GetBoardThickness()
@@ -495,17 +484,71 @@ class DfmChildFrame(UiChildFrame):
                         item.SetBrightened()
                         self.item_list.append(item)
 
+                    elif self.json_string == "Signal Integrity":
+                        items = []
+                        self.remove_added_line(event)
+                        for result in self.result[result_list]["result"]:
+                            if result["type"] == 0:
+                                if result["et"] == 0:
+                                    item = (
+                                        GRAPHICS_SETTING.get_signal_integrity_segment(
+                                            self,
+                                            result,
+                                            self.result_json,
+                                            self.board,
+                                            x,
+                                            y,
+                                        )
+                                    )
+                                elif result["et"] == 1:
+                                    item = GRAPHICS_SETTING.get_signal_integrity_arc(
+                                        self, result, self.board, x, y
+                                    )
+                                else:
+
+                                    item = GRAPHICS_SETTING.get_signal_integrity_rect(
+                                        self, result, self.board, x, y
+                                    )
+                            if not item:
+                                line = pcbnew.PCB_SHAPE()
+                                line.SetLayer(pcbnew.LAYER_DRC_WARNING)
+                                line.SetWidth(250000)
+                                line = GRAPHICS_SETTING.set_segment(
+                                    self, line, result, x, y
+                                )
+                                self.line_list.append(line)
+                            else:
+                                items.append(item)
+                                self.item_list.append(item)
+
+                            # for result in self.result[result_list]["result"]:
+                            for layer in result["layer"]:
+                                layer_num.append(self.board.GetLayerID(layer))
+
+                        if items:
+
+                            for item in items:
+                                item.SetBrightened()
+                                if len(items) - items.index(item) == 1:
+                                    pcbnew.FocusOnItem(
+                                        item, self.board.GetLayerID(item.GetLayer())
+                                    )
+
+                        elif self.line_list:
+                            for index, line in enumerate(self.line_list):
+                                self.board.Add(line)
+                                line.SetBrightened()
+                                if index == len(self.line_list) - 1:
+                                    pcbnew.FocusOnItem(line, layer_num[0])
+                            self.timer.Start(2000)
+
                     # dfm分析项
                     else:
-                        if len(self.line_list) != 0:
-                            for line in self.line_list:
-                                self.board.Delete(line)
-                            self.line_list.clear()
+                        self.remove_added_line(event)
                         for result in self.result[result_list]["result"]:
                             # 多种的数据格式
                             line = pcbnew.PCB_SHAPE()
                             line.SetLayer(pcbnew.LAYER_DRC_WARNING)
-
                             line.SetWidth(250000)
                             if result["type"] == 0:
                                 if result["et"] == 0:
@@ -529,21 +572,21 @@ class DfmChildFrame(UiChildFrame):
                                     self, line, result, x, y
                                 )
                             self.line_list.append(line)
-                            # layer_num.append(pcbnew.LAYER_FP_REFERENCES)
+                            layer_num.append(pcbnew.Edge_Cuts)
 
-                        # 显示的层
-                        for result in self.result[result_list]["result"]:
+                            # 显示的层
+                            # for result in self.result[result_list]["result"]:
                             for layer in result["layer"]:
-                                layer_num.append(self.board.GetLayerID(layer))
+                                if self.board.GetLayerID(layer) > -1:
+                                    layer_num.append(self.board.GetLayerID(layer))
+                                else:
+                                    layer_num.append(pcbnew.B_Adhes)
                         count = 0
 
                         # 定位
                         for line in self.line_list:
                             count += 1
                             self.board.Add(line)
-                            # line.SetSelected() LAYER_MARKER_SHADOWS
-                            # mistake_mark.SetMarkerType(mistake_mark.MARKER_DRC)
-                            # line.IsSelected()
                             line.SetBrightened()
                             if count == len(self.line_list):
                                 pcbnew.FocusOnItem(line, layer_num[0])
