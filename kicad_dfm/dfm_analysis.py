@@ -178,6 +178,8 @@ class DfmAnalysis:
 
     def analysis_json(self, json_path, transformation=False):
         json_result = {}
+        if json_path is None or not isinstance(json_path, str):
+            return
         with open(json_path, "r") as f:
             content = f.read().encode(encoding="utf-8")
             try:
@@ -249,7 +251,11 @@ class DfmAnalysis:
         have_yellow = False
         info_list = []
         for item_check in item_json["check"]:
-            dfm_show_layer = item_check["layer"]
+
+            if item_check["layer"] == "Drl":
+                dfm_show_layer = "B.Adhesive"
+            else:
+                dfm_show_layer = item_check["layer"]
             for item_info in item_check["info"]:
                 item = item_info["item"]
                 if transformation:
@@ -267,7 +273,10 @@ class DfmAnalysis:
                     if dfm_show_layer == "Bot Paste" or dfm_show_layer == "Top Paste":
                         item_layer_list.append("Outline")
                     for item_layer in item_info_info["layer"]:
-                        item_layer_list.append(item_layer)
+                        if item_layer == "Drl":
+                            item_layer_list.append("B.Adhesive")
+                        else:
+                            item_layer_list.append(item_layer)
                     # 设置显示的颜色
                     if rule_string2[0] == "-" or rule_string1[0] == "-":
                         have_red = True

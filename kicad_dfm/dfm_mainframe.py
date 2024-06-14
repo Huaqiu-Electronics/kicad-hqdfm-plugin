@@ -51,6 +51,7 @@ class DfmMainframe(wx.Frame):
                 style=wx.ICON_INFORMATION,
             )
             return
+        # self.control = config.Language_chinese
         self.line_list = []
         self.have_progress = False
         try:
@@ -60,7 +61,7 @@ class DfmMainframe(wx.Frame):
             for fp in (
                 "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
                 "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\ecc83\\ecc83-pp.kicad_pcb",
-                "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\video\\video.kicad_pcb",
+                "C:\\Program Files\\demos\\video\\video.kicad_pcb",
             ):
                 if os.path.exists(fp):
                     self.board = pcbnew.LoadBoard(fp)
@@ -340,13 +341,21 @@ class DfmMainframe(wx.Frame):
         pass
 
     def on_select_export_gerber(self, event):
+        if self.country == "CN":
+            country = "中国"
+        else:
+            country = self.country
         messageDialog = wx.MessageDialog(
             self,
-            _("Do you want to save PCB file?"),
+            _("Do you want to save PCB file? \r\n 调用接口的国家: {country}").format(
+                country=country
+            ),
+            # _("Do you want to save PCB file? \r\n  "),
             _("Info"),
             wx.YES_NO | wx.ICON_INFORMATION | wx.NO_DEFAULT,
         )
 
+        # wx.MessageBox(f"调用接口的国家: {country}")
         messageDialog.SetYesNoLabels(_("Yes"), _("No"))
         if messageDialog.ShowModal() == wx.ID_YES:
             fullfilepath = self.board.GetFileName()
@@ -404,9 +413,7 @@ class DfmMainframe(wx.Frame):
             return
         # kicad项 分析
         minmum_line_width = MinimumLineWidth(self.control, self.board)
-        # self.kicad_result["Signal Integrity"] = minmum_line_width.get_signal_integrity(
-        #     self.analysis_result
-        # )
+
         self.kicad_result["Smallest Trace Width"] = minmum_line_width.get_line_width(
             self.analysis_result
         )
@@ -447,24 +454,6 @@ class DfmMainframe(wx.Frame):
                     "display"
                 ] = self.item_result
                 self.json_analysis_map[_("Signal Integrity")]["color"] = ""
-        # # 电气信号
-        # if self.kicad_result["Signal Integrity"] == "":
-        #     self.json_analysis_map[_("Signal Integrity")]["display"] = self.item_result
-        #     self.json_analysis_map[_("Signal Integrity")]["color"] = ""
-        # else:
-        #     data = self.kicad_result["Signal Integrity"]["display"]
-        #     if data is not None:
-        #         self.json_analysis_map[_("Signal Integrity")]["display"] = _(
-        #             "Error(s) detected"
-        #         )
-        #         self.json_analysis_map[_("Signal Integrity")][
-        #             "color"
-        #         ] = self.kicad_result["Signal Integrity"]["color"]
-        #     else:
-        #         self.json_analysis_map[_("Signal Integrity")][
-        #             "display"
-        #         ] = self.item_result
-        #         self.json_analysis_map[_("Signal Integrity")]["color"] = ""
 
         # 最小线宽
         if self.kicad_result["Smallest Trace Width"] == "":
@@ -794,7 +783,6 @@ class DfmMainframe(wx.Frame):
                     if location:
                         self.country = location.get("country", "None")
                         # 这里可以处理更多的位置信息，例如城市、地区等
-                        print(f"Country: {self.country}")
                     return self.country
                 time.sleep(1)
                 attempts += 1

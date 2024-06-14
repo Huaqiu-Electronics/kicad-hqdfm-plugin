@@ -15,6 +15,16 @@ from .dfm_child_frame_model import DfmChildFrameModel
 import sys
 
 
+class MyShapeItem(pcbnew.PCB_SHAPE):
+    def __init__(self, *args):
+        super().__init__(*args)
+
+    def GetLayerSet(self):
+        r"""GetLayerSet(BOARD_ITEM self) -> LSET"""
+        wx.MessageBox("GetLayerSet")
+        return pcbnew.LSET()
+
+
 class DfmChildFrame(UiChildFrame):
     def __init__(
         self,
@@ -70,7 +80,7 @@ class DfmChildFrame(UiChildFrame):
         )
 
         self.combo_box.Bind(wx.EVT_COMBOBOX, self.read_json)
-        self.Bind(wx.EVT_CLOSE, self.on_close)
+        self.Bind(wx.EVT_CLOSE, self.on_close, self)
 
         self.first_button.Bind(wx.EVT_BUTTON, self.select_first)
         self.back_button.Bind(wx.EVT_BUTTON, self.select_back)
@@ -87,28 +97,12 @@ class DfmChildFrame(UiChildFrame):
         self.Centre()
         self.Show(True)
 
-        self.timer = wx.Timer(self)  # 创建定时器
-        self.Bind(wx.EVT_TIMER, self.on_timer_tick, self.timer)
-        # self.timer.Start(2000)  # 每100毫秒触发一次定时器
-
-    def on_timer_tick(self, event):
-        # 定时器触发时检查鼠标位置
-        # 获取当前鼠标位置
-        pt = wx.GetMousePosition()
-        window_pos = self.ClientToScreen(wx.Point(0, 0))
-        window_size = self.GetClientSize()
-
-        # 检查鼠标是否在窗口内
-        if not (
-            window_pos.x <= pt.x <= window_pos.x + window_size.width
-            and window_pos.y <= pt.y <= window_pos.y + window_size.height
-        ):
-            self.timer.Stop()
-            self.remove_added_line(event)
-            wx.CallAfter(pcbnew.Refresh)
-            # 这里可以添加鼠标不在窗口上移动时的处理逻辑
-
     def remove_added_line(self, event):
+        if len(self.item_list) != 0:
+            for item in self.item_list:
+                item.ClearBrightened()
+                # item.ClearSelected()
+
         if len(self.line_list) != 0:
             for line in self.line_list:
                 self.board.Delete(line)
@@ -118,8 +112,6 @@ class DfmChildFrame(UiChildFrame):
     # 关闭窗口时清空在kicad上的处理
     def on_close(self, event):
         self.remove_added_line(event)
-        for item in self.item_list:
-            item.ClearBrightened()
         self.Destroy()
 
     def select_first(self, event):
@@ -430,8 +422,8 @@ class DfmChildFrame(UiChildFrame):
         settings = self.board.GetDesignSettings()
         x = settings.GetAuxOrigin().x
         y = settings.GetAuxOrigin().y
-        for clear_item in self.item_list:
-            clear_item.ClearBrightened()
+        self.remove_added_line(event)
+
         self.item_list = []
         pattern = re.compile(r"(\d+(?=(\、)))")
         try:
@@ -476,6 +468,8 @@ class DfmChildFrame(UiChildFrame):
                     if (
                         self.json_string == "Hatched Copper Pour"
                         or self.json_string == "Pad size"
+                        or self.json_string == _("Hatched Copper Pour")
+                        or self.json_string == _("Pad size")
                     ):
                         item = self.board.GetItem(self.result[result_list][0]["id"])
                         pcbnew.FocusOnItem(item, self.board.GetLayerID(item.GetLayer()))
@@ -484,20 +478,19 @@ class DfmChildFrame(UiChildFrame):
                         item.SetBrightened()
                         self.item_list.append(item)
 
-                    elif self.json_string == "Signal Integrity":
+                    elif (
+                        self.json_string == "Signal Integrity"
+                        or self.json_string == "Hole Diameter"
+                    ):
                         items = []
                         self.remove_added_line(event)
                         for result in self.result[result_list]["result"]:
+                            item = None
                             if result["type"] == 0:
                                 if result["et"] == 0:
                                     item = (
                                         GRAPHICS_SETTING.get_signal_integrity_segment(
-                                            self,
-                                            result,
-                                            self.result_json,
-                                            self.board,
-                                            x,
-                                            y,
+                                            self, result, self.board, x, y
                                         )
                                     )
                                 elif result["et"] == 1:
@@ -509,45 +502,96 @@ class DfmChildFrame(UiChildFrame):
                                     item = GRAPHICS_SETTING.get_signal_integrity_rect(
                                         self, result, self.board, x, y
                                     )
-                            if not item:
-                                line = pcbnew.PCB_SHAPE()
-                                line.SetLayer(pcbnew.LAYER_DRC_WARNING)
-                                line.SetWidth(250000)
-                                line = GRAPHICS_SETTING.set_segment(
-                                    self, line, result, x, y
-                                )
-                                self.line_list.append(line)
-                            else:
                                 items.append(item)
                                 self.item_list.append(item)
-
-                            # for result in self.result[result_list]["result"]:
                             for layer in result["layer"]:
                                 layer_num.append(self.board.GetLayerID(layer))
 
                         if items:
-
                             for item in items:
+                                if not item:
+                                    return
                                 item.SetBrightened()
+                                if type(item) is pcbnew.PCB_TEXT:
+                                    pcbnew.FocusOnItem(
+                                        item, self.board.GetLayerID(item.GetLayer())
+                                    )
                                 if len(items) - items.index(item) == 1:
                                     pcbnew.FocusOnItem(
                                         item, self.board.GetLayerID(item.GetLayer())
                                     )
 
-                        elif self.line_list:
-                            for index, line in enumerate(self.line_list):
-                                self.board.Add(line)
-                                line.SetBrightened()
-                                if index == len(self.line_list) - 1:
-                                    pcbnew.FocusOnItem(line, layer_num[0])
-                            self.timer.Start(2000)
+                    elif (
+                        self.json_string == "Holes on SMD Pads"
+                        or self.json_string == "Special Drill Holes"
+                    ):
+                        items = []
+                        self.remove_added_line(event)
+                        for result in self.result[result_list]["result"]:
+                            item = GRAPHICS_SETTING.get_SMD_pads_rect_list(
+                                self, result, self.board, x, y
+                            )
+                            items.append(item)
+                            self.item_list.append(item)
+                            for layer in result["layer"]:
+                                layer_num.append(self.board.GetLayerID(layer))
+                        if items:
+                            self.set_items_Brightened(items)
 
+                    elif (
+                        self.json_string == "Drill to Copper"
+                        or self.json_string == "Smallest Trace Spacing"
+                    ):
+                        items = []
+                        self.remove_added_line(event)
+                        for result in self.result[result_list]["result"]:
+                            if result["item"] == _("Pad Spacing"):
+                                items = GRAPHICS_SETTING.get_pad_spacing_judge_segment(
+                                    self, result, self.board, x, y
+                                )
+                            else:
+                                items = GRAPHICS_SETTING.get_spacing_judge_segment(
+                                    self, result, self.board, x, y
+                                )
+                            for layer in result["layer"]:
+                                layer_num.append(self.board.GetLayerID(layer))
+                        if items:
+                            self.set_items_Brightened(items)
+
+                    elif self.json_string == "Board Edge Clearance":
+                        items = []
+                        self.remove_added_line(event)
+                        for result in self.result[result_list]["result"]:
+                            items = GRAPHICS_SETTING.get_board_edge_judge_segment(
+                                self, result, self.board, x, y
+                            )
+                            for layer in result["layer"]:
+                                layer_num.append(self.board.GetLayerID(layer))
+                        if items:
+                            self.set_items_Brightened(items)
+                    elif (
+                        self.json_string == "Drill Hole Spacing"
+                        or self.json_string == "Pad Spacing"
+                    ):
+                        items = []
+                        self.remove_added_line(event)
+                        for result in self.result[result_list]["result"]:
+                            items = GRAPHICS_SETTING.get_pad_spacing_judge_segment(
+                                self, result, self.board, x, y
+                            )
+                            for layer in result["layer"]:
+                                layer_num.append(self.board.GetLayerID(layer))
+                        if items:
+                            self.set_items_Brightened(items)
                     # dfm分析项
                     else:
                         self.remove_added_line(event)
                         for result in self.result[result_list]["result"]:
                             # 多种的数据格式
                             line = pcbnew.PCB_SHAPE()
+                            line.GetLayerSet()
+
+                            # line.SetLayer(pcbnew.Dwgs_User)
                             line.SetLayer(pcbnew.LAYER_DRC_WARNING)
                             line.SetWidth(250000)
                             if result["type"] == 0:
@@ -572,17 +616,15 @@ class DfmChildFrame(UiChildFrame):
                                     self, line, result, x, y
                                 )
                             self.line_list.append(line)
-                            layer_num.append(pcbnew.Edge_Cuts)
+                            layer_num.append(pcbnew.Dwgs_User)
 
                             # 显示的层
-                            # for result in self.result[result_list]["result"]:
                             for layer in result["layer"]:
                                 if self.board.GetLayerID(layer) > -1:
                                     layer_num.append(self.board.GetLayerID(layer))
                                 else:
                                     layer_num.append(pcbnew.B_Adhes)
                         count = 0
-
                         # 定位
                         for line in self.line_list:
                             count += 1
@@ -590,7 +632,6 @@ class DfmChildFrame(UiChildFrame):
                             line.SetBrightened()
                             if count == len(self.line_list):
                                 pcbnew.FocusOnItem(line, layer_num[0])
-                        self.timer.Start(2000)
 
         # 关闭不需要显示的层
         if self.check_box.GetValue() is False:
@@ -600,8 +641,18 @@ class DfmChildFrame(UiChildFrame):
                     continue
                 gal_set.removeLayer(num)
             self.board.SetVisibleLayers(gal_set)
+            pcbnew.UpdateUserInterface()
         wx.CallAfter(pcbnew.Refresh)
         event.Skip()
+
+    def set_items_Brightened(self, items):
+        for item in items:
+            if not item:
+                return
+            self.item_list.append(item)
+            item.SetBrightened()
+        if len(items) - items.index(item) == 1:
+            pcbnew.FocusOnItem(item, self.board.GetLayerID(item.GetLayer()))
 
     @property
     def get_layer(self):

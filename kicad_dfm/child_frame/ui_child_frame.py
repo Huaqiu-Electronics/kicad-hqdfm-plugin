@@ -98,7 +98,7 @@ class UiChildFrame(wx.Frame):
             combo_boxChoices,
             0,
         )
-        self.combo_box.SetSelection(0)
+        self.combo_box.SetSelection(1)
         bSizer3.Add(self.combo_box, 0, wx.ALL | wx.EXPAND, 5)
 
         self.layer_panel.SetSizer(bSizer3)
@@ -264,7 +264,7 @@ class UiChildFrame(wx.Frame):
         self.m_panel7.SetSizer(bSizer10)
         self.m_panel7.Layout()
         bSizer10.Fit(self.m_panel7)
-        bSizer1.Add(self.m_panel7, 1, wx.EXPAND | wx.ALL, 5)
+        bSizer1.Add(self.m_panel7, 1, wx.EXPAND | wx.ALL, 8)
 
         self.SetSizer(bSizer1)
         self.Layout()
