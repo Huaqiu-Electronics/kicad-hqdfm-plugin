@@ -3,70 +3,37 @@ import pcbnew
 from kicad_dfm.settings.color_rule import ColorRule
 import wx
 from math import sqrt
+from .point_to_line_distance import point_to_line_distance
 
-circle_type = 0
+ERROR_RANGE = 0
 EDGE_WIDTH_EXTEN = 100000
-LINE__WIDTH_EXTEN = 80000
+LINE_WIDTH_EXTEN = 80000
 
 RECTANGLE = 1
 ROUNDRECT = 4
 CHAMFERED_RECT = 5
 
 
-def point_to_line_distance(p, line):
-    """计算点到线段的垂直距离"""
-    C = (line["start_x"], line["start_y"])
-    D = (line["end_x"], line["end_y"])
-
-    # 计算分子部分
-    numerator = abs((D[1] - C[1]) * (p[0] - C[0]) - (D[0] - C[0]) * (p[1] - C[1]))
-
-    # 计算分母部分
-    denominator = sqrt((D[1] - C[1]) ** 2 + (D[0] - C[0]) ** 2)
-
-    # 避免除以零
-    if denominator == 0:
-        return float("inf")  # 如果线段的端点相同，返回无穷大距离
-    distance = numerator / denominator
-
-    # 判断线段是否水平或垂直
-    if (D[1] - C[1]) == 0:  # 线段CD水平, 垂足 P' 的坐标
-        P_prime_x = p[0]
-        P_prime_y = D[1]
-    elif (D[0] - C[0]) == 0:  # 线段垂直, 垂足 P' 的坐标
-        P_prime_x = D[0]
-        P_prime_y = p[1]
-    else:
-        factor_denominator = (D[0] - C[0]) ** 2 + (D[1] - C[1]) ** 2
-        factor = (
-            (p[0] - C[0]) * (D[0] - C[0]) + (p[1] - C[1]) * (D[1] - C[1])
-        ) / factor_denominator
-        P_prime_x = C[0] + factor * (D[0] - C[0])
-        P_prime_y = C[1] + factor * (D[1] - C[1])
-
-    # 判断垂足 P' 是否在线段上( 前两条判断斜率为正的情况，后两条判断斜率为负的情况)
-    is_on_segment = (
-        (
-            (C[0] - LINE__WIDTH_EXTEN <= P_prime_x <= D[0] + LINE__WIDTH_EXTEN)
-            and (C[1] - LINE__WIDTH_EXTEN <= P_prime_y <= D[1] + LINE__WIDTH_EXTEN)
-        )
-        or (
-            (D[0] - LINE__WIDTH_EXTEN <= P_prime_x <= C[0] + LINE__WIDTH_EXTEN)
-            and (D[1] - LINE__WIDTH_EXTEN <= P_prime_y <= C[1] + LINE__WIDTH_EXTEN)
-        )
-        or (
-            (D[0] - LINE__WIDTH_EXTEN <= P_prime_x <= C[0] + LINE__WIDTH_EXTEN)
-            and (C[1] - LINE__WIDTH_EXTEN <= P_prime_y <= D[1] + LINE__WIDTH_EXTEN)
-        )
-        or (
-            (C[0] - LINE__WIDTH_EXTEN <= P_prime_x <= D[0] + LINE__WIDTH_EXTEN)
-            and (D[1] - LINE__WIDTH_EXTEN <= P_prime_y <= C[1] + LINE__WIDTH_EXTEN)
-        )
-    )
-    if is_on_segment:
-        return distance
-    else:
-        return 1000000
+def analysis_line_and_arc(items, line_coordinates):
+    for item in items:  # Can be VIA or TRACK
+        if (
+            type(item) is pcbnew.PCB_TRACK
+            and line_coordinates["layer"] == item.GetLayerName()
+        ):
+            line = {
+                "layer": item.GetLayerName(),
+                "start_x": item.GetStart().x,
+                "start_y": item.GetStart().y,
+                "end_x": item.GetEndX(),
+                "end_y": item.GetEndY(),
+            }
+            if (
+                abs(line_coordinates["start_x"] - line["start_x"]) < 10000
+                and abs(line_coordinates["start_y"] - line["start_y"]) < 10000
+                and abs(line_coordinates["end_x"] - line["end_x"]) < 10000
+                and abs(line_coordinates["end_y"] - line["end_y"]) < 10000
+            ):
+                return item
 
 
 class GraphicsSetting:
@@ -77,7 +44,6 @@ class GraphicsSetting:
         line.SetEndY(y - int(Decimal(result["ey"]) * 1000000))
         line.SetStartX(int(Decimal(result["sx"]) * 1000000) + x)
         line.SetStartY(y - int(Decimal(result["sy"]) * 1000000))
-
         return line
 
     def set_arc(self, line, result, x, y):
@@ -242,7 +208,6 @@ class GraphicsSetting:
 
     def get_spacing_judge_segment(self, result, board, x, y):
         self.board = board
-        epsilon = 0  # 误差范围，根据需要调整
         items = []
         line_coordinates = {
             "layer": result["layer"][0],
@@ -262,7 +227,7 @@ class GraphicsSetting:
                     "start_y": item.GetStart().y,
                     "end_x": item.GetEndX(),
                     "end_y": item.GetEndY(),
-                    "line_width_y": item.GetWidth() / 2 + LINE__WIDTH_EXTEN,
+                    "line_width_y": item.GetWidth() / 2 + LINE_WIDTH_EXTEN,
                 }
                 # 计算 line_coordinates 的起点和终点到 line 的距离
                 distance_start = point_to_line_distance(
@@ -272,11 +237,11 @@ class GraphicsSetting:
                     (line_coordinates["end_x"], line_coordinates["end_y"]), line
                 )
                 if (
-                    line["line_width_y"] - distance_start >= epsilon
-                    or line["line_width_y"] - distance_end >= epsilon
+                    line["line_width_y"] - distance_start >= ERROR_RANGE
+                    or line["line_width_y"] - distance_end >= ERROR_RANGE
                 ):
                     items.append(item)
-                    # continue
+
             if type(item) is pcbnew.PCB_VIA:
                 circle = {
                     "layer": item.GetLayerName(),
@@ -297,8 +262,8 @@ class GraphicsSetting:
                 )
 
                 if (
-                    radius - distance_start >= epsilon
-                    or radius - distance_end >= epsilon
+                    radius - distance_start >= ERROR_RANGE
+                    or radius - distance_end >= ERROR_RANGE
                 ):
                     items.append(item)
                     # continue
@@ -319,8 +284,8 @@ class GraphicsSetting:
 
                     rect = {
                         "layer": pad.GetLayerName(),
-                        "size_x": pad.GetSizeX(),
-                        "size_y": pad.GetSizeY(),
+                        "size_x": pad.GetSizeX() + EDGE_WIDTH_EXTEN,
+                        "size_y": pad.GetSizeY() + EDGE_WIDTH_EXTEN,
                         "pad_position_x": pad.ShapePos().x,
                         "pad_position_y": pad.ShapePos().y,
                         "pad_angle": fpAngle,
@@ -352,13 +317,12 @@ class GraphicsSetting:
                 else:
                     circle = {
                         "layer": pad.GetLayerName(),
-                        "size_x": pad.GetSizeX(),
-                        "size_y": pad.GetSizeY(),
+                        "size_x": pad.GetSizeX() + EDGE_WIDTH_EXTEN,
+                        "size_y": pad.GetSizeY() + EDGE_WIDTH_EXTEN,
                         "pad_position_x": pad.ShapePos().x,
                         "pad_position_y": pad.ShapePos().y,
                     }
-                    radius = sqrt(circle["size_x"] ** 2 + circle["size_y"] ** 2) / 2
-                    # radius =  circle["size_x"] / 2
+                    radius = circle["size_x"] / 2
                     distance_start = sqrt(
                         (circle["pad_position_x"] - line_coordinates["start_x"]) ** 2
                         + (circle["pad_position_y"] - line_coordinates["start_y"]) ** 2
@@ -370,8 +334,8 @@ class GraphicsSetting:
                     )
 
                     if (
-                        radius - distance_start >= epsilon
-                        or radius - distance_end >= epsilon
+                        radius - distance_start >= ERROR_RANGE
+                        or radius - distance_end >= ERROR_RANGE
                     ):
                         items.append(pad)
 
@@ -379,7 +343,6 @@ class GraphicsSetting:
 
     def get_board_edge_judge_segment(self, result, board, x, y):
         self.board = board
-        epsilon = 0  # 误差范围，根据需要调整
         items = []
         line_coordinates = {
             "layer": result["layer"][0],
@@ -409,7 +372,7 @@ class GraphicsSetting:
                     "start_y": item.GetStart().y,
                     "end_x": item.GetEndX(),
                     "end_y": item.GetEndY(),
-                    "line_width_y": item.GetWidth() / 2 + LINE__WIDTH_EXTEN,
+                    "line_width_y": item.GetWidth() / 2 + LINE_WIDTH_EXTEN,
                 }
                 distance_start = point_to_line_distance(
                     (line_coordinates["start_x"], line_coordinates["start_y"]), line
@@ -418,8 +381,8 @@ class GraphicsSetting:
                     (line_coordinates["end_x"], line_coordinates["end_y"]), line
                 )
                 if (
-                    line["line_width_y"] - distance_start >= epsilon
-                    or line["line_width_y"] - distance_end >= epsilon
+                    line["line_width_y"] - distance_start >= ERROR_RANGE
+                    or line["line_width_y"] - distance_end >= ERROR_RANGE
                 ):
                     items.append(item)
                     continue
@@ -433,7 +396,7 @@ class GraphicsSetting:
                     "start_y": item.GetStart().y,
                     "end_x": item.GetEndX(),
                     "end_y": item.GetEndY(),
-                    "line_width_y": item.GetWidth() / 2 + LINE__WIDTH_EXTEN,
+                    "line_width_y": item.GetWidth() / 2 + LINE_WIDTH_EXTEN,
                 }
                 # 计算 line_coordinates 的起点和终点到 line 的距离
                 distance_start = point_to_line_distance(
@@ -443,8 +406,8 @@ class GraphicsSetting:
                     (line_coordinates["end_x"], line_coordinates["end_y"]), line
                 )
                 if (
-                    line["line_width_y"] - distance_start >= epsilon
-                    or line["line_width_y"] - distance_end >= epsilon
+                    line["line_width_y"] - distance_start >= ERROR_RANGE
+                    or line["line_width_y"] - distance_end >= ERROR_RANGE
                 ):
                     items.append(item)
                     # continue
@@ -457,8 +420,7 @@ class GraphicsSetting:
                     "position_x": item.GetEndX(),
                     "position_y": item.GetEndY(),
                 }
-                # radius =  circle["size_x"] / 2
-                radius = sqrt(circle["size_x"] ** 2 + circle["size_x"] ** 2) / 2
+                radius = circle["size_x"] / 2 + EDGE_WIDTH_EXTEN
 
                 distance_start = sqrt(
                     (circle["position_x"] - line_coordinates["start_x"]) ** 2
@@ -470,8 +432,8 @@ class GraphicsSetting:
                 )
 
                 if (
-                    radius - distance_start >= epsilon
-                    or radius - distance_end >= epsilon
+                    radius - distance_start >= ERROR_RANGE
+                    or radius - distance_end >= ERROR_RANGE
                 ):
                     items.append(item)
                     # continue
@@ -492,8 +454,8 @@ class GraphicsSetting:
 
                     rect = {
                         "layer": pad.GetLayerName(),
-                        "size_x": pad.GetSizeX(),
-                        "size_y": pad.GetSizeY(),
+                        "size_x": pad.GetSizeX() + EDGE_WIDTH_EXTEN,
+                        "size_y": pad.GetSizeY() + EDGE_WIDTH_EXTEN,
                         "pad_position_x": pad.ShapePos().x,
                         "pad_position_y": pad.ShapePos().y,
                         "pad_angle": fpAngle,
@@ -525,12 +487,11 @@ class GraphicsSetting:
                 else:
                     circle = {
                         "layer": pad.GetLayerName(),
-                        "size_x": pad.GetSizeX(),
-                        "size_y": pad.GetSizeY(),
+                        "size_x": pad.GetSizeX() + EDGE_WIDTH_EXTEN,
+                        "size_y": pad.GetSizeY() + EDGE_WIDTH_EXTEN,
                         "pad_position_x": pad.ShapePos().x,
                         "pad_position_y": pad.ShapePos().y,
                     }
-                    # radius = sqrt(circle["size_x"] ** 2 + circle["size_y"] ** 2) / 2
                     radius = circle["size_x"] / 2
                     distance_start = sqrt(
                         (circle["pad_position_x"] - line_coordinates["start_x"]) ** 2
@@ -543,16 +504,14 @@ class GraphicsSetting:
                     )
 
                     if (
-                        radius - distance_start >= epsilon
-                        or radius - distance_end >= epsilon
+                        radius - distance_start >= ERROR_RANGE
+                        or radius - distance_end >= ERROR_RANGE
                     ):
                         items.append(pad)
-
         return items
 
     def get_pad_spacing_judge_segment(self, result, board, x, y):
         self.board = board
-        epsilon = 0  # 误差范围，根据需要调整
         items = []
         line_coordinates = {
             "layer": result["layer"][0],
@@ -562,20 +521,18 @@ class GraphicsSetting:
             "end_y": y - int(Decimal(result["ey"]) * 1000000),
         }
         layer = result.get("layer", [])
-
         tracks = self.board.GetTracks()
         for item in tracks:
             if type(item) is pcbnew.PCB_VIA:
 
                 circle = {
                     "layer": item.GetLayerName(),
-                    "size_x": item.GetWidth() + EDGE_WIDTH_EXTEN,
-                    "size_y": item.GetWidth() + EDGE_WIDTH_EXTEN,
+                    "size_x": item.GetWidth(),
+                    "size_y": item.GetWidth(),
                     "position_x": item.GetEndX(),
                     "position_y": item.GetEndY(),
                 }
-                radius = circle["size_x"] / 2
-
+                radius = circle["size_x"] / 2 + EDGE_WIDTH_EXTEN
                 distance_start = sqrt(
                     (circle["position_x"] - line_coordinates["start_x"]) ** 2
                     + (circle["position_y"] - line_coordinates["start_y"]) ** 2
@@ -584,10 +541,9 @@ class GraphicsSetting:
                     (circle["position_x"] - line_coordinates["end_x"]) ** 2
                     + (circle["position_y"] - line_coordinates["end_y"]) ** 2
                 )
-
                 if (
-                    radius - distance_start >= epsilon
-                    or radius - distance_end >= epsilon
+                    radius - distance_start >= ERROR_RANGE
+                    or radius - distance_end >= ERROR_RANGE
                 ):
                     items.append(item)
 
@@ -645,24 +601,20 @@ class GraphicsSetting:
                         "pad_position_x": pad.ShapePos().x,
                         "pad_position_y": pad.ShapePos().y,
                     }
-                    # radius = sqrt(circle["size_x"] ** 2 + circle["size_y"] ** 2) / 2
                     radius = circle["size_x"] / 2
                     distance_start = sqrt(
                         (circle["pad_position_x"] - line_coordinates["start_x"]) ** 2
                         + (circle["pad_position_y"] - line_coordinates["start_y"]) ** 2
                     )
-
                     distance_end = sqrt(
                         (circle["pad_position_x"] - line_coordinates["end_x"]) ** 2
                         + (circle["pad_position_y"] - line_coordinates["end_y"]) ** 2
                     )
-
                     if (
-                        radius - distance_start >= epsilon
-                        or radius - distance_end >= epsilon
+                        radius - distance_start >= ERROR_RANGE
+                        or radius - distance_end >= ERROR_RANGE
                     ):
                         items.append(pad)
-
         return items
 
     def get_SMD_pads_rect_list(self, result, board, x, y):

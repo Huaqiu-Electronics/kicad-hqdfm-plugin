@@ -100,7 +100,8 @@ class DfmChildFrame(UiChildFrame):
     def remove_added_line(self, event):
         if len(self.item_list) != 0:
             for item in self.item_list:
-                item.ClearBrightened()
+                if item:
+                    item.ClearBrightened()
                 # item.ClearSelected()
 
         if len(self.line_list) != 0:
@@ -161,6 +162,8 @@ class DfmChildFrame(UiChildFrame):
     def dispose_result(self):
         if self.combo_box.GetSelection() == 1:
             if self.json_string not in self.delete_value.keys():
+                if not self.result_json[self.json_string]:
+                    return
                 for result_list in self.result_json[self.json_string]["check"]:
                     for result in result_list["result"]:
                         if result["color"] == "black":
@@ -245,6 +248,7 @@ class DfmChildFrame(UiChildFrame):
                     self, list_string[0], self.message_type["picture_path"]
                 )
             )
+            self.Layout()
 
         # 孔环和最小线宽的特殊展示方式
         if self.json_string == "Smallest Trace Width" or self.json_string == "RingHole":
