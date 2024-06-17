@@ -341,16 +341,16 @@ class DfmMainframe(wx.Frame):
         pass
 
     def on_select_export_gerber(self, event):
-        if self.country == "CN":
-            country = "中国"
-        else:
-            country = self.country
+        # if self.country == "CN":
+        #     country = "中国"
+        # else:
+        #     country = self.country
         messageDialog = wx.MessageDialog(
             self,
-            _("Do you want to save PCB file? \r\n 调用接口的国家: {country}").format(
-                country=country
-            ),
-            # _("Do you want to save PCB file? \r\n  "),
+            # _("Do you want to save PCB file? \r\n 调用接口的国家: {country}").format(
+            #     country=country
+            # ),
+            _("Do you want to save PCB file? \r\n  "),
             _("Info"),
             wx.YES_NO | wx.ICON_INFORMATION | wx.NO_DEFAULT,
         )
@@ -782,7 +782,6 @@ class DfmMainframe(wx.Frame):
                     location = response.json()
                     if location:
                         self.country = location.get("country", "None")
-                        # 这里可以处理更多的位置信息，例如城市、地区等
                     return self.country
                 time.sleep(1)
                 attempts += 1
