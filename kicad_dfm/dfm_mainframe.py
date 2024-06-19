@@ -59,8 +59,8 @@ class DfmMainframe(wx.Frame):
             self.board = pcbnew.GetBoard()
         except Exception as e:
             for fp in (
-                "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
                 "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\ecc83\\ecc83-pp.kicad_pcb",
+                "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
                 "C:\\Program Files\\demos\\video\\video.kicad_pcb",
             ):
                 if os.path.exists(fp):
@@ -81,7 +81,6 @@ class DfmMainframe(wx.Frame):
         self.item_result = _("no errors detected")
         self.json_analysis_map = {}
         self.SetIcon(wx.Icon(GetImagePath("icon.png"), wx.BITMAP_TYPE_PNG))  # 设置窗口图标
-        # 将 DfmMaindailogView 对象添加到 BoxSizer 中
         self.dfm_maindialog = DfmMaindailogView(self, self.control)
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         self.sizer.Add(self.dfm_maindialog, 1, wx.EXPAND)
@@ -341,30 +340,10 @@ class DfmMainframe(wx.Frame):
         pass
 
     def on_select_export_gerber(self, event):
-        # if self.country == "CN":
-        #     country = "中国"
-        # else:
-        #     country = self.country
-        messageDialog = wx.MessageDialog(
-            self,
-            # _("Do you want to save PCB file? \r\n 调用接口的国家: {country}").format(
-            #     country=country
-            # ),
-            _("Do you want to save PCB file? \r\n  "),
-            _("Info"),
-            wx.YES_NO | wx.ICON_INFORMATION | wx.NO_DEFAULT,
-        )
 
-        # wx.MessageBox(f"调用接口的国家: {country}")
-        messageDialog.SetYesNoLabels(_("Yes"), _("No"))
-        if messageDialog.ShowModal() == wx.ID_YES:
-            fullfilepath = self.board.GetFileName()
-            # fullfilepath = self.path+'\\save.kicad_pcb'
-            save_result = pcbnew.SaveBoard(fullfilepath, self.board)
-            if not save_result:
-                wx.MessageBox(_(" Fialed to save PCB file."), _("Info"))
-                return
-        messageDialog.Destroy()
+        fullfilepath = self.board.GetFileName()
+        pcbnew.SaveBoard(fullfilepath, self.board)
+
         try:
             gerber_dir = os.path.join(self.path, "dfm", "gerber")
             Path(gerber_dir).mkdir(parents=True, exist_ok=True)
@@ -389,13 +368,12 @@ class DfmMainframe(wx.Frame):
                 json_path = self.dfm_analysis.haiwai_download_dfm_file(
                     archived, self.name
                 )
-            # 解析json文件，保存到结果中
 
             if pcbnew.GetLanguage() == "简体中文":
                 self.analysis_result = self.dfm_analysis.analysis_json(json_path, True)
             else:
                 self.analysis_result = self.dfm_analysis.analysis_json(json_path)
-            if self.analysis_result == "":
+            if self.analysis_result == "" or not self.analysis_result:
                 wx.MessageBox(
                     _("File analysis failure!"), _("Info"), style=wx.ICON_INFORMATION
                 )

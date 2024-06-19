@@ -6,8 +6,11 @@ import pcbnew
 from .. import config
 from ..picture import GetImagePath
 from kicad_dfm.child_frame.ui_child_frame import UiChildFrame
-from kicad_dfm.settings.graphics_setting import GRAPHICS_SETTING
-from kicad_dfm.child_frame.child_frame_model import ChildFrameSetting
+from kicad_dfm.settings.graphics_setting import GraphicsSetting
+from kicad_dfm.child_frame.child_frame_setting import (
+    ChildFrameSetting,
+    CHILDFRAME_UNIT_CONVERSION,
+)
 import wx.dataview as dv
 from kicad_dfm.child_frame.picture_match_path import PICTURE_MATCH_PATH
 from kicad_dfm.settings.timestamp import TimeStamp
@@ -51,6 +54,8 @@ class DfmChildFrame(UiChildFrame):
             self.message_type = config.Language_english
         self.kicad = kicad
         self.combo = 1
+        self.graphics_setting = GraphicsSetting(self.board)
+        self.child_frame_setting = ChildFrameSetting(self.board)
 
         self.SetTitle(title)
         self.result = {}
@@ -58,6 +63,7 @@ class DfmChildFrame(UiChildFrame):
         self.item_list = []
         self.delete_value = {}
         self.select_number = -1
+        self.combo_box.SetSelection(0)
 
         self.analysis_result_data = self.get_result()
         self.lst_analysis_result1.AppendTextColumn(
@@ -103,11 +109,11 @@ class DfmChildFrame(UiChildFrame):
                 if item:
                     item.ClearBrightened()
                 # item.ClearSelected()
-
         if len(self.line_list) != 0:
             for line in self.line_list:
                 self.board.Delete(line)
             self.line_list.clear()
+        pcbnew.Refresh
         event.Skip()
 
     # 关闭窗口时清空在kicad上的处理
@@ -159,6 +165,19 @@ class DfmChildFrame(UiChildFrame):
         self.analysis_process(string_data, event)
         event.Skip()
 
+    def read_json(self, event):
+        self.combo = self.combo_box.GetSelection()
+        self.dispose_result()
+        self.get_result()
+        self.set_layer()
+        self.set_color_rule()
+        event.Skip()
+
+    def set_result(self, event):
+        self.set_layer()
+        self.set_color_rule()
+        event.Skip()
+
     def dispose_result(self):
         if self.combo_box.GetSelection() == 1:
             if self.json_string not in self.delete_value.keys():
@@ -184,19 +203,6 @@ class DfmChildFrame(UiChildFrame):
         self.lst_layer.Set(self.get_layer)
         self.lst_analysis_type.Set(self.get_type_data)
 
-    def read_json(self, event):
-        self.combo = self.combo_box.GetSelection()
-        self.dispose_result()
-        self.get_result()
-        self.set_layer()
-        self.set_color_rule()
-        event.Skip()
-
-    def set_result(self, event):
-        self.set_layer()
-        self.set_color_rule()
-        event.Skip()
-
     def set_layer(self):
         if len(self.get_layer) == 0:
             self.layer_name.append("")
@@ -216,7 +222,9 @@ class DfmChildFrame(UiChildFrame):
         selected_item_types = set(self.get_type_data)
         for result_list in self.result_json[self.json_string]["check"]:
             for result in result_list["result"]:
-                result_layer = self.layer_conversion(result["layer"])
+                result_layer = self.child_frame_setting.layer_conversion(
+                    self.json_string, result["layer"]
+                )
                 if (
                     result["item"] not in selected_item_types
                     and result_layer[0] in selected_layers
@@ -254,7 +262,9 @@ class DfmChildFrame(UiChildFrame):
         if self.json_string == "Smallest Trace Width" or self.json_string == "RingHole":
             for check_list in self.result_json[self.json_string]["check"]:
                 for result in check_list["result"]:
-                    result_layer = self.layer_conversion(result["layer"])
+                    result_layer = self.child_frame_setting.layer_conversion(
+                        self.json_string, result["layer"]
+                    )
                     if (
                         result["item"] in list_string
                         and result_layer[0] in self.layer_name
@@ -288,37 +298,21 @@ class DfmChildFrame(UiChildFrame):
                             self.result[str(num)] = result_list
             for result in self.result:
                 millimeter_value = round(float(self.result[result][0]["value"]), 3)
-                iu_value = self.Millimeter2iu(millimeter_value)
-                mils_value = self.Millimeter2mils(millimeter_value)
+                iu_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2iu(millimeter_value)
+                mils_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2mils(
+                    millimeter_value
+                )
                 if self.unit == 0:
-                    string = (
-                        result
-                        + "、"
-                        + str(iu_value)
-                        + "inch"
-                        + ","
-                        + str(len(self.result[result]))
-                        + _("pcs")
+                    string = CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
+                        result, str(iu_value) + "inch", len(self.result[result])
                     )
                 elif self.unit == 5:
-                    string = (
-                        result
-                        + "、"
-                        + str(mils_value)
-                        + "mils"
-                        + ","
-                        + str(len(self.result[result]))
-                        + _("pcs")
+                    string = CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
+                        result, str(mils_value) + "mils", len(self.result[result])
                     )
                 else:
-                    string = (
-                        result
-                        + "、"
-                        + str(millimeter_value)
-                        + "mm"
-                        + ","
-                        + str(len(self.result[result]))
-                        + _("pcs")
+                    string = CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
+                        result, str(millimeter_value) + "mm", len(self.result[result])
                     )
 
                 value = self.result[result][0]["value"]
@@ -326,9 +320,12 @@ class DfmChildFrame(UiChildFrame):
                 results_list.append([string, color])
 
         else:
+
             for result_list in self.result_json[self.json_string]["check"]:
                 for result in result_list["result"]:
-                    result_layer = self.layer_conversion(result["layer"])
+                    result_layer = self.child_frame_setting.layer_conversion(
+                        self.json_string, result["layer"]
+                    )
                     if (
                         result["item"] in list_string
                         and result_layer[0] in self.layer_name
@@ -337,11 +334,13 @@ class DfmChildFrame(UiChildFrame):
                         if self.json_string == "Holes on SMD Pads":
                             results_list.append(
                                 [
-                                    self.string_conversion(num, result["value"]),
+                                    CHILDFRAME_UNIT_CONVERSION.string_conversion(
+                                        str(num), result["value"]
+                                    ),
                                     result["color"],
                                 ]
                             )
-                        elif result["item"] == "Aspect Ratio":
+                        elif result["item"] == _("Aspect Ratio"):
                             millimeter_value = round(float(result["value"]), 2)
                             board_thickness = round(
                                 (
@@ -358,19 +357,35 @@ class DfmChildFrame(UiChildFrame):
                                 + "/"
                                 + str(hole_diameter)
                                 + ")"
+                                + ", "
+                                + str(len(result_list["result"]))
+                                + _("pcs")
                             )
                             results_list.append(
-                                [self.string_conversion(num, values), result["color"]]
+                                [
+                                    CHILDFRAME_UNIT_CONVERSION.string_conversion(
+                                        str(num), values
+                                    ),
+                                    result["color"],
+                                ]
                             )
-                        else:
+                        elif result["item"] == _("Largest Drill Size") or result[
+                            "item"
+                        ] == _("Smallest Drill Size"):
                             millimeter_value = round(float(result["value"]), 3)
-                            iu_value = self.Millimeter2iu(millimeter_value)
-                            mils_value = self.Millimeter2mils(millimeter_value)
+                            iu_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2iu(
+                                millimeter_value
+                            )
+                            mils_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2mils(
+                                millimeter_value
+                            )
                             if self.unit == 0:
                                 results_list.append(
                                     [
-                                        self.string_conversion(
-                                            num, str(iu_value) + "inch"
+                                        CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
+                                            str(num),
+                                            str(iu_value) + "inch",
+                                            len(result_list["result"]),
                                         ),
                                         result["color"],
                                     ]
@@ -378,8 +393,10 @@ class DfmChildFrame(UiChildFrame):
                             elif self.unit == 5:
                                 results_list.append(
                                     [
-                                        self.string_conversion(
-                                            num, str(mils_value) + "mil"
+                                        CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
+                                            str(num),
+                                            str(mils_value) + "mil",
+                                            len(result_list["result"]),
                                         ),
                                         result["color"],
                                     ]
@@ -387,8 +404,45 @@ class DfmChildFrame(UiChildFrame):
                             else:
                                 results_list.append(
                                     [
-                                        self.string_conversion(
-                                            num, result["value"] + "mm"
+                                        CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
+                                            str(num),
+                                            result["value"] + "mm",
+                                            len(result_list["result"]),
+                                        ),
+                                        result["color"],
+                                    ]
+                                )
+                        else:
+                            millimeter_value = round(float(result["value"]), 3)
+                            iu_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2iu(
+                                millimeter_value
+                            )
+                            mils_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2mils(
+                                millimeter_value
+                            )
+                            if self.unit == 0:
+                                results_list.append(
+                                    [
+                                        CHILDFRAME_UNIT_CONVERSION.string_conversion(
+                                            str(num), str(iu_value) + "inch"
+                                        ),
+                                        result["color"],
+                                    ]
+                                )
+                            elif self.unit == 5:
+                                results_list.append(
+                                    [
+                                        CHILDFRAME_UNIT_CONVERSION.string_conversion(
+                                            str(num), str(mils_value) + "mil"
+                                        ),
+                                        result["color"],
+                                    ]
+                                )
+                            else:
+                                results_list.append(
+                                    [
+                                        CHILDFRAME_UNIT_CONVERSION.string_conversion(
+                                            str(num), result["value"] + "mm"
                                         ),
                                         result["color"],
                                     ]
@@ -398,20 +452,10 @@ class DfmChildFrame(UiChildFrame):
 
         self.dfm_child_frame_model.Update(results_list)
 
-    def string_conversion(self, num, value):
-        string = str(num) + "、" + value
-        return string
-
     def data_view_binding(self):
         self.dfm_child_frame_model = DfmChildFrameModel(self.analysis_result_data)
         self.lst_analysis_result1.AssociateModel(self.dfm_child_frame_model)
         wx.CallAfter(self.lst_analysis_result1.Refresh)
-
-    def Millimeter2iu(self, millimeter_value):
-        return round(millimeter_value / 25.4, 3)
-
-    def Millimeter2mils(self, millimeter_value):
-        return round((millimeter_value * 39.37), 3)
 
     def on_analysis_result(self, event):
         selection = self.lst_analysis_result1.GetSelectedRow()
@@ -469,12 +513,9 @@ class DfmChildFrame(UiChildFrame):
             for result_list in self.result:
                 if search == str(result_list):
                     # kicad分析项
-                    if (
-                        self.json_string == "Hatched Copper Pour"
-                        or self.json_string == "Pad size"
-                        or self.json_string == _("Hatched Copper Pour")
-                        or self.json_string == _("Pad size")
-                    ):
+
+                    self.remove_added_line(event)
+                    if self.json_string in ["Hatched Copper Pour", "Pad size"]:
                         item = self.board.GetItem(self.result[result_list][0]["id"])
                         pcbnew.FocusOnItem(item, self.board.GetLayerID(item.GetLayer()))
                         for layer in self.result[result_list][0]["layer"]:
@@ -482,35 +523,30 @@ class DfmChildFrame(UiChildFrame):
                         item.SetBrightened()
                         self.item_list.append(item)
 
-                    elif (
-                        self.json_string == "Signal Integrity"
-                        or self.json_string == "Hole Diameter"
-                    ):
+                    elif self.json_string in ["Signal Integrity", "Hole Diameter"]:
                         items = []
-                        self.remove_added_line(event)
                         for result in self.result[result_list]["result"]:
-                            item = None
                             if result["type"] == 0:
                                 if result["et"] == 0:
-                                    item = (
-                                        GRAPHICS_SETTING.get_signal_integrity_segment(
-                                            self, result, self.board, x, y
-                                        )
+                                    item = self.graphics_setting.get_signal_integrity_segment(
+                                        result, x, y
                                     )
                                 elif result["et"] == 1:
-                                    item = GRAPHICS_SETTING.get_signal_integrity_arc(
-                                        self, result, self.board, x, y
+                                    item = (
+                                        self.graphics_setting.get_signal_integrity_arc(
+                                            result, x, y
+                                        )
                                     )
                                 else:
-
-                                    item = GRAPHICS_SETTING.get_signal_integrity_rect(
-                                        self, result, self.board, x, y
+                                    item = (
+                                        self.graphics_setting.get_signal_integrity_rect(
+                                            result, x, y
+                                        )
                                     )
                                 items.append(item)
                                 self.item_list.append(item)
                             for layer in result["layer"]:
                                 layer_num.append(self.board.GetLayerID(layer))
-
                         if items:
                             for item in items:
                                 if not item:
@@ -525,15 +561,14 @@ class DfmChildFrame(UiChildFrame):
                                         item, self.board.GetLayerID(item.GetLayer())
                                     )
 
-                    elif (
-                        self.json_string == "Holes on SMD Pads"
-                        or self.json_string == "Special Drill Holes"
-                    ):
+                    elif self.json_string in [
+                        "Holes on SMD Pads",
+                        "Special Drill Holes",
+                    ]:
                         items = []
-                        self.remove_added_line(event)
                         for result in self.result[result_list]["result"]:
-                            item = GRAPHICS_SETTING.get_SMD_pads_rect_list(
-                                self, result, self.board, x, y
+                            item = self.graphics_setting.get_SMD_pads_rect_list(
+                                result, x, y
                             )
                             items.append(item)
                             self.item_list.append(item)
@@ -542,20 +577,21 @@ class DfmChildFrame(UiChildFrame):
                         if items:
                             self.set_items_Brightened(items)
 
-                    elif (
-                        self.json_string == "Drill to Copper"
-                        or self.json_string == "Smallest Trace Spacing"
-                    ):
+                    elif self.json_string in [
+                        "Drill to Copper",
+                        "Smallest Trace Spacing",
+                    ]:
                         items = []
-                        self.remove_added_line(event)
                         for result in self.result[result_list]["result"]:
                             if result["item"] == _("Pad Spacing"):
-                                items = GRAPHICS_SETTING.get_pad_spacing_judge_segment(
-                                    self, result, self.board, x, y
+                                items = (
+                                    self.graphics_setting.get_pad_spacing_judge_segment(
+                                        result, x, y
+                                    )
                                 )
                             else:
-                                items = GRAPHICS_SETTING.get_spacing_judge_segment(
-                                    self, result, self.board, x, y
+                                items = self.graphics_setting.get_spacing_judge_segment(
+                                    result, x, y
                                 )
                             for layer in result["layer"]:
                                 layer_num.append(self.board.GetLayerID(layer))
@@ -563,33 +599,25 @@ class DfmChildFrame(UiChildFrame):
                             self.set_items_Brightened(items)
 
                     elif self.json_string == "Board Edge Clearance":
-                        items = []
-                        self.remove_added_line(event)
-                        for result in self.result[result_list]["result"]:
-                            items = GRAPHICS_SETTING.get_board_edge_judge_segment(
-                                self, result, self.board, x, y
-                            )
-                            for layer in result["layer"]:
-                                layer_num.append(self.board.GetLayerID(layer))
-                        if items:
-                            self.set_items_Brightened(items)
-                    elif (
-                        self.json_string == "Drill Hole Spacing"
-                        or self.json_string == "Pad Spacing"
-                    ):
-                        items = []
-                        self.remove_added_line(event)
-                        for result in self.result[result_list]["result"]:
-                            items = GRAPHICS_SETTING.get_pad_spacing_judge_segment(
-                                self, result, self.board, x, y
-                            )
-                            for layer in result["layer"]:
-                                layer_num.append(self.board.GetLayerID(layer))
-                        if items:
-                            self.set_items_Brightened(items)
+                        self.process_items(
+                            self.result[result_list]["result"],
+                            self.graphics_setting.get_board_edge_judge_segment,
+                            x,
+                            y,
+                            layer_num,
+                        )
+
+                    elif self.json_string in ["Pad Spacing", "Drill Hole Spacing"]:
+                        self.process_items(
+                            self.result[result_list]["result"],
+                            self.graphics_setting.get_pad_spacing_judge_segment,
+                            x,
+                            y,
+                            layer_num,
+                        )
+
                     # dfm分析项
                     else:
-                        self.remove_added_line(event)
                         for result in self.result[result_list]["result"]:
                             # 多种的数据格式
                             line = pcbnew.PCB_SHAPE()
@@ -600,24 +628,24 @@ class DfmChildFrame(UiChildFrame):
                             line.SetWidth(250000)
                             if result["type"] == 0:
                                 if result["et"] == 0:
-                                    line = GRAPHICS_SETTING.set_segment(
-                                        self, line, result, x, y
+                                    line = self.graphics_setting.set_segment(
+                                        line, result, x, y
                                     )
                                 elif result["et"] == 1:
-                                    line = GRAPHICS_SETTING.set_arc(
-                                        self, line, result, x, y
+                                    line = self.graphics_setting.set_arc(
+                                        line, result, x, y
                                     )
                                 else:
-                                    line = GRAPHICS_SETTING.set_rect(
-                                        self, line, result, x, y
+                                    line = self.graphics_setting.set_rect(
+                                        line, result, x, y
                                     )
                             elif result["type"] == 2:
-                                line = GRAPHICS_SETTING.set_segment(
-                                    self, line, result, x, y
+                                line = self.graphics_setting.set_segment(
+                                    line, result, x, y
                                 )
                             else:
-                                line = GRAPHICS_SETTING.set_rect_list(
-                                    self, line, result, x, y
+                                line = self.graphics_setting.set_rect_list(
+                                    line, result, x, y
                                 )
                             self.line_list.append(line)
                             layer_num.append(pcbnew.Dwgs_User)
@@ -649,6 +677,15 @@ class DfmChildFrame(UiChildFrame):
         wx.CallAfter(pcbnew.Refresh)
         event.Skip()
 
+    def process_items(self, results, get_item_func, x, y, layer_num):
+        items = []
+        for result in results:
+            items = get_item_func(result, x, y)
+            for layer in result["layer"]:
+                layer_num.append(self.board.GetLayerID(layer))
+        if items:
+            self.set_items_Brightened(items)
+
     def set_items_Brightened(self, items):
         for item in items:
             if not item:
@@ -666,7 +703,9 @@ class DfmChildFrame(UiChildFrame):
         for result_list in self.result_json[self.json_string]["check"]:
             for result in result_list["result"]:
                 if self.kicad is False:
-                    result["layer"] = self.layer_conversion(result["layer"])
+                    result["layer"] = self.child_frame_setting.layer_conversion(
+                        self.json_string, result["layer"]
+                    )
                 if result["layer"][0] not in layer:
                     layer.append(result["layer"][0])
         return layer
@@ -691,38 +730,7 @@ class DfmChildFrame(UiChildFrame):
             for result in result_list["result"]:
                 if result["value"] not in analysis_result:
                     analysis_result.append([result["value"], result["color"]])
-                    # analysis_result.append( result["value"] )
         return analysis_result
-
-    def layer_conversion(self, layer_result):
-        if (
-            self.json_string == "Hatched Copper Pour"
-            or self.json_string == "Pad size"
-            or self.json_string == "Smallest Trace Width"
-            or self.json_string == "RingHole"
-        ):
-            return layer_result
-        kicad_layer = {}
-        kicad_layer["Top Silk"] = self.board.GetLayerName(37)
-        kicad_layer["Top Solder"] = self.board.GetLayerName(39)
-        kicad_layer["Top Layer"] = self.board.GetLayerName(0)
-        kicad_layer["Bot Silk"] = self.board.GetLayerName(36)
-        kicad_layer["Bot Solder"] = self.board.GetLayerName(38)
-        kicad_layer["Bot Layer"] = self.board.GetLayerName(31)
-        kicad_layer["Outline"] = self.board.GetLayerName(44)
-        kicad_layer["Top Paste"] = self.board.GetLayerName(35)
-        kicad_layer["Bot Paste"] = self.board.GetLayerName(34)
-        for i in range(2, 32):
-            kicad_layer[f"Inner{i}"] = self.board.GetLayerName(i - 1)
-
-        if isinstance(layer_result, str):  # 如果 layer_result 是字符串
-            if layer_result in kicad_layer.keys():
-                layer_result = kicad_layer[layer_result]
-        elif isinstance(layer_result, list):  # 如果 layer_result 是列表
-            for i, layer in enumerate(layer_result):
-                if layer in kicad_layer.keys():
-                    layer_result[i] = kicad_layer[layer]
-        return layer_result
 
     def GetImagePath(self, bitmap_path):
         return GetImagePath(bitmap_path)
