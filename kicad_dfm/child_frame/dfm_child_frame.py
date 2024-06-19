@@ -63,7 +63,7 @@ class DfmChildFrame(UiChildFrame):
         self.item_list = []
         self.delete_value = {}
         self.select_number = -1
-        self.combo_box.SetSelection(0)
+        # self.combo_box.SetSelection(0)
 
         self.analysis_result_data = self.get_result()
         self.lst_analysis_result1.AppendTextColumn(
@@ -178,6 +178,10 @@ class DfmChildFrame(UiChildFrame):
         self.set_color_rule()
         event.Skip()
 
+    def analysis_type(self, event):
+        self.set_color_rule()
+        event.Skip()
+
     def dispose_result(self):
         if self.combo_box.GetSelection() == 1:
             if self.json_string not in self.delete_value.keys():
@@ -208,7 +212,6 @@ class DfmChildFrame(UiChildFrame):
             self.layer_name.append("")
             return
         self.layer_name = []
-        # self.analysis_type_data = []
         if self.lst_layer.GetSelections() != wx.NOT_FOUND:
             list_data = self.lst_layer.GetSelections()
         for data in list_data:
@@ -232,10 +235,6 @@ class DfmChildFrame(UiChildFrame):
                     selected_item_types.add(result["item"])
 
         self.lst_analysis_type.Set(list(selected_item_types))
-
-    def analysis_type(self, event):
-        self.set_color_rule()
-        event.Skip()
 
     def set_color_rule(self):
         if self.result_json[self.json_string] == "":
@@ -512,7 +511,6 @@ class DfmChildFrame(UiChildFrame):
         else:
             for result_list in self.result:
                 if search == str(result_list):
-                    # kicad分析项
 
                     self.remove_added_line(event)
                     if self.json_string in ["Hatched Copper Pour", "Pad size"]:
@@ -616,14 +614,11 @@ class DfmChildFrame(UiChildFrame):
                             layer_num,
                         )
 
-                    # dfm分析项
+                    # dfm analysis item
                     else:
                         for result in self.result[result_list]["result"]:
-                            # 多种的数据格式
                             line = pcbnew.PCB_SHAPE()
                             line.GetLayerSet()
-
-                            # line.SetLayer(pcbnew.Dwgs_User)
                             line.SetLayer(pcbnew.LAYER_DRC_WARNING)
                             line.SetWidth(250000)
                             if result["type"] == 0:
@@ -650,14 +645,14 @@ class DfmChildFrame(UiChildFrame):
                             self.line_list.append(line)
                             layer_num.append(pcbnew.Dwgs_User)
 
-                            # 显示的层
+                            # show layers
                             for layer in result["layer"]:
                                 if self.board.GetLayerID(layer) > -1:
                                     layer_num.append(self.board.GetLayerID(layer))
                                 else:
                                     layer_num.append(pcbnew.B_Adhes)
                         count = 0
-                        # 定位
+                        # orientation
                         for line in self.line_list:
                             count += 1
                             self.board.Add(line)
@@ -665,7 +660,7 @@ class DfmChildFrame(UiChildFrame):
                             if count == len(self.line_list):
                                 pcbnew.FocusOnItem(line, layer_num[0])
 
-        # 关闭不需要显示的层
+        # close needn't layers
         if self.check_box.GetValue() is False:
             gal_set = self.board.GetVisibleLayers()
             for num in [x for x in gal_set.Seq()]:
