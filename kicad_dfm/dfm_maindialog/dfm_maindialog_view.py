@@ -1,7 +1,9 @@
 import wx
+import sys
 from kicad_dfm.dfm_maindialog.ui_dfm_maindialog import UiDfmMaindialog
 import wx.dataview as dv
 from kicad_dfm.dfm_maindialog.dfm_maindialog_model import DfmMaindialogModel
+from kicad_dfm.utils.CustomRenderer import MyCustomRenderer
 
 
 class DfmMaindailogView(UiDfmMaindialog):
@@ -11,23 +13,12 @@ class DfmMaindailogView(UiDfmMaindialog):
         _control,
     ):
         super().__init__(parent)
-        # self.control = _control
-
-        self.mainframe_data_view.AppendTextColumn(
-            _("Item"),
-            0,
-            width=160,
-            mode=dv.DATAVIEW_CELL_ACTIVATABLE,
-            align=wx.ALIGN_CENTER_HORIZONTAL,
-        )
-        self.mainframe_data_view.AppendTextColumn(
-            _("display"),
-            1,
-            width=-1,
-            mode=dv.DATAVIEW_CELL_ACTIVATABLE,
-            align=wx.ALIGN_CENTER_HORIZONTAL,
-        )
-        self.mainframe_data_view.SetRowHeight(35)
+        self.log = sys.stdout
+        for title, col, width in [("Item", 0, 170), ("display", 1, -1)]:
+            renderer = MyCustomRenderer(self.log, mode=dv.DATAVIEW_CELL_ACTIVATABLE)
+            column = dv.DataViewColumn(title, renderer, col, width=width)
+            column.Alignment = wx.ALIGN_CENTER_HORIZONTAL
+            self.mainframe_data_view.AppendColumn(column)
 
         self.Layout()
 

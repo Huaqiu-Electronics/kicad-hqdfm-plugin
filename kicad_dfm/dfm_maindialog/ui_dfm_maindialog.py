@@ -11,6 +11,9 @@ import wx
 import wx.xrc
 import wx.dataview
 
+import gettext
+
+_ = gettext.gettext
 
 ###########################################################################
 ## Class UiDfmMaindialog
@@ -103,15 +106,16 @@ class UiDfmMaindialog(wx.Panel):
             self.m_panel3,
             wx.ID_ANY,
             wx.DefaultPosition,
-            wx.Size(-1, -1),
+            wx.DefaultSize,
             wx.dataview.DV_HORIZ_RULES
             | wx.dataview.DV_NO_HEADER
             | wx.dataview.DV_ROW_LINES
+            | wx.dataview.DV_VARIABLE_LINE_HEIGHT
             | wx.dataview.DV_VERT_RULES,
         )
         self.mainframe_data_view.SetMinSize(wx.Size(-1, 670))
 
-        bSizer8.Add(self.mainframe_data_view, 10, wx.EXPAND, 5)
+        bSizer8.Add(self.mainframe_data_view, 10, wx.ALL | wx.EXPAND, 0)
 
         bSizer6.Add(bSizer8, 8, wx.ALL, 5)
 

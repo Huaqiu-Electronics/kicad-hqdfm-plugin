@@ -30,6 +30,7 @@ class BaseApp(wx.EvtHandler):
         if existing_locale is not None:
             existing_locale.AddCatalog(LANG_DOMAIN)
 
+        print(wx.__version__)
         self.startup()
         return None
 

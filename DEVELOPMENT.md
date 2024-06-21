@@ -1,4 +1,4 @@
-# Building kicad-dfm-plugin
+# Building kicad-hqdfm-plugin
 
 ## Preparation
 
