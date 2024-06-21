@@ -43,6 +43,7 @@ class MyCustomRenderer(dv.DataViewCustomRenderer):
     def Render(self, rect, dc, state):
         if state != 0:
             self.log.write("Render: %s, %d\n" % (rect, state))
+            dc.SetTextForeground(wx.Colour("black"))
 
         # And then finish up with this helper function that draws the
         # text for us, dealing with alignment, font and color
@@ -53,7 +54,7 @@ class MyCustomRenderer(dv.DataViewCustomRenderer):
             0,  # x-offset, to compensate for the rounded rectangles
             rect,
             dc,
-            state,  # wxDataViewCellRenderState flags
+            state=0,  # wxDataViewCellRenderState flags
         )
         return True
 

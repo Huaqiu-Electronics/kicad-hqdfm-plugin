@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2024-06-18 10:57+0800\n"
+"POT-Creation-Date: 2024-06-21 13:46+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -60,61 +60,33 @@ msgid "Grid Width"
 msgstr ""
 
 #:
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:65
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:17
-msgid "Item"
-msgstr ""
-
-#:
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:303
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:313
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:323
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:367
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:440
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\child_frame_setting.py:47
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:361
 msgid "pcs"
 msgstr ""
 
 #:
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:348
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:70
+msgid "Item"
+msgstr ""
+
+#:
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:342
 msgid "Aspect Ratio"
 msgstr ""
 
 #:
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:372
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:371
 msgid "Largest Drill Size"
 msgstr ""
 
 #:
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:372
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:373
 msgid "Smallest Drill Size"
 msgstr ""
 
 #:
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:517
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:163
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:226
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:288
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:508
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:511
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:514
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:517
-msgid "Hatched Copper Pour"
-msgstr ""
-
-#:
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:518
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:161
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:224
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:281
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:477
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:478
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:481
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:484
-msgid "Pad size"
-msgstr ""
-
-#:
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:594
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:584
 #: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:162
 #: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:225
 #: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:284
@@ -264,11 +236,6 @@ msgid "Error"
 msgstr ""
 
 #:
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\dfm_maindialog_view.py:24
-msgid "display"
-msgstr ""
-
-#:
 #: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:57
 msgid "   DFM Analysis   "
 msgstr ""
@@ -279,21 +246,21 @@ msgid "   Rule Manager   "
 msgstr ""
 
 #:
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:145
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:155
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:165
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:175
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:185
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:195
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:205
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:215
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:225
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:235
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:245
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:255
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:265
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:275
-#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:285
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:146
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:156
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:166
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:176
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:186
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:196
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:206
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:216
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:226
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:236
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:246
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:256
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:266
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:276
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:286
 msgid "Check"
 msgstr ""
 
@@ -356,6 +323,28 @@ msgstr ""
 #: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:470
 #: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:473
 msgid "Smallest Trace Spacing"
+msgstr ""
+
+#:
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:161
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:224
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:281
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:477
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:478
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:481
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:484
+msgid "Pad size"
+msgstr ""
+
+#:
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:163
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:226
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:288
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:508
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:511
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:514
+#: c:\Users\haf\Documents\KiCad\8.0\scripting\plugins\kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:517
+msgid "Hatched Copper Pour"
 msgstr ""
 
 #:

@@ -1,5 +1,5 @@
 # language domain
-LANG_DOMAIN = "kicad_dfm_plugin"
+LANG_DOMAIN = "kicad_hqdfm_plugin"
 
 
 ENGLISH = "English"

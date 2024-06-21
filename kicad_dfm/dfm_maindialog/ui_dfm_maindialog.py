@@ -11,9 +11,6 @@ import wx
 import wx.xrc
 import wx.dataview
 
-import gettext
-
-_ = gettext.gettext
 
 ###########################################################################
 ## Class UiDfmMaindialog

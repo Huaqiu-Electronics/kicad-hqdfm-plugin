@@ -5,7 +5,7 @@ import wx.lib.newevent as ne
 
 LocaleChangeEvent, EVT_LOCALE_CHANGE = ne.NewCommandEvent()
 
-APP_NAME = "kicad_dfm_plugin"
+APP_NAME = "kicad_hqdfm_plugin"
 
 VENDOR_NAME = "NextPCB"
 
