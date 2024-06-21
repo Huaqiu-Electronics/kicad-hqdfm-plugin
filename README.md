@@ -1,9 +1,9 @@
-# HQ DFM analysis
+# HQ DFM
 
 
 ### Implementing One-Click PCB Design Flaw Analysis with HQ DFM in KiCad
 
-The HQ DFM analysis plugin will assist you in:
+The HQ DFM plugin will assist you in:
 
 - One-click analysis of over 20 design risk issues including open circuits, disconnected traces, line spacing, and width.
 - Automatically analyzing PCB design flaws and eliminating production difficulties and design defects.
@@ -53,8 +53,8 @@ HQ DFM is an efficient PCB design software that performs one-click analysis of d
 ![NextPCB Plugin](https://github.com/SYSUeric66/kicad-amf-plugin/blob/8318782634b7f8237bd4a650c37e4031e876e3a0/docs/amf.gif)
 
 
-### About HQ NextPCB
+### About HQ PCB / NextPCB
 
-HQ NextPCB specializes in reliable multilayer PCB manufacture and assembly, and like KiCad, our goal is to enable engineers to build tomorrow's electronics. NextPCB is working with KiCad to provide smart tools to simplify the progression from design to physical product. With 3 major factories catering to prototyping, mass production and PCB assembly, and over 15 years of engineering expertise, NextPCB believes our industrial experience will prove invaluable to KiCad users and the PCB design community.
+HQ PCB specializes in reliable multilayer PCB manufacture and assembly, and like KiCad, our goal is to enable engineers to build tomorrow's electronics. NextPCB is working with KiCad to provide smart tools to simplify the progression from design to physical product. With 3 major factories catering to prototyping, mass production and PCB assembly, and over 15 years of engineering expertise, NextPCB believes our industrial experience will prove invaluable to KiCad users and the PCB design community.
 
 We are a [KiCad Platinum Sponsor](https://www.nextpcb.com/blog/kicad-nextpcb-platinum-sponsorship).
