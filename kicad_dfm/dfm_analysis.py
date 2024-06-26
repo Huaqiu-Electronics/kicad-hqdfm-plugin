@@ -2,7 +2,6 @@ import json
 
 import re
 import wx
-import urllib.request
 import os
 import sys
 import time
@@ -129,7 +128,7 @@ class DfmAnalysis:
         file_url = file_path["data"]["analyse_url"]
         filename = GetFilePath("temp.json")
         temp_filename = GetFilePath("name.json")
-        urllib.request.urlretrieve(file_url, filename)
+        self.download_file(file_url, filename)
 
         data = {"name": title_name}
         with open(temp_filename, "w", encoding="utf-8") as fp:
@@ -146,6 +145,13 @@ class DfmAnalysis:
         else:
             return
         return filename
+
+    def download_file(self, url, filename):
+        with requests.get(url, stream=True) as response:
+            response.raise_for_status()  # 检查请求是否成功
+            with open(filename, "wb") as f:
+                for chunk in response.iter_content(chunk_size=8192):
+                    f.write(chunk)
 
     def api_request_interface(self, url, files, data):
         try:

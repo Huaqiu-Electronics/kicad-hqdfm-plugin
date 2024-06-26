@@ -5,3 +5,15 @@
 **/temp.json
 .vscode/
 *.log
+
+
+certifi/
+certifi/*
+charset_normalizer/
+charset_normalizer/*
+idna/
+idna/*
+requests/
+requests/*
+urllib3/
+urllib3/*
