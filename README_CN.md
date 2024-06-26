@@ -12,7 +12,7 @@ HQ DFM  插件将帮助您：
 - 自动分析PCB设计隐患，排除生产难点、设计缺陷
 
 检查完设计隐患后，您可以使用NextPCB插件将其直接添加到您的华秋购物车。
-![华秋插件](https://github.com/SYSUeric66/kicad-amf-plugin/blob/8318782634b7f8237bd4a650c37e4031e876e3a0/docs/amf.gif)
+![华秋插件](kicad_dfm/picture/dfm-screen.gif)
 
 
 ## 特色
@@ -46,8 +46,8 @@ _注意：这些参数从您的 KiCad 设计的gerber文件中提取分析。
 
 ## 安装
 
-从 **为包保留** 下载最新版本的 ZIP 文件，然后在 KiCad 中，从主窗口打开“插件和内容管理器”。最后，使用窗口底部的“从文件安装...”来安装 “HQDFM” ZIP 文件。
-![图片](https://github.com/HubertHQH/HQ-NextPCB/assets/125419974/97ef0ca3-380e-4f6f-a14b-6960271118fc)
+安装最新版本的插件，从主窗口打开“插件和内容管理器”，在插件栏中找到“HQ DFM”。最后，点击“安装”和“应用挂起的更改”
+![图片](kicad_dfm/picture/image.png)
 
 
 ### 关于华秋DFM
@@ -55,7 +55,7 @@ _注意：这些参数从您的 KiCad 设计的gerber文件中提取分析。
 华秋DFM是一款高效的PCB设计软件，一键分析设计隐患，提供优化方案，输出Gerber、BOM、坐标文件，让设计和制造更简单。
 ![华秋DFM](https://dfm.hqpcb.com/)
 您可以使用华秋DFM 仔细检查您的制造文件，调整电路板参数，然后通过 HQ PCB / NextPCB 将其直接添加到您的华秋购物车。
-![华秋插件](https://github.com/SYSUeric66/kicad-amf-plugin/blob/8318782634b7f8237bd4a650c37e4031e876e3a0/docs/amf.gif)
+
 
 
 ### 关于华秋PCB / NextPCB

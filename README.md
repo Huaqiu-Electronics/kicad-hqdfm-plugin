@@ -8,9 +8,8 @@ The HQ DFM plugin will assist you in:
 - One-click analysis of over 20 design risk issues including open circuits, disconnected traces, line spacing, and width.
 - Automatically analyzing PCB design flaws and eliminating production difficulties and design defects.
 
-After checking the design flaws, you can use the NextPCB plugin to directly add them to your shopping cart at Huachuang.
-![NextPCB Plugin](https://github.com/SYSUeric66/kicad-amf-plugin/blob/8318782634b7f8237bd4a650c37e4031e876e3a0/docs/amf.gif)
-
+After checking the design flaws, you can use the NextPCB plugin to directly add them to your shopping cart at Huaqiu.
+![HQDFM Plugin](kicad_dfm/picture/dfm-screen.gif)
 
 ## Features
 
@@ -42,14 +41,14 @@ HQ DFM will analyze the following parameters in your KiCad design:
 ## Installation
 
 Install the latest release plugin from **Plugin and Content Manager**. Open the "Plugin and Content Manager" from the main window, Navigate to the "Plugins" section and locate "HQ DFM" in the list. Finally, Click on the "Install" button and "Apply Pending Changes" to finalize the installation process.
-![image](image.png)
+![image](kicad_dfm/picture/image.png)
 
 ### About HQ DFM
 
 HQ DFM is an efficient PCB design software that performs one-click analysis of design risks, provides optimization solutions, and generates Gerber, BOM, and coordinate files, making design and manufacturing simpler.
 ![HQDFM](https://dfm.hqpcb.com/)
  you can use the HQDFM Gerber Viewer to double check your manufacturing files, adjust board parameters then add it to your NextPCB cart directly.
-![NextPCB Plugin](https://github.com/SYSUeric66/kicad-amf-plugin/blob/8318782634b7f8237bd4a650c37e4031e876e3a0/docs/amf.gif)
+
 
 
 ### About HQ PCB / NextPCB
