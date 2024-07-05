@@ -12,4 +12,6 @@ class PcbSetting:
         box = self.board.GetBoardEdgesBoundingBox()
         box_x = box.GetWidth() / 1000000
         box_y = box.GetHeight() / 1000000
+        if box_x == 0.0 or box_y == 0.0:
+            return "0"
         return str(round(box_x - width, 2)) + "*" + str(round(box_y - width, 2))

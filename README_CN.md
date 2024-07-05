@@ -12,7 +12,7 @@ HQ DFM  插件将帮助您：
 - 自动分析PCB设计隐患，排除生产难点、设计缺陷
 
 检查完设计隐患后，您可以使用NextPCB插件将其直接添加到您的华秋购物车。
-![华秋插件](kicad_dfm/picture/dfm-screen.gif)
+![华秋插件](dfm-screen.gif)
 
 
 ## 特色

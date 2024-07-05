@@ -13,7 +13,7 @@ class _SinglePlugin:
         return self.wind
 
     def show_existing(self):
-        if not self.wind is None:
+        if self.wind is not None:
             self.wind.Show(False)
             self.wind.Show(True)
             return True

@@ -9,7 +9,7 @@ The HQ DFM plugin will assist you in:
 - Automatically analyzing PCB design flaws and eliminating production difficulties and design defects.
 
 After checking the design flaws, you can use the NextPCB plugin to directly add them to your shopping cart at Huaqiu.
-![HQDFM Plugin](kicad_dfm/picture/dfm-screen.gif)
+![HQDFM Plugin](dfm-screen.gif)
 
 ## Features
 

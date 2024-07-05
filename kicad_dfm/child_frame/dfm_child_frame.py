@@ -114,6 +114,7 @@ class DfmChildFrame(UiChildFrame):
                 self.board.Delete(line)
             self.line_list.clear()
         pcbnew.Refresh
+        # pcbnew.UpdateUserInterface
         event.Skip()
 
     # 关闭窗口时清空在kicad上的处理
@@ -188,11 +189,12 @@ class DfmChildFrame(UiChildFrame):
                 if not self.result_json[self.json_string]:
                     return
                 for result_list in self.result_json[self.json_string]["check"]:
-                    for result in result_list["result"]:
-                        if result["color"] == "black":
-                            if self.json_string not in self.delete_value.keys():
-                                self.delete_value[self.json_string] = []
-                            self.delete_value[self.json_string].append(result_list)
+                    # for result in result_list["result"]:
+                    #     if result["color"] == "black":
+                    if result_list["result"][0]["color"] == "black":
+                        if self.json_string not in self.delete_value:
+                            self.delete_value[self.json_string] = []
+                        self.delete_value[self.json_string].append(result_list)
             if self.json_string in self.delete_value.keys():
                 for result in self.delete_value[self.json_string]:
                     if result in self.result_json[self.json_string]["check"]:
@@ -319,7 +321,6 @@ class DfmChildFrame(UiChildFrame):
                 results_list.append([string, color])
 
         else:
-
             for result_list in self.result_json[self.json_string]["check"]:
                 for result in result_list["result"]:
                     result_layer = self.child_frame_setting.layer_conversion(
@@ -368,9 +369,10 @@ class DfmChildFrame(UiChildFrame):
                                     result["color"],
                                 ]
                             )
-                        elif result["item"] == _("Largest Drill Size") or result[
-                            "item"
-                        ] == _("Smallest Drill Size"):
+                        elif self.json_string == "Hole Diameter":
+                            # elif result["item"] == _("Largest Drill Size") or result[
+                            #     "item"
+                            # ] == _("Smallest Drill Size"):
                             millimeter_value = round(float(result["value"]), 3)
                             iu_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2iu(
                                 millimeter_value
@@ -526,9 +528,14 @@ class DfmChildFrame(UiChildFrame):
                         for result in self.result[result_list]["result"]:
                             if result["type"] == 0:
                                 if result["et"] == 0:
-                                    item = self.graphics_setting.get_signal_integrity_segment(
-                                        result, x, y
-                                    )
+                                    if self.json_string == "Signal Integrity":
+                                        item = self.graphics_setting.get_signal_integrity_segment(
+                                            result, x, y
+                                        )
+                                    else:
+                                        item = self.graphics_setting.get_hole_diameter_segment(
+                                            result, x, y
+                                        )
                                 elif result["et"] == 1:
                                     item = (
                                         self.graphics_setting.get_signal_integrity_arc(
@@ -620,7 +627,7 @@ class DfmChildFrame(UiChildFrame):
                             line = pcbnew.PCB_SHAPE()
                             line.GetLayerSet()
                             line.SetLayer(pcbnew.LAYER_DRC_WARNING)
-                            line.SetWidth(250000)
+                            line.SetWidth(100000)
                             if result["type"] == 0:
                                 if result["et"] == 0:
                                     line = self.graphics_setting.set_segment(

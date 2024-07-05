@@ -33,7 +33,6 @@ class DfmMainframe(wx.Frame):
             title=_("HQ DFM"),
             style=wx.DEFAULT_FRAME_STYLE & ~(wx.MAXIMIZE_BOX) | wx.TAB_TRAVERSAL,
         )
-
         SINGLE_PLUGIN.register_main_wind(self)
         self.control = {}
         if pcbnew.GetLanguage() == "简体中文":
@@ -59,9 +58,11 @@ class DfmMainframe(wx.Frame):
             self.board = pcbnew.GetBoard()
         except Exception as e:
             for fp in (
-                "C:\\Program Files\\KiCad\\8.0\\share\\kicad\\demos\\ecc83\\ecc83-pp.kicad_pcb",
                 "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
+                "C:\\Program Files\\demos\\kit-dev-coldfire-xilinx_5213\\kit-dev-coldfire-xilinx_5213.kicad_pcb",
+                "C:\\Program Files\\demos\\ESP32 Clone Devkit.kicad_pcb",
                 "C:\\Program Files\\demos\\video\\video.kicad_pcb",
+                "C:\\Program Files\\demos\\Prj 1 - LED torch.kicad_pcb",
             ):
                 if os.path.exists(fp):
                     self.board = pcbnew.LoadBoard(fp)
@@ -177,10 +178,14 @@ class DfmMainframe(wx.Frame):
         self.add_temp_json()
 
     def on_close(self, event):
-        for line in self.line_list:
-            self.board.Delete(line)
-        SINGLE_PLUGIN.register_main_wind(None)
+        try:
+            for line in self.line_list:
+                self.board.Delete(line)
+            SINGLE_PLUGIN.register_main_wind(None)
+        except Exception as e:
+            print(f"Error during close: {e}")
         self.Destroy()
+        event.Skip()
 
     def add_temp_json(self):
         json_name = GetFilePath("temp.json")

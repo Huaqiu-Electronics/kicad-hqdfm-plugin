@@ -1,9 +1,7 @@
 import sys
 import wx
 import wx.dataview as dv
-import os
-
-# import os; print('PID:'+str(os.getpid())); raw_input("Press enter...")
+import platform
 
 # ----------------------------------------------------------------------
 
@@ -31,20 +29,22 @@ class MyCustomRenderer(dv.DataViewCustomRenderer):
         value = self.value if self.value else ""
         size = self.GetTextExtent(value)
         # "Windows"
-        if os.name == "nt":
+        current_os = platform.system()
+
+        if current_os == "Windows":
             size.height = 35
-        # "Linux"
-        elif os.name == "posix":
+        elif current_os == "Linux":
             size.height = 32
+        elif current_os == "Darwin":  # macOS 的系统名称是 "Darwin"
+            size.height = 35  # 假设在 macOS 上你想要设置的高度是 30
         else:
             size.height = 35
         return size
 
     def Render(self, rect, dc, state):
         if state != 0:
-            self.log.write("Render: %s, %d\n" % (rect, state))
             dc.SetTextForeground(wx.Colour("black"))
-
+            # self.log.write("Render: %s, %d\n" % (rect, state))
         # And then finish up with this helper function that draws the
         # text for us, dealing with alignment, font and color
         # attributes, etc

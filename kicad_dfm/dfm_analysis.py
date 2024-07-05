@@ -155,7 +155,7 @@ class DfmAnalysis:
 
     def api_request_interface(self, url, files, data):
         try:
-            response = requests.post(url, files=files, data=data)
+            response = requests.post(url, files=files, data=data, timeout=50)
             response.raise_for_status()
             self.progress.Update(20)
             self.progress.SetTitle(_("Analysis file"))
@@ -257,9 +257,11 @@ class DfmAnalysis:
         have_yellow = False
         info_list = []
         for item_check in item_json["check"]:
-
-            if item_check["layer"] == "Drl":
-                dfm_show_layer = "B.Adhesive"
+            if name == "Drill to Copper":
+                if item_check["layer"] == "Drl":
+                    dfm_show_layer = ""
+            elif item_check["layer"] == "Drl":
+                dfm_show_layer = "Top Layer"
             else:
                 dfm_show_layer = item_check["layer"]
             for item_info in item_check["info"]:
@@ -275,12 +277,18 @@ class DfmAnalysis:
                 for item_info_info in item_info["info"]:
                     result_list = {}
                     item_layer_list = []
-                    item_layer_list.append(dfm_show_layer)
+                    if dfm_show_layer != "":
+                        item_layer_list.append(dfm_show_layer)
                     if dfm_show_layer == "Bot Paste" or dfm_show_layer == "Top Paste":
                         item_layer_list.append("Outline")
                     for item_layer in item_info_info["layer"]:
-                        if item_layer == "Drl":
-                            item_layer_list.append("B.Adhesive")
+                        if name == "Drill to Copper":
+                            if item_layer == "Drl":
+                                continue
+                            else:
+                                item_layer_list.append(item_layer)
+                        elif item_layer == "Drl":
+                            item_layer_list.append("Top Layer")
                         else:
                             item_layer_list.append(item_layer)
                     # 设置显示的颜色
