@@ -40,7 +40,7 @@ HQ DFM 将从您的 KiCad 设计中分析 PCB 中的以下参数：
 - 沉金面积
 - 飞针点数
 
-\注意：这些参数从您的 KiCad 设计的 gerber 文件中提取分析。
+注意：这些参数从您的 KiCad 设计的 gerber 文件中提取分析。
 
 ## 安装
 
@@ -49,7 +49,7 @@ HQ DFM 将从您的 KiCad 设计中分析 PCB 中的以下参数：
 
 ### 关于华秋 DFM
 
-![华秋 DFM](https://dfm.elecfans.com/) 是一款高效的 PCB 设计软件，一键分析设计隐患，提供优化方案，输出 Gerber、BOM、坐标文件，让设计和制造更简单。
+[华秋 DFM](https://dfm.elecfans.com/) 是一款高效的 PCB 设计软件，一键分析设计隐患，提供优化方案，输出 Gerber、BOM、坐标文件，让设计和制造更简单。
 
 您可以使用华秋 DFM 仔细检查您的制造文件，调整电路板参数，然后通过 HQ PCB / NextPCB 将其直接添加到您的华秋购物车。
 
