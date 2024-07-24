@@ -47,7 +47,7 @@ Install the latest release plugin from **Plugin and Content Manager**. Open the 
 
 ### About HQ DFM
 
-[HQ DFM](https://dfm.hqpcb.com/)is an efficient PCB design software that performs one-click analysis of design risks, provides optimization solutions, and generates Gerber, BOM, and coordinate files, making design and manufacturing simpler.
+[HQ DFM](https://dfm.hqpcb.com/) is an efficient PCB design software that performs one-click analysis of design risks, provides optimization solutions, and generates Gerber, BOM, and coordinate files, making design and manufacturing simpler.
 
 you can use the HQDFM Gerber Viewer to double check your manufacturing files, adjust board parameters then add it to your NextPCB cart directly.
 
