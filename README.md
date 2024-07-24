@@ -1,5 +1,8 @@
 # HQ DFM
 
+<p>
+    English |<a href="README_CN.md">中文<a/>
+</p>
 
 ### Implementing One-Click PCB Design Flaw Analysis with HQ DFM in KiCad
 
@@ -37,7 +40,6 @@ HQ DFM will analyze the following parameters in your KiCad design:
 - Surface Finish Area
 - Test Point Count
 
-
 ## Installation
 
 Install the latest release plugin from **Plugin and Content Manager**. Open the "Plugin and Content Manager" from the main window, Navigate to the "Plugins" section and locate "HQ DFM" in the list. Finally, Click on the "Install" button and "Apply Pending Changes" to finalize the installation process.
@@ -47,9 +49,7 @@ Install the latest release plugin from **Plugin and Content Manager**. Open the 
 
 HQ DFM is an efficient PCB design software that performs one-click analysis of design risks, provides optimization solutions, and generates Gerber, BOM, and coordinate files, making design and manufacturing simpler.
 ![HQDFM](https://dfm.hqpcb.com/)
- you can use the HQDFM Gerber Viewer to double check your manufacturing files, adjust board parameters then add it to your NextPCB cart directly.
-
-
+you can use the HQDFM Gerber Viewer to double check your manufacturing files, adjust board parameters then add it to your NextPCB cart directly.
 
 ### About HQ PCB / NextPCB
 
