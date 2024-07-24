@@ -4,10 +4,6 @@
     中文 |<a href="README.md">English<a/>
 </p>
 
-### 接口使用说明
-
-用 json 文件画好某个层的图形，然后通过图形坐标拿到 boarditem，获得 item 自带的 m_uuid,此时获取到 pcb 板子上图形自带的 uuid。然后通过 SetBrightened()设置高亮，通过 FocusOnItem 移动指针。
-
 ### 在 KiCad 中 HQ DFM 实现一键分析 PCB 设计隐患
 
 HQ DFM 插件将帮助您：
@@ -15,10 +11,10 @@ HQ DFM 插件将帮助您：
 - 一键分析开短路、断头线、线距线宽等 20 余项设计风险问题
 - 自动分析 PCB 设计隐患，排除生产难点、设计缺陷
 
-检查完设计隐患后，您可以使用 NextPCB 插件将其直接添加到您的华秋购物车。
+检查完设计隐患后，您可以使用 HQPCB 插件将其直接添加到您的华秋购物车。
 ![华秋插件](dfm-screen.gif)
 
-## 特色
+## 功能
 
 ### 设计参数分析
 
@@ -44,12 +40,12 @@ HQ DFM 将从您的 KiCad 设计中分析 PCB 中的以下参数：
 - 沉金面积
 - 飞针点数
 
-\_注意：这些参数从您的 KiCad 设计的 gerber 文件中提取分析。
+\注意：这些参数从您的 KiCad 设计的 gerber 文件中提取分析。
 
 ## 安装
 
 安装最新版本的插件，从主窗口打开“插件和内容管理器”，在插件栏中找到“HQ DFM”。最后，点击“安装”和“应用挂起的更改”
-![图片](kicad_dfm/picture/image.png)
+![图片](kicad_dfm/picture/HQDFM.png)
 
 ### 关于华秋 DFM
 
