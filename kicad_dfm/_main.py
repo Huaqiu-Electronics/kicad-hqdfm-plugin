@@ -4,4 +4,5 @@ import wx
 
 
 def _main():
-    app = BaseApp()
+    if not SINGLE_PLUGIN.show_existing():
+        app = BaseApp()

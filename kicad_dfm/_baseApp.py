@@ -42,6 +42,12 @@ class BaseApp(wx.EvtHandler):
         self.startup()
         return None
 
+    def __del__(self):
+        # destructor
+        from kicad_dfm.settings.single_plugin import SINGLE_PLUGIN
+
+        SINGLE_PLUGIN.register_main_wind(None)
+
     def startup(self):
         for win in wx.GetTopLevelWindows():
             if win.GetTitle() == _("HQ DFM"):
@@ -50,10 +56,14 @@ class BaseApp(wx.EvtHandler):
         windows = wx.GetTopLevelWindows()
         pcb_window = [w for w in windows if _("pcb editor") in w.GetTitle().lower()]
 
-        if len(pcb_window) != 1:
-            DfmMainframe(None).Show()
+        # if len(pcb_window) != 1:
+        #     DfmMainframe(None).Show()
+        # else:
+        #     if pcb_window[0].GetTitle().lower() == _("pcb editor"):
+        #         wx.MessageBox(_("File is empty"), _("Help"), style=wx.ICON_INFORMATION)
+        #     else:
+        #         DfmMainframe(pcb_window[0]).Show()
+        if pcb_window:
+            DfmMainframe(pcb_window[0]).Show()
         else:
-            if pcb_window[0].GetTitle().lower() == _("pcb editor"):
-                wx.MessageBox(_("File is empty"), _("Help"), style=wx.ICON_INFORMATION)
-            else:
-                DfmMainframe(pcb_window[0]).Show()
+            DfmMainframe(None).Show()

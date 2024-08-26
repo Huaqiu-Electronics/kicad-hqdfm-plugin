@@ -24,6 +24,7 @@ class DfmAnalysis:
         data = {"type": "kicad"}
         url = "https://dfm.hqpcb.com/api/kicadView/upfile"
         response = self.api_request_interface(url, files, data)
+
         json_temp = response.json()
         if not json_temp:
             self.report_part_search_error(
@@ -42,12 +43,13 @@ class DfmAnalysis:
             self.report_part_search_error(_("Not dfm data. Please request again."))
             return
         url_path.close()
+        if self.progress.WasCancelled():
+            self.progress_dialog_close()
 
         id_url = "http://dfm.hqpcb.com/api/KicadView/getParseResult"
         params = {"id": analyse_id, "kicadid": kicad_id}
         filename = self.requset_dfm_analysis_file(id_url, params, zip_path, title_name)
-        self.progress.Update(100)
-        self.progress.Destroy()
+        self.progress_dialog_close()
         return filename
 
     def haiwai_download_dfm_file(self, zip_path, title_name):
@@ -66,6 +68,9 @@ class DfmAnalysis:
         if json_temp["status"] is False:
             return
         url_path.close()
+        if self.progress.WasCancelled():
+            self.progress_dialog_close()
+
         json_id = ""
         kicad_id = ""
 
@@ -85,8 +90,7 @@ class DfmAnalysis:
         id_url = "https://www.nextpcb.com/DfmView/getParseResult"
         params = {"id": json_id, "kicadid": kicad_id}
         filename = self.requset_dfm_analysis_file(id_url, params, zip_path, title_name)
-        self.progress.Update(100)
-        self.progress.Destroy()
+        self.progress_dialog_close()
         return filename
 
     def start_progress_bar(self):
@@ -94,14 +98,21 @@ class DfmAnalysis:
             _("Upload DFM analysis file"),
             _("Please wait"),
             maximum=100,
-            style=wx.PD_SMOOTH | wx.PD_AUTO_HIDE,
+            style=wx.PD_APP_MODAL | wx.PD_CAN_ABORT | wx.PD_AUTO_HIDE,
         )
+        self.abort = False
+        # self.progress.Bind(wx.EVT_CLOSE, self.on_cancel)
         self.progress.Update(5)
+
+    def progress_dialog_close(self):
+        self.progress.Update(100)
+        self.progress.Destroy()
+        self.progress = None
 
     def requset_dfm_analysis_file(self, id_url, params, zip_path, title_name):
         number = 30
+        self.progress.SetTitle(_("Analytical phase"))
         while 1:
-            self.progress.SetTitle(_("Analytical phase"))
             if number < 90:
                 number += 2
             try:
@@ -117,6 +128,10 @@ class DfmAnalysis:
                 break
             if file_path["code"] != 22006:
                 break
+
+            if self.progress.WasCancelled():
+                return
+
         if len(file_path["data"]) == 0:
             wx.MessageBox(
                 _("Request data error,please request again."),
@@ -179,8 +194,7 @@ class DfmAnalysis:
             _("Error"),
             style=wx.ICON_ERROR,
         )
-        self.progress.Update(100)
-        self.progress.Destroy()
+        self.progress_dialog_close()
 
     def analysis_json(self, json_path, transformation=False):
         json_result = {}

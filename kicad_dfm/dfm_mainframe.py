@@ -61,8 +61,8 @@ class DfmMainframe(wx.Frame):
                 "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
                 "C:\\Program Files\\demos\\kit-dev-coldfire-xilinx_5213\\kit-dev-coldfire-xilinx_5213.kicad_pcb",
                 "C:\\Program Files\\demos\\ESP32 Clone Devkit.kicad_pcb",
-                "C:\\Program Files\\demos\\video\\video.kicad_pcb",
                 "C:\\Program Files\\demos\\Prj 1 - LED torch.kicad_pcb",
+                "C:\\Program Files\\demos\\video\\video.kicad_pcb",
             ):
                 if os.path.exists(fp):
                     self.board = pcbnew.LoadBoard(fp)
@@ -380,7 +380,9 @@ class DfmMainframe(wx.Frame):
                 self.analysis_result = self.dfm_analysis.analysis_json(json_path)
             if self.analysis_result == "" or not self.analysis_result:
                 wx.MessageBox(
-                    _("File analysis failure!"), _("Info"), style=wx.ICON_INFORMATION
+                    _("End of DFM analysis request. No analysis data was returned!"),
+                    _("Info"),
+                    style=wx.ICON_INFORMATION,
                 )
             else:
                 wx.MessageDialog(
