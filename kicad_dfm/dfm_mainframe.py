@@ -62,6 +62,7 @@ class DfmMainframe(wx.Frame):
                 "C:\\Program Files\\demos\\kit-dev-coldfire-xilinx_5213\\kit-dev-coldfire-xilinx_5213.kicad_pcb",
                 "C:\\Program Files\\demos\\ESP32 Clone Devkit.kicad_pcb",
                 "C:\\Program Files\\demos\\Prj 1 - LED torch.kicad_pcb",
+                "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
                 "C:\\Program Files\\demos\\video\\video.kicad_pcb",
             ):
                 if os.path.exists(fp):
@@ -352,7 +353,7 @@ class DfmMainframe(wx.Frame):
         try:
             gerber_dir = os.path.join(self.path, "dfm", "gerber")
             Path(gerber_dir).mkdir(parents=True, exist_ok=True)
-        except PermissionError as e:
+        except (PermissionError, OSError) as e:
             gerber_dir = os.path.join(tempfile.gettempdir(), "dfm", "gerber")
             Path(gerber_dir).mkdir(parents=True, exist_ok=True)
         creat_file = CreateFile(self.board)
@@ -365,7 +366,10 @@ class DfmMainframe(wx.Frame):
         if self.have_progress is False:
             self.have_progress = True
             # 下载json文件
-            if self.country == "CN":
+            # json_path = self.dfm_analysis.guonei_download_dfm_file(
+            #     archived, self.name
+            # )
+            if self.country == "CN" or self.country == "HK":
                 json_path = self.dfm_analysis.guonei_download_dfm_file(
                     archived, self.name
                 )

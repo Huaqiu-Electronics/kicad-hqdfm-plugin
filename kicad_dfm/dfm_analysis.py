@@ -10,7 +10,13 @@ from kicad_dfm import GetFilePath
 from kicad_dfm.settings.timestamp import TimeStamp
 import logging
 import requests
-from requests.exceptions import Timeout, ConnectionError, HTTPError
+from requests.exceptions import (
+    Timeout,
+    ConnectionError,
+    HTTPError,
+    SSLError,
+    RequestException,
+)
 
 
 class DfmAnalysis:
@@ -22,7 +28,8 @@ class DfmAnalysis:
         url_path = open(zip_path, "rb")
         files = {"file": ("gerber.zip", url_path, "application/zip", {"Expires": "0"})}
         data = {"type": "kicad"}
-        url = "https://dfm.hqpcb.com/api/kicadView/upfile"
+        url = "https://www.eda.cn/openapi/dfm/hqpcb/upfile"
+
         response = self.api_request_interface(url, files, data)
 
         json_temp = response.json()
@@ -46,9 +53,11 @@ class DfmAnalysis:
         if self.progress.WasCancelled():
             self.progress_dialog_close()
 
-        id_url = "http://dfm.hqpcb.com/api/KicadView/getParseResult"
+        id_url = "https://www.eda.cn/openapi/dfm/hqpcb/getParseResult"
         params = {"id": analyse_id, "kicadid": kicad_id}
-        filename = self.requset_dfm_analysis_file(id_url, params, zip_path, title_name)
+        filename = self.guonei_requset_dfm_analysis_file(
+            id_url, params, zip_path, title_name
+        )
         self.progress_dialog_close()
         return filename
 
@@ -57,12 +66,12 @@ class DfmAnalysis:
         url_path = open(zip_path, "rb")
         files = {"file": ("gerber.zip", url_path, "application/zip", {"Expires": "0"})}
         data = {
-            "region": (None, "us"),
-            "type": (None, "dfm"),
-            "bcount": (None, 10),
+            "region": "us",
+            "type": "dfm",
+            "bcount": "10",
         }
+        url = "https://www.eda.cn/openapi/api/nextpcb/upfile/kiCadUpFile"
 
-        url = "https://www.nextpcb.com/upfile/kiCadUpFile"
         response = self.api_request_interface(url, files, data)
         json_temp = response.json()
         if json_temp["status"] is False:
@@ -87,9 +96,11 @@ class DfmAnalysis:
             self.report_part_search_error(_("Not dfm data. Please request again."))
             return
 
-        id_url = "https://www.nextpcb.com/DfmView/getParseResult"
+        id_url = "https://www.eda.cn/openapi/api/nextpcb/DfmView/getParseResult"
         params = {"id": json_id, "kicadid": kicad_id}
-        filename = self.requset_dfm_analysis_file(id_url, params, zip_path, title_name)
+        filename = self.haiwai_requset_dfm_analysis_file(
+            id_url, params, zip_path, title_name
+        )
         self.progress_dialog_close()
         return filename
 
@@ -109,7 +120,7 @@ class DfmAnalysis:
         self.progress.Destroy()
         self.progress = None
 
-    def requset_dfm_analysis_file(self, id_url, params, zip_path, title_name):
+    def haiwai_requset_dfm_analysis_file(self, id_url, params, zip_path, title_name):
         number = 30
         self.progress.SetTitle(_("Analytical phase"))
         while 1:
@@ -124,7 +135,67 @@ class DfmAnalysis:
                 )
             file_path = json_file.json()
             self.progress.Update(number)
-            if file_path["code"] == 2000 or file_path["code"] == 200:
+            if (
+                file_path["code"] == 2000
+                or file_path["code"] == 200
+                or file_path["code"] == 50000
+            ):
+                break
+            if file_path["code"] != 22006:
+                break
+
+            if self.progress.WasCancelled():
+                return
+
+        if len(file_path["data"]) == 0:
+            wx.MessageBox(
+                _("Request data error,please request again."),
+                _("Info"),
+                style=wx.ICON_INFORMATION,
+            )
+            return
+
+        file_url = file_path["data"]["analyse_url"]
+        filename = GetFilePath("temp.json")
+        temp_filename = GetFilePath("name.json")
+        self.download_file(file_url, filename)
+
+        data = {"name": title_name}
+        with open(temp_filename, "w", encoding="utf-8") as fp:
+            json.dump(
+                data,
+                fp,
+                ensure_ascii=False,
+                indent=4,
+                separators=(",", ":"),
+                sort_keys=True,
+            )
+        if os.path.exists(zip_path):
+            os.remove(zip_path)
+        else:
+            return
+        return filename
+
+    def guonei_requset_dfm_analysis_file(self, id_url, params, zip_path, title_name):
+        number = 30
+        self.progress.SetTitle(_("Analytical phase"))
+        while 1:
+            if number < 90:
+                number += 2
+            try:
+                json_file = requests.post(id_url, params=params)
+                time.sleep(1.5)
+            except requests.exceptions.ConnectionError as e:
+                self.report_part_search_error(
+                    _("Network connection error. Please request again.")
+                )
+            file_path = json_file.json()
+            self.progress.Update(number)
+            if (
+                file_path["code"] == 2000
+                or file_path["code"] == 200
+                or file_path["code"] == 50000
+            ):
                 break
             if file_path["code"] != 22006:
                 break
@@ -170,7 +241,8 @@ class DfmAnalysis:
 
     def api_request_interface(self, url, files, data):
         try:
-            response = requests.post(url, files=files, data=data, timeout=50)
+            headers = {"Cookie": "JSESSIONID=107651F471ED81257ABB4BF1FF1E3150"}
+            response = requests.post(url, headers=headers, files=files, data=data)
             response.raise_for_status()
             self.progress.Update(20)
             self.progress.SetTitle(_("Analysis file"))
