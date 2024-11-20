@@ -342,6 +342,7 @@ class DfmAnalysis:
         have_red = False
         have_yellow = False
         info_list = []
+        dfm_show_layer = ""
         for item_check in item_json["check"]:
             if name == "Drill to Copper":
                 if item_check["layer"] == "Drl":
