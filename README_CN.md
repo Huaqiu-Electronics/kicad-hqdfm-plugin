@@ -61,21 +61,21 @@ HQ DFM 将从您的 KiCad 设计中分析 PCB 中的以下参数：
 
 
 
-### Kicad-HQ 安装
+## Kicad-HQ 安装
 
-## Windows
+### Windows
 
 Windows 安装包可以直接使用以下链接下载：
 https://www.eda.cn/data/kicad-release/kicad-huaqiu-8.0.6-x86_64.exe.zip
 
-## Linux
+### Linux
 Linux 版本需要使用 Flatpak 下载
 
-# 1，安装 flatpak
+#### 1，安装 flatpak
 
 `sudo apt install flatpak`
 
-# 2，将域名映射为特定的 IP 地址
+#### 2，将域名映射为特定的 IP 地址
 
 `sudo vim /etc/hosts`
 
@@ -85,7 +85,7 @@ Linux 版本需要使用 Flatpak 下载
 测试是否连接成功：
 `ping kicad.huaqiu.com`
 
-# 3，添加远程kicad仓库
+#### 3，添加远程kicad仓库
 
 `flatpak remote-add --user repo https://kicad.huaqiu.com/kicadhuaqiu`
 
@@ -94,7 +94,7 @@ Linux 版本需要使用 Flatpak 下载
 
 如果报错GPG verification,执行步骤 4 ，否则跳过
 
-# 4，忽略包没签名认证,用 vim 编辑器修改配置
+#### 4，忽略包没签名认证,用 vim 编辑器修改配置
 
 `vim ~/.local/share/flatpak/repo/config`
 
@@ -105,13 +105,13 @@ Linux 版本需要使用 Flatpak 下载
 查看是否添加成功：
 `flatpak remote-ls repo`
 
-# 5，安装kicad
+#### 5，安装kicad
 
 `flatpak install repo org.kicad.KiCad`
 
 如果报错缺少依赖，进行下一步“6”。
 
-# 6，缺少 SDK 依赖，用国内 flathub 镜像仓库，先添加远程仓库，然后安装缺少的依赖：
+#### 6，缺少 SDK 依赖，用国内 flathub 镜像仓库，先添加远程仓库，然后安装缺少的依赖：
 
 `sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub`
 

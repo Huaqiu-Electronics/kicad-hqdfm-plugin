@@ -59,21 +59,21 @@ We are a [KiCad Platinum Sponsor](https://www.nextpcb.com/blog/kicad-nextpcb-pla
 
 
 
-### kicad-HQ install
+## kicad-HQ install
 
-## Windows
+### Windows
 
 The Windows installation package can be downloaded directly using the following link:
 https://www.eda.cn/data/kicad-release/kicad-huaqiu-8.0.6-x86_64.exe.zip
 
-## Linux
+### Linux
 The Linux version requires Flatpak installation
 
-# 1，Install flatpak
+#### 1，Install flatpak
 
 `sudo apt install flatpak`
 
-# 2，Map a domain name to a specific IP address
+#### 2，Map a domain name to a specific IP address
 
 `sudo vim /etc/hosts`
 
@@ -83,7 +83,7 @@ Use vim to go to etc/host and add this line：
 Check whether the connection is successful:
 `ping kicad.huaqiu.com`
 
-# 3，Add a remote kicad repository
+#### 3，Add a remote kicad repository
 
 `flatpak remote-add --user repo https://kicad.huaqiu.com/kicadhuaqiu`
 
@@ -92,7 +92,7 @@ Check whether the addition succeeds：
 
 If GPG verification is reported, go to Step 4. Otherwise, skip it
 
-# 4，Ignore package unsigned authentication and modify the configuration with the vim editor
+#### 4，Ignore package unsigned authentication and modify the configuration with the vim editor
 
 `vim ~/.local/share/flatpak/repo/config`
 
@@ -104,13 +104,13 @@ Modify in the file:
 Check whether the addition is successful:
 `flatpak remote-ls repo`
 
-# 5，Install kicad
+#### 5，Install kicad
 
 `flatpak install repo org.kicad.KiCad`
 
 If no dependency is reported, go to the next step "6".
 
-# 6，Lack of SDK dependency, use domestic flathub mirror warehouse, add remote warehouse first, and then install the missing dependency:
+#### 6，Lack of SDK dependency, use domestic flathub mirror warehouse, add remote warehouse first, and then install the missing dependency:
 
 `sudo flatpak remote-modify flathub --url=https://mirror.sjtu.edu.cn/flathub`
 
