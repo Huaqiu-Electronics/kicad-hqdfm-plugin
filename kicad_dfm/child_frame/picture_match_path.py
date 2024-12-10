@@ -4,7 +4,7 @@ from kicad_dfm.picture import GetImagePath
 
 class _PictureMatchPath:
     def picture_path(self, string, language_string):
-        json_string = string.lower()
+        json_string = string.lower().strip()
         if json_string == "acute angle traces" or json_string == "锐角":
             return wx.Bitmap(self.GetImagePath("acute_angle" + language_string))
         elif json_string == "unconnected traces" or json_string == "断头线":
