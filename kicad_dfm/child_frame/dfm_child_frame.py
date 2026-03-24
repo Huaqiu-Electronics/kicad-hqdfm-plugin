@@ -9,7 +9,7 @@ from kicad_dfm.child_frame.ui_child_frame import UiChildFrame
 from kicad_dfm.settings.graphics_setting import GraphicsSetting
 from kicad_dfm.child_frame.child_frame_setting import (
     ChildFrameSetting,
-    CHILDFRAME_UNIT_CONVERSION,
+    CHILDFRAME_UNIT_CONVERSION
 )
 import wx.dataview as dv
 from kicad_dfm.child_frame.picture_match_path import PICTURE_MATCH_PATH
@@ -48,10 +48,10 @@ class DfmChildFrame(UiChildFrame):
         self.result_json = analysis_result
         self.json_string = json_string
         self.message_type = {}
-        if pcbnew.GetLanguage() == "简体中文":
-            self.message_type = config.Language_chinese
-        else:
+        if pcbnew.GetLanguage() == "English":
             self.message_type = config.Language_english
+        else:
+            self.message_type = config.Language_chinese
         self.kicad = kicad
         self.combo = 1
         self.graphics_setting = GraphicsSetting(self.board)
@@ -252,15 +252,19 @@ class DfmChildFrame(UiChildFrame):
         if len(list_string) == 0 and len(self.get_layer) != 0:
             list_string.append(self.lst_analysis_type.GetString(0))
             self.lst_analysis_type.SetSelection(0)
-            self.bmp.SetBitmap(
-                PICTURE_MATCH_PATH.picture_path(
+            bitmap_path =  PICTURE_MATCH_PATH.picture_path(
                     self, list_string[0], self.message_type["picture_path"]
                 )
-            )
+            if bitmap_path is None:
+                self.bmp.SetBitmap(wx.Bitmap(GetImagePath("none.png")))
+                print(" PICTURE_MATCH_PATH.picture_path() 返回了 None")
+            else:
+                self.bmp.SetBitmap(bitmap_path)
             self.Layout()
 
         # 孔环和最小线宽的特殊展示方式
         if self.json_string == "Smallest Trace Width" or self.json_string == "RingHole":
+            check_lists =self.result_json[self.json_string]["check"]
             for check_list in self.result_json[self.json_string]["check"]:
                 for result in check_list["result"]:
                     result_layer = self.child_frame_setting.layer_conversion(
@@ -542,6 +546,10 @@ class DfmChildFrame(UiChildFrame):
                                             result, x, y
                                         )
                                     )
+                                elif result["et"] == 3:
+                                        item = self.graphics_setting.get_signal_integrity_floating_copper(
+                                            result, x, y
+                                        )
                                 else:
                                     item = (
                                         self.graphics_setting.get_signal_integrity_rect(
@@ -603,7 +611,7 @@ class DfmChildFrame(UiChildFrame):
                         if items:
                             self.set_items_Brightened(items)
 
-                    elif self.json_string == "Board Edge Clearance":
+                    elif self.json_string == "Copper-to-Board Edge":
                         self.process_items(
                             self.result[result_list]["result"],
                             self.graphics_setting.get_board_edge_judge_segment,
@@ -721,6 +729,18 @@ class DfmChildFrame(UiChildFrame):
                 for result_list in self.result_json[self.json_string]["check"]:
                     for result in result_list["result"]:
                         analysis_type.add(result["item"])
+
+            # # 遍历列表
+            # _cached_analysis_type = []
+            # analysis_type_list = list(analysis_type)
+            # for item in analysis_type_list:
+            #     item = item.strip()  # 去掉首尾空格
+            #     _language_item = self.message_type.get(item)  # 使用 get 方法避免 KeyError
+            #     if _language_item is None:
+            #         print(f"Warning: '{item}' not found in Language_chinese.")
+            #         _language_item = item  # 如果找不到，保留原字符串
+            #     _cached_analysis_type.append(_language_item)
+
             _cached_analysis_type = list(analysis_type)
         return _cached_analysis_type
 

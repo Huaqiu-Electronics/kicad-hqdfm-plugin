@@ -127,7 +127,7 @@ class DfmAnalysis:
             if number < 90:
                 number += 2
             try:
-                json_file = requests.get(id_url, params=params)
+                json_file = requests.get(id_url, params=params, timeout=20  )
                 time.sleep(1.5)
             except requests.exceptions.ConnectionError as e:
                 self.report_part_search_error(
@@ -233,7 +233,7 @@ class DfmAnalysis:
         return filename
 
     def download_file(self, url, filename):
-        with requests.get(url, stream=True) as response:
+        with requests.get(url, stream=True,  timeout=20 ) as response:
             response.raise_for_status()  # 检查请求是否成功
             with open(filename, "wb") as f:
                 for chunk in response.iter_content(chunk_size=8192):
@@ -294,7 +294,7 @@ class DfmAnalysis:
                 "RingHole",
                 "Drill Hole Spacing",
                 "Drill to Copper",
-                "Board Edge Clearance",
+                "Copper-to-Board Edge",
                 "Special Drill Holes",
                 "Holes on SMD Pads",
                 "Missing SMask Openings",

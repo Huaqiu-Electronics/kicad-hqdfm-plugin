@@ -40,9 +40,9 @@ class DfmMainframe(wx.Frame):
         elif pcbnew.GetLanguage() == "English":
             self.control = config.Language_english
         elif pcbnew.GetLanguage() == "Default":
-            self.control = config.Language_english
+            self.control = config.Language_chinese
         elif pcbnew.GetLanguage() == "":
-            self.control = config.Language_english
+            self.control = config.Language_chinese
         else:
             wx.MessageBox(
                 _("The language you selected is currently not supported"),
@@ -64,6 +64,11 @@ class DfmMainframe(wx.Frame):
                 "C:\\Program Files\\demos\\Prj 1 - LED torch.kicad_pcb",
                 "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
                 "C:\\Program Files\\demos\\video\\video.kicad_pcb",
+                "C:\\Users\\haf\\Desktop\\常用文档\\tiny-scarab.kicad_pcb",
+                "C:\\Program Files\\demos\\testDFM\\testDFM.kicad_pcb",
+                "C:\\Program Files\\demos\\ecc83\\ecc83-pp-kicad9.kicad_pcb",
+                "C:\\Program Files\\demos\\N100.kicad_pcb",
+                # "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
             ):
                 if os.path.exists(fp):
                     self.board = pcbnew.LoadBoard(fp)
@@ -153,7 +158,13 @@ class DfmMainframe(wx.Frame):
         )
         self.Bind(wx.EVT_CLOSE, self.on_close)
 
+
+
     def init_data_view(self):
+        # record pcblayer and object visibility
+        self.gal_set = self.board.GetVisibleLayers()
+        self.ele_gal_set = self.board.GetVisibleElements()
+        
         self.json_analysis_map = {
             _("Layer Count"): {"display": "", "color": ""},
             _("Dimensions"): {"display": "", "color": ""},
@@ -167,7 +178,7 @@ class DfmMainframe(wx.Frame):
             _("RingHole"): {"display": "", "color": ""},
             _("Drill Hole Spacing"): {"display": "", "color": ""},
             _("Drill to Copper"): {"display": "", "color": ""},
-            _("Board Edge Clearance"): {"display": "", "color": ""},
+            _("Copper-to-Board Edge"): {"display": "", "color": ""},
             _("Special Drill Holes"): {"display": "", "color": ""},
             _("Holes on SMD Pads"): {"display": "", "color": ""},
             _("Missing SMask Openings"): {"display": "", "color": ""},
@@ -180,6 +191,11 @@ class DfmMainframe(wx.Frame):
 
     def on_close(self, event):
         try:
+            # Restore layer and object visibility
+            self.board.SetVisibleLayers( self.gal_set )
+            self.board.SetVisibleElements(self.ele_gal_set)
+            pcbnew.UpdateUserInterface()
+            
             for line in self.line_list:
                 self.board.Delete(line)
             SINGLE_PLUGIN.register_main_wind(None)
@@ -234,7 +250,7 @@ class DfmMainframe(wx.Frame):
             _("RingHole"),
             _("Drill Hole Spacing"),
             _("Drill to Copper"),
-            _("Board Edge Clearance"),
+            _("Copper-to-Board Edge"),
             _("Special Drill Holes"),
             _("Holes on SMD Pads"),
             _("Missing SMask Openings"),
@@ -314,7 +330,7 @@ class DfmMainframe(wx.Frame):
 
     def show_board_edge_clearance_button(self, event):
         self.create_child_frame(
-            _("Board Edge Clearance"), self.analysis_result, "Board Edge Clearance"
+            _("Copper-to-Board Edge"), self.analysis_result, "Copper-to-Board Edge"
         )
 
     def show_special_drill_holes_button(self, event):
@@ -378,10 +394,11 @@ class DfmMainframe(wx.Frame):
                     archived, self.name
                 )
 
-            if pcbnew.GetLanguage() == "简体中文":
-                self.analysis_result = self.dfm_analysis.analysis_json(json_path, True)
-            else:
+            if pcbnew.GetLanguage() == "English":
                 self.analysis_result = self.dfm_analysis.analysis_json(json_path)
+            else:
+                self.analysis_result = self.dfm_analysis.analysis_json(json_path, True)
+
             if self.analysis_result == "" or not self.analysis_result:
                 wx.MessageBox(
                     _("End of DFM analysis request. No analysis data was returned!"),
@@ -601,27 +618,27 @@ class DfmMainframe(wx.Frame):
                 self.json_analysis_map[_("Drill to Copper")]["color"] = ""
 
         # 板边距离
-        if self.analysis_result["Board Edge Clearance"] == "":
-            self.json_analysis_map[_("Board Edge Clearance")][
+        if self.analysis_result["Copper-to-Board Edge"] == "":
+            self.json_analysis_map[_("Copper-to-Board Edge")][
                 "display"
             ] = self.item_result
-            self.json_analysis_map[_("Board Edge Clearance")]["color"] = ""
+            self.json_analysis_map[_("Copper-to-Board Edge")]["color"] = ""
         else:
             data = self.get_data(
-                self.analysis_result["Board Edge Clearance"]["display"]
+                self.analysis_result["Copper-to-Board Edge"]["display"]
             )
             if data is not None:
-                self.json_analysis_map[_("Board Edge Clearance")][
+                self.json_analysis_map[_("Copper-to-Board Edge")][
                     "display"
                 ] = self.unit_conversion(data)
-                self.json_analysis_map[_("Board Edge Clearance")][
+                self.json_analysis_map[_("Copper-to-Board Edge")][
                     "color"
-                ] = self.analysis_result["Board Edge Clearance"]["color"]
+                ] = self.analysis_result["Copper-to-Board Edge"]["color"]
             else:
-                self.json_analysis_map[_("Board Edge Clearance")][
+                self.json_analysis_map[_("Copper-to-Board Edge")][
                     "display"
                 ] = self.item_result
-                self.json_analysis_map[_("Board Edge Clearance")]["color"] = ""
+                self.json_analysis_map[_("Copper-to-Board Edge")]["color"] = ""
 
         # 特殊孔
         if self.analysis_result["Special Drill Holes"] == "":
