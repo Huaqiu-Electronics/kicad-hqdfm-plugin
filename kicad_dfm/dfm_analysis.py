@@ -361,7 +361,8 @@ class DfmAnalysis:
                 rule_string2 = rule_string1[2].partition(",")
                 rule_string3 = rule_string2[2].partition(",")
                 rule_string4 = rule_string3[2].partition(",")
-                for item_info_info in item_info["info"]:
+                item_info_info_list = item_info.get("info") or []
+                for item_info_info in item_info_info_list:
                     result_list = {}
                     item_layer_list = []
                     if dfm_show_layer != "":
@@ -439,8 +440,9 @@ class DfmAnalysis:
         self, item_info_info, item, rule, item_layer_list, color
     ):
         item_list = []
-        if item_info_info["type"] == 0:
-            for item_info_info_result in item_info_info["result"]:
+        if item_info_info.get("type") == 0:
+            result_data = item_info_info.get("result") or []
+            for item_info_info_result in result_data:
                 item_info_list = {}
                 item_info_list["item"] = item
                 item_info_list["rule"] = rule
@@ -450,24 +452,24 @@ class DfmAnalysis:
                 item_info_list["color"] = color
                 if item_info_info_result["et"] == 0:
                     item_info_list["et"] = item_info_info_result["et"]
-                    item_info_list["sx"] = item_info_info_result["coord"]["sx"]
-                    item_info_list["sy"] = item_info_info_result["coord"]["sy"]
-                    item_info_list["ex"] = item_info_info_result["coord"]["ex"]
-                    item_info_list["ey"] = item_info_info_result["coord"]["ey"]
+                    item_info_list["sx"] = item_info_info_result["coord"]["spt"]["x"]
+                    item_info_list["sy"] = item_info_info_result["coord"]["spt"]["y"]
+                    item_info_list["ex"] = item_info_info_result["coord"]["ept"]["x"]
+                    item_info_list["ey"] = item_info_info_result["coord"]["ept"]["y"]
                     item_list.append(item_info_list)
                 elif item_info_info_result["et"] == 1:
                     item_info_list["et"] = item_info_info_result["et"]
-                    item_info_list["sx"] = item_info_info_result["coord"]["sx"]
-                    item_info_list["sy"] = item_info_info_result["coord"]["sy"]
-                    item_info_list["ex"] = item_info_info_result["coord"]["ex"]
-                    item_info_list["ey"] = item_info_info_result["coord"]["ey"]
-                    item_info_list["cx"] = item_info_info_result["coord"]["cx"]
-                    item_info_list["cy"] = item_info_info_result["coord"]["cy"]
+                    item_info_list["sx"] = item_info_info_result["coord"]["spt"]["x"]
+                    item_info_list["sy"] = item_info_info_result["coord"]["spt"]["y"]
+                    item_info_list["ex"] = item_info_info_result["coord"]["ept"]["x"]
+                    item_info_list["ey"] = item_info_info_result["coord"]["ept"]["y"]
+                    item_info_list["cx"] = item_info_info_result["coord"]["cpt"]["x"]
+                    item_info_list["cy"] = item_info_info_result["coord"]["cpt"]["y"]
                     item_list.append(item_info_list)
                 else:
                     item_info_list["et"] = item_info_info_result["et"]
-                    item_info_list["cx"] = item_info_info_result["coord"]["cx"]
-                    item_info_list["cy"] = item_info_info_result["coord"]["cy"]
+                    item_info_list["cx"] = item_info_info_result["coord"]["cpt"]["x"]
+                    item_info_list["cy"] = item_info_info_result["coord"]["cpt"]["y"]
                     item_list.append(item_info_list)
         elif item_info_info["type"] == 2:
             item_info_list = {}

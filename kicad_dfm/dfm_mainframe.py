@@ -62,12 +62,13 @@ class DfmMainframe(wx.Frame):
                 "C:\\Program Files\\demos\\kit-dev-coldfire-xilinx_5213\\kit-dev-coldfire-xilinx_5213.kicad_pcb",
                 "C:\\Program Files\\demos\\ESP32 Clone Devkit.kicad_pcb",
                 "C:\\Program Files\\demos\\Prj 1 - LED torch.kicad_pcb",
-                "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
+
                 "C:\\Program Files\\demos\\video\\video.kicad_pcb",
-                "C:\\Users\\haf\\Desktop\\常用文档\\tiny-scarab.kicad_pcb",
-                "C:\\Program Files\\demos\\testDFM\\testDFM.kicad_pcb",
-                "C:\\Program Files\\demos\\ecc83\\ecc83-pp-kicad9.kicad_pcb",
-                "C:\\Program Files\\demos\\N100.kicad_pcb",
+                # "C:\\Users\\haf\\Desktop\\常用文档\\tiny-scarab.kicad_pcb",
+                # "C:\\Program Files\\demos\\testDFM\\testDFM.kicad_pcb",
+                #"C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
+                # "C:\\Program Files\\demos\\ecc83\\ecc83-pp_v2.kicad_pcb",
+                # "C:\\Program Files\\demos\\N100.kicad_pcb",
                 # "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
             ):
                 if os.path.exists(fp):
@@ -350,9 +351,11 @@ class DfmMainframe(wx.Frame):
 
     def show_drill_hole_density_button(self, event):
         self.have_same_class_window()
+        drill_hole_data = self.analysis_result.get("Drill Hole Density", {})
+        display_value = drill_hole_data.get("display", "") if isinstance(drill_hole_data, dict) else ""
         HoleChildFrameView(
             self,
-            self.analysis_result["Drill Hole Density"]["display"],
+            display_value,
         ).Show()
 
     def show_surface_finish_area_button(self, event):
@@ -740,6 +743,8 @@ class DfmMainframe(wx.Frame):
 
     # 只获取数据
     def get_data(self, data_string):
+        if data_string is None:
+            return None
         pattern = re.compile(r"(\d+(\.\d+)?)")
         ret = pattern.search(data_string)
         if ret is not None:

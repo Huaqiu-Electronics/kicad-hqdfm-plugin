@@ -191,7 +191,7 @@ class DfmChildFrame(UiChildFrame):
                 for result_list in self.result_json[self.json_string]["check"]:
                     # for result in result_list["result"]:
                     #     if result["color"] == "black":
-                    if result_list["result"][0]["color"] == "black":
+                    if result_list.get("result") and result_list["result"][0]["color"] == "black":
                         if self.json_string not in self.delete_value:
                             self.delete_value[self.json_string] = []
                         self.delete_value[self.json_string].append(result_list)
@@ -496,7 +496,7 @@ class DfmChildFrame(UiChildFrame):
             for result_list in self.result:
                 if search == str(result_list):
                     for result in self.result[result_list]:
-                        item = self.board.GetItem(result["id"])
+                        item = self.board.ResolveItem(result["id"])
                         item.SetBrightened()
                         # item.SetSelected()
                         self.item_list.append(item)
@@ -520,7 +520,7 @@ class DfmChildFrame(UiChildFrame):
 
                     self.remove_added_line(event)
                     if self.json_string in ["Hatched Copper Pour", "Pad size"]:
-                        item = self.board.GetItem(self.result[result_list][0]["id"])
+                        item = self.board.ResolveItem(self.result[result_list][0]["id"])
                         pcbnew.FocusOnItem(item, self.board.GetLayerID(item.GetLayer()))
                         for layer in self.result[result_list][0]["layer"]:
                             layer_num.append(self.board.GetLayerID(layer))
@@ -746,9 +746,10 @@ class DfmChildFrame(UiChildFrame):
 
     def get_result(self):
         analysis_result = []
-        if self.result_json[self.json_string] == "":
+        result_data = self.result_json.get(self.json_string, {})
+        if result_data == "" or not result_data.get("check"):
             return analysis_result
-        for result_list in self.result_json[self.json_string]["check"]:
+        for result_list in result_data["check"]:
             for result in result_list["result"]:
                 if result["value"] not in analysis_result:
                     analysis_result.append([result["value"], result["color"]])
