@@ -14,17 +14,23 @@ class ChildFrameSetting:
         ):
             return layer_result
         kicad_layer = {}
-        kicad_layer["Top Silk"] = self.board.GetLayerName(37)
-        kicad_layer["Top Solder"] = self.board.GetLayerName(39)
+        _layer = {}
+        for i in range(0, 82):
+            _layer[f"Inner{i}"] = self.board.GetLayerName(i)
+        
+        kicad_layer["Top Silk"] = self.board.GetLayerName(5)
+        kicad_layer["Top Solder"] = self.board.GetLayerName(1)
         kicad_layer["Top Layer"] = self.board.GetLayerName(0)
-        kicad_layer["Bot Silk"] = self.board.GetLayerName(36)
-        kicad_layer["Bot Solder"] = self.board.GetLayerName(38)
-        kicad_layer["Bot Layer"] = self.board.GetLayerName(31)
-        kicad_layer["Outline"] = self.board.GetLayerName(44)
+        kicad_layer["Bot Silk"] = self.board.GetLayerName(7)
+        kicad_layer["Bot Solder"] = self.board.GetLayerName(3)
+        kicad_layer["Bot Layer"] = self.board.GetLayerName(2)
+        kicad_layer["Outline"] = self.board.GetLayerName(25)
         kicad_layer["Top Paste"] = self.board.GetLayerName(35)
-        kicad_layer["Bot Paste"] = self.board.GetLayerName(34)
-        for i in range(2, 32):
-            kicad_layer[f"Inner{i}"] = self.board.GetLayerName(i - 1)
+        kicad_layer["Bot Paste"] = self.board.GetLayerName(33)
+        kicad_layer["Inner2"] = self.board.GetLayerName(4)
+        kicad_layer["Inner3"] = self.board.GetLayerName(6)
+        for i in range(8, 66, 2):
+            kicad_layer[f"Inner{ i//2 }"] = self.board.GetLayerName( i )
 
         if isinstance(layer_result, str):  # 如果 layer_result 是字符串
             if layer_result in kicad_layer.keys():
@@ -48,6 +54,9 @@ class ChildFrameUnitConversion:
         return string
 
     def string_conversion(num, value):
+        if isinstance(value, (int, float)):
+            value = f"{value:.3f}"
+        print(f"value: {str(type(value))}")
         string = num + "、" + value
         return string
 

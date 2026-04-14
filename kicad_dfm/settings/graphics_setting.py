@@ -94,6 +94,41 @@ class GraphicsSetting:
         if result is not None:
             return result
 
+
+    def get_signal_integrity_floating_copper(self, result, x, y):
+        line_coordinates = {
+            "layer": result["layer"][0],
+            "start_x": int(Decimal(result["cx"]) * 1000000) + x,
+            "start_y": y - int(Decimal(result["cy"]) * 1000000),
+            "end_x": int(Decimal(result["cx"]) * 1000000) + x,
+            "end_y": y - int(Decimal(result["cy"]) * 1000000),
+        }
+        layer = result.get("layer", [])
+        start_point = pcbnew.VECTOR2I(
+            line_coordinates["start_x"], line_coordinates["start_y"]
+        )
+        end_point = pcbnew.VECTOR2I(
+            line_coordinates["end_x"], line_coordinates["end_y"]
+        )
+
+        items = self.board.GetTracks()
+        result = self.analysis_singal_tracks(
+            items, line_coordinates, start_point, end_point
+        )
+        if result is not None:
+            return result
+
+        Drawings = self.board.GetDrawings()
+        
+        result = self.analysis_singal_drawings(
+            Drawings, line_coordinates, start_point, end_point
+        )
+        if result is not None:
+            return result
+
+
+
+
     def get_hole_diameter_segment(self, result, x, y):
         line_coordinates = {
             "layer": result["layer"][0],
@@ -287,14 +322,14 @@ class GraphicsSetting:
         self, Drawings, line_coordinates, start_point, end_point
     ):
         for Drawing in Drawings:
-            if type(Drawing) is pcbnew.PCB_TEXT:
-                hitconsequence = Drawing.HitTest(start_point, ERROR_ACCURACY)
-                if (
-                    hitconsequence
-                    and Drawing.HitTest(end_point, ERROR_ACCURACY)
-                    and line_coordinates["layer"] == Drawing.GetLayerName()
-                ):
-                    return Drawing
+            # if type(Drawing) is pcbnew.PCB_TEXT:
+            hitconsequence = Drawing.HitTest(start_point, ERROR_ACCURACY)
+            if (
+                hitconsequence
+                and Drawing.HitTest(end_point, ERROR_ACCURACY)
+                and line_coordinates["layer"] == Drawing.GetLayerName()
+            ):
+                return Drawing
 
     def analysis_board_edge_drawings(self, Drawings, start_point, end_point, items):
         for item in Drawings:
@@ -366,6 +401,7 @@ class GraphicsSetting:
         for footprint in footprints:
             pads = footprint.Pads()
             fpLayerName = self.board.GetLayerName(footprint.GetSide())
+            fpLayerID = self.board.GetLayerID(fpLayerName)
             fpTypeName = footprint.GetTypeName()
             if pads is None:
                 return
@@ -377,8 +413,8 @@ class GraphicsSetting:
                         "layer": fpLayerName,
                         "size_x": pad.GetSizeX(),
                         "size_y": pad.GetSizeY(),
-                        "pad_position_x": pad.ShapePos().x,
-                        "pad_position_y": pad.ShapePos().y,
+                        "pad_position_x": pad.ShapePos(fpLayerID).x,
+                        "pad_position_y": pad.ShapePos(fpLayerID).y,
                     }
                     if (
                         rect_coordinates["start_x"]
@@ -394,8 +430,8 @@ class GraphicsSetting:
                         "layer": fpLayerName,
                         "size_x": pad.GetSizeX(),
                         "size_y": pad.GetSizeY(),
-                        "pad_position_x": pad.ShapePos().x,
-                        "pad_position_y": pad.ShapePos().y,
+                        "pad_position_x": pad.ShapePos(fpLayerID).x,
+                        "pad_position_y": pad.ShapePos(fpLayerID).y,
                     }
                     if (
                         rect_coordinates["start_x"]
@@ -438,24 +474,45 @@ class GraphicsSetting:
                 items.append(result)
 
     def analysis_zones(self, zones, layer, start_point, end_point, items):
-        iter_proxy = zones.begin()
-        while iter_proxy != zones.end():
-            zone = iter_proxy.next()
-            layer_name = self.board.GetLayerName(zone.GetFirstLayer())
-            hits = zone.HitTestFilledArea(
-                zone.GetFirstLayer(), start_point, ERROR_ACCURACY
-            )
-            hite = zone.HitTestFilledArea(
-                zone.GetFirstLayer(), end_point, ERROR_ACCURACY
-            )
-            if layer_name in layer:
-                if hits or hite:
-                    items.append(zone)
+        if isinstance(zones, tuple):
+            for zone in zones:
+                layer_name = self.board.GetLayerName(zone.GetFirstLayer())
+                hits = zone.HitTestFilledArea(
+                    zone.GetFirstLayer(), start_point, ERROR_ACCURACY
+                )
+                hite = zone.HitTestFilledArea(
+                    zone.GetFirstLayer(), end_point, ERROR_ACCURACY
+                )
+                if layer_name in layer:
+                    if hits or hite:
+                        items.append(zone)
+        
+        else:
+            iter_proxy = zones.begin()
+            while iter_proxy != zones.end():
+                zone = iter_proxy.next()
+                layer_name = self.board.GetLayerName(zone.GetFirstLayer())
+                hits = zone.HitTestFilledArea(
+                    zone.GetFirstLayer(), start_point, ERROR_ACCURACY
+                )
+                hite = zone.HitTestFilledArea(
+                    zone.GetFirstLayer(), end_point, ERROR_ACCURACY
+                )
+                if layer_name in layer:
+                    if hits or hite:
+                        items.append(zone)
+
 
     def analysis_borad_edge_zones(self, zones, layer, start_point, end_point, items):
-        iter_proxy = zones.begin()
-        while iter_proxy != zones.end():
-            zone = iter_proxy.next()
-            layer_name = self.board.GetLayerName(zone.GetFirstLayer())
-            if layer_name in layer:
-                items.append(zone)
+        if isinstance(zones, tuple):
+            for zone in zones:
+                layer_name = self.board.GetLayerName(zone.GetFirstLayer())
+                if layer_name in layer:
+                    items.append(zone)
+        else:
+            iter_proxy = zones.begin()
+            while iter_proxy != zones.end():
+                zone = iter_proxy.next()
+                layer_name = self.board.GetLayerName(zone.GetFirstLayer())
+                if layer_name in layer:
+                    items.append(zone)

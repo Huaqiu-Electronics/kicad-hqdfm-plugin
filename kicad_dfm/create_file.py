@@ -28,7 +28,7 @@ from pcbnew import (
     ToMM,
     DRILL_MARKS_NO_DRILL_SHAPE,
 )
-
+from kicad_dfm.settings.version_utils import plot_text
 
 class CreateFile:
     def __init__(self, _board):
@@ -45,7 +45,9 @@ class CreateFile:
 
         popt.SetPlotValue(True)
         popt.SetPlotReference(True)
-        popt.SetPlotInvisibleText(False)
+        # plot_text(popt)
+        # popt.SetPlotInvisibleText(False)
+        # popt.SetPlotFPText(False)
 
         popt.SetSketchPadsOnFabLayers(False)
 
@@ -55,11 +57,11 @@ class CreateFile:
 
         popt.SetSubtractMaskFromSilk(True)
 
-        popt.SetPlotViaOnMaskLayer(False)
+        # popt.SetPlotViaOnMaskLayer(False)
 
         popt.SetUseAuxOrigin(True)
 
-        popt.SetPlotViaOnMaskLayer(True)
+        # popt.SetPlotViaOnMaskLayer(True)
 
         popt.SetUseGerberX2format(True)
 
@@ -135,16 +137,32 @@ class CreateFile:
             ]
 
         for layer_info in plot_plan:
+            self.logger.debug(f"Setting layer: {layer_info[1]}")
             if layer_info[1] <= B_Cu:
                 popt.SetSkipPlotNPTH_Pads(True)
             else:
                 popt.SetSkipPlotNPTH_Pads(False)
             pctl.SetLayer(layer_info[1])
-            pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2])
-            if pctl.PlotLayer() is False:
-                self.logger.error(f"Error plotting {layer_info[2]}")
-            self.logger.info(f"Successfully plotted {layer_info[2]}")
+            self.logger.debug(f"Opening plot file: {layer_info[0]}")
+            if not pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2]):
+                self.logger.error(f"Failed to open plot file for {layer_info[2]}")
+                continue
+            self.logger.debug(f"Plotting layer: {layer_info[2]}")
+            try:
+                if not pctl.PlotLayer():
+                    self.logger.error(f"Error plotting {layer_info[2]}")
+                else:
+                    self.logger.info(f"Successfully plotted {layer_info[2]}")
+            except Exception as e:
+                self.logger.error(f"Exception occurred while plotting {layer_info[2]}: {e}")
         pctl.ClosePlot()
+        
+        #     pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2])
+        #     Plote = pctl.PlotLayer()
+        #     if pctl.PlotLayer() is False:
+        #         self.logger.error(f"Error plotting {layer_info[2]}")
+        #     self.logger.info(f"Successfully plotted {layer_info[2]}")
+        # pctl.ClosePlot()
         # 导出gerber
 
     def export_drl(self, gerber_dir):

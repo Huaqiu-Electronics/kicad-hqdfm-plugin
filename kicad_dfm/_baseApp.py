@@ -1,7 +1,6 @@
 import wx
 import os
 import sys
-from pcbnew import *
 from wx.lib.mixins.inspection import InspectionMixin
 from .dfm_mainframe import DfmMainframe
 import builtins
@@ -9,6 +8,7 @@ from kicad_dfm import PLUGIN_ROOT
 from kicad_dfm.language.lang_const import LANG_DOMAIN
 import socket
 import multiprocessing
+import pcbnew
 
 # add translation macro to builtin similar to what gettext does
 builtins.__dict__["_"] = wx.GetTranslation
@@ -49,9 +49,11 @@ class BaseApp(wx.EvtHandler):
         SINGLE_PLUGIN.register_main_wind(None)
 
     def startup(self):
+
         for win in wx.GetTopLevelWindows():
             if win.GetTitle() == _("HQ DFM"):
                 win.Destroy()
+                
 
         windows = wx.GetTopLevelWindows()
         pcb_window = [w for w in windows if _("pcb editor") in w.GetTitle().lower()]

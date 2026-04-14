@@ -224,9 +224,10 @@ class MinimumLineWidth:
         line_width_minimum = -1
         have_red = False
         have_yellow = False
+        smallest_trace = analysis_result.get("Smallest Trace Width", {})
         if (
-            analysis_result["Smallest Trace Width"] == ""
-            or analysis_result["Smallest Trace Width"]["check"] is None
+            smallest_trace == ""
+            or smallest_trace.get("check") is None
         ):
             return ""
         for item in self.board.GetTracks():  # Can be VIA or TRACK

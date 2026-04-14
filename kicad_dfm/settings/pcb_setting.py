@@ -5,6 +5,7 @@ class PcbSetting:
     # 处理 kicad 获取的层尺寸信息
     def get_layer_size(self):
         drawings = self.board.GetDrawings()
+        width = 0
         for drawing in drawings:
             if drawing.GetLayer() == 44:
                 width = drawing.GetWidth() / 1000000
