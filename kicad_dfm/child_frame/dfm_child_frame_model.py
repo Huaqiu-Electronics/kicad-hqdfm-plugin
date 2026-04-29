@@ -1,6 +1,7 @@
-import sys
 import wx
 import wx.dataview as dv
+
+from kicad_dfm.constants import Colour
 
 # ----------------------------------------------------------------------
 
@@ -34,29 +35,28 @@ class DfmChildFrameModel(dv.DataViewIndexListModel):
         if col < 0 or col >= MAX_COLS:
             return None
         try:
-            # 使用循环来获取数据，而不是多个 elif 语句
+            # 使用循环来获取数据,而不是多个 elif 语句
             return self.data[row][col]
 
-        except IndexError as e:
-            # 如果 row 索引超出了范围，捕获错误
-            print(f"Error: Row index {row} is out of range. {e}")
+        except IndexError:
+            # 如果 row 索引超出了范围,捕获错误
             return None
-        except Exception as e:
+        except Exception:
             # 捕获其他可能的错误
-            print(f"An unexpected error occurred: {e}")
             return None
 
     def GetAttrByRow(self, row, col, attr):
         ##self.log.write('GetAttrByRow: (%d, %d)' % (row, col))
-        if col == 0 and self.data[row][1] == "red":
-            attr.SetColour("red")
+        if col == 0 and self.data[row][1] == Colour.RED:
+            attr.SetColour(Colour.RED)
             return True
-        elif col == 0 and self.data[row][1] == "black":
-            attr.SetColour("black")
+        if col == 0 and self.data[row][1] == Colour.BLACK:
+            attr.SetColour(Colour.BLACK)
             return True
-        elif col == 0 and self.data[row][1] == "gold":
+        if col == 0 and self.data[row][1] == Colour.GOLD:
             attr.SetColour(wx.Colour(255, 165, 0))
             return True
+        return None
 
     # This method is called when the user edits a data item in the view.
     def SetValueByRow(self, value, row, col):
@@ -72,7 +72,7 @@ class DfmChildFrameModel(dv.DataViewIndexListModel):
         return MAX_COLS
 
     # Specify the data type for a column
-    def GetColumnType(self, col):
+    def GetColumnType(self, _col):
         return "string"  # 所有列的数据类型都是字符串
 
     # Report the number of rows in the model
@@ -92,17 +92,11 @@ class DfmChildFrameModel(dv.DataViewIndexListModel):
         if col == 0:
             # 对键进行排序
             return (
-                (self.data[row1][0] > self.data[row2][0])
-                - (self.data[row1][0] < self.data[row2][0])
+                (self.data[row1][0] > self.data[row2][0]) - (self.data[row1][0] < self.data[row2][0])
                 if ascending
-                else -1
-                * (
-                    (self.data[row1][0] > self.data[row2][0])
-                    - (self.data[row1][0] < self.data[row2][0])
-                )
+                else -1 * ((self.data[row1][0] > self.data[row2][0]) - (self.data[row1][0] < self.data[row2][0]))
             )
-        else:
-            return 0
+        return 0
 
     def DeleteRows(self, rows):
         # 删除行的实现
@@ -130,18 +124,18 @@ class DfmChildFrameModel(dv.DataViewIndexListModel):
         self.RowAppended()
 
     def AddRows(self, values):
-        for row_index, new_value in enumerate(values):
+        for _row_index, new_value in enumerate(values):
             # 添加新行到数据结构
             self.data.append(new_value)
             # 通知模型新行已被添加
             self.RowAppended()
 
-    def Update(self, datas):
+    def Update(self, data):
         self.DeleteAll()
         # self.data = []
-        # for data in datas:
-        # self.data = datas
-        for new_value in datas:
+        # for data in data:
+        # self.data = data
+        for new_value in data:
             # 添加新行到数据结构
             self.data.append(new_value)
             # 通知模型新行已被添加

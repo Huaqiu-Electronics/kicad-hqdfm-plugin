@@ -1,6 +1,6 @@
+from __future__ import annotations
+
 import wx
-import os
-import logging
 
 
 class _FrameSetting:

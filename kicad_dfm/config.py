@@ -1,27 +1,6 @@
-# DFM_JSON_NAME = {
-#     _("Layer Count" ):    "Layer Count",
-#     _("Dimensions" ):    "Dimensions",
-#     _("Signal Integrity" ):    "Signal Integrity",
-#     _("Smallest Trace Width" ):    "Smallest Trace Width",
-#     _("Smallest Trace Spacing" ):    "Smallest Trace Spacing",
-#     _("Pad size" ):    "Pad size",
-#     _("Pad Spacing" ):    "Pad Spacing",
-#     _("Hatched Copper Pour" ):    "Hatched Copper Pour",
-#     _("Hole Diameter" ):    "Hole Diameter",
-#     _("RingHole" ):    "RingHole",
-#     _("Drill Hole Spacing" ):    "Drill Hole Spacing",
-#     _("Drill to Copper" ):    "Drill to Copper",
-#     _("Board Edge Clearance" ):    "Board Edge Clearance",
-#     _("Special Drill Holes" ):    "Special Drill Holes",
-#     _("Holes on SMD Pads" ):    "Holes on SMD Pads",
-#     _("Missing SMask Openings" ):    "Missing SMask Openings",
-#     _("Drill Hole Density" ):    "Drill Hole Density",
-#     _("Surface Finish Area" ):    "Surface Finish Area",
-#     _("Test Point Count" ):    "Test Point Count",
-# }
+from __future__ import annotations
 
-
-Language_chinese = {
+Language_chinese: dict[str, str] = {
     "Signal Integrity": "电气信号",
     "Smallest Trace Width": "最小线宽",
     "Smallest Trace Spacing": "最小间距",
@@ -107,15 +86,6 @@ Language_english = {
     "pcs": "pcs",
     "picture_path": "_en.png",
     "show": "show all",
-    "via_ring": "via孔环",
-    "pth_ring": "pth孔环",
-    "long_pads": "长条焊盘",
-    "short_pads": "常规焊盘",
-    "line_width": "最小线宽",
-    "grid_width": "网格线宽",
-    "grid_spacing": "网格线距",
-    "unconnected traces": "断头线",
-    "floating copper": "孤立铜",
     "unconnected vias": "无效过孔",
     "acute angle traces": "锐角",
     "smallest trace width": "最小线宽",

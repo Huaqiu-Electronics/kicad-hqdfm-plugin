@@ -4,26 +4,41 @@ import re
 import wx
 import wx.dataview
 
-PLUGIN_PATH = os.path.split(os.path.abspath(__file__))[0]
+from kicad_dfm.constants import (
+    PAD_ATTR_EXCLUDE_FROM_BOM as EXCLUDE_FROM_BOM,
+)
+from kicad_dfm.constants import (
+    PAD_ATTR_EXCLUDE_FROM_POS as EXCLUDE_FROM_POS,
+)
+from kicad_dfm.constants import (
+    PAD_ATTR_NOT_IN_SCHEMATIC as NOT_IN_SCHEMATIC,
+)
+from kicad_dfm.constants import (
+    PAD_ATTR_SMD as SMD,
+)
+from kicad_dfm.constants import (
+    PAD_ATTR_THT as THT,
+)
+from kicad_dfm.constants import (
+    WX_VERSION_BOUNDARY,
+)
+from kicad_dfm.utils.pure import clear_bit, get_bit, set_bit, toggle_bit
 
-THT = 0
-SMD = 1
-EXCLUDE_FROM_POS = 2
-EXCLUDE_FROM_BOM = 3
-NOT_IN_SCHEMATIC = 4
+PLUGIN_PATH = os.path.split(os.path.abspath(__file__))[0]
+PLUGIN_ROOT = os.path.dirname(PLUGIN_PATH)
 
 
 def getWxWidgetsVersion():
     v = re.search(r"wxWidgets\s([\d\.]+)", wx.version())
-    v = int(v.group(1).replace(".", ""))
-    return v
+    return int(v.group(1).replace(".", ""))
 
 
 def getVersion():
-    """READ Version from file"""
-    if not os.path.isfile(os.path.join(PLUGIN_PATH, "VERSION")):
+    """READ Version from file (repo-root VERSION)."""
+    version_path = os.path.join(PLUGIN_ROOT, "VERSION")
+    if not os.path.isfile(version_path):
         return "unknown"
-    with open(os.path.join(PLUGIN_PATH, "VERSION")) as f:
+    with open(version_path) as f:
         return f.read().strip()
 
 
@@ -31,16 +46,14 @@ def GetScaleFactor(window):
     """Workaround if wxWidgets Version does not support GetDPIScaleFactor"""
     if hasattr(window, "GetDPIScaleFactor"):
         return window.GetDPIScaleFactor()
-    else:
-        return 1.0
+    return 1.0
 
 
 def HighResWxSize(window, size):
     """Workaround if wxWidgets Version does not support FromDIP"""
     if hasattr(window, "FromDIP"):
         return window.FromDIP(size)
-    else:
-        return size
+    return size
 
 
 def loadBitmapScaled(filename, scale=1.0, static=False):
@@ -53,7 +66,7 @@ def loadBitmapScaled(filename, scale=1.0, static=False):
         bmp = wx.Bitmap(img.Scale(int(w * scale), int(h * scale)))
     else:
         bmp = wx.Bitmap()
-    if getWxWidgetsVersion() > 315 and not static:
+    if getWxWidgetsVersion() > WX_VERSION_BOUNDARY and not static:
         return wx.BitmapBundle(bmp)
     return bmp
 
@@ -61,7 +74,7 @@ def loadBitmapScaled(filename, scale=1.0, static=False):
 def loadIconScaled(filename, scale=1.0):
     """Load a scaled icon, handle differences between Kicad versions"""
     bmp = loadBitmapScaled(filename, scale=scale, static=False)
-    if getWxWidgetsVersion() > 315:
+    if getWxWidgetsVersion() > WX_VERSION_BOUNDARY:
         return bmp
     return wx.Icon(bmp)
 
@@ -75,29 +88,13 @@ def GetListIcon(value, scale_factor):
                 scale_factor,
             ),
         )
-    else:
-        return wx.dataview.DataViewIconText(
-            "",
-            loadIconScaled(
-                "mdi-close-color.png",
-                scale_factor,
-            ),
-        )
-
-
-def natural_sort_collation(a, b):
-    """Natural sort collation for use in sqlite."""
-    if a == b:
-        return 0
-
-    def convert(text):
-        return int(text) if text.isdigit() else text.lower()
-
-    def yellownum_key(key):
-        return [convert(c) for c in re.split("([0-9]+)", key)]
-
-    natorder = sorted([a, b], key=yellownum_key)
-    return -1 if natorder.index(a) == 0 else 1
+    return wx.dataview.DataViewIconText(
+        "",
+        loadIconScaled(
+            "mdi-close-color.png",
+            scale_factor,
+        ),
+    )
 
 
 def get_lcsc_value(fp):
@@ -117,59 +114,31 @@ def get_lcsc_value(fp):
 
 def get_valid_footprints(board):
     """Get all footprints that have a valid reference (drop all REF**)"""
-    footprints = []
-    for fp in board.GetFootprints():
-        if re.match(r"\w+\d+", fp.GetReference()):
-            footprints.append(fp)
-    return footprints
+    return [fp for fp in board.GetFootprints() if re.match(r"\w+\d+", fp.GetReference())]
 
 
 def get_footprint_keys(fp):
     """get keys from footprint for sorting."""
     try:
         package = str(fp.GetFPID().GetLibItemName())
-    except:
+    except Exception:
         package = ""
     try:
-        reference = int(re.search("\d+", fp.GetReference())[0])
-    except:
+        reference = int(re.search(r"\d+", fp.GetReference())[0])
+    except Exception:
         reference = 0
     return (package, reference)
 
 
 def get_footprint_by_ref(board, ref):
     """get a footprint from the list of footprints by its Reference."""
-    fps = []
-    for fp in get_valid_footprints(board):
-        if str(fp.GetReference()) == ref:
-            fps.append(fp)
-    return fps
-
-
-def get_bit(value, bit):
-    """Get the nth bit of a byte."""
-    return value & (1 << bit)
-
-
-def set_bit(value, bit):
-    """Set the nth bit of a byte."""
-    return value | (1 << bit)
-
-
-def clear_bit(value, bit):
-    """Clear the nth bit of a byte."""
-    return value & ~(1 << bit)
-
-
-def toggle_bit(value, bit):
-    """Toggle the nth bit of a byte."""
-    return value ^ (1 << bit)
+    return [fp for fp in get_valid_footprints(board) if str(fp.GetReference()) == ref]
 
 
 def get_tht(footprint):
     """Get the THT property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     return bool(get_bit(val, THT))
 
@@ -177,7 +146,7 @@ def get_tht(footprint):
 def get_smd(footprint):
     """Get the SMD property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     return bool(get_bit(val, SMD))
 
@@ -185,7 +154,7 @@ def get_smd(footprint):
 def get_exclude_from_pos(footprint):
     """Get the 'exclude from POS' property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     return bool(get_bit(val, EXCLUDE_FROM_POS))
 
@@ -193,7 +162,7 @@ def get_exclude_from_pos(footprint):
 def get_exclude_from_bom(footprint):
     """Get the 'exclude from BOM' property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     return bool(get_bit(val, EXCLUDE_FROM_BOM))
 
@@ -201,7 +170,7 @@ def get_exclude_from_bom(footprint):
 def get_not_in_schematic(footprint):
     """Get the 'not in schematic' property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     return bool(get_bit(val, NOT_IN_SCHEMATIC))
 
@@ -209,7 +178,7 @@ def get_not_in_schematic(footprint):
 def set_tht(footprint):
     """Set the THT property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     val = set_bit(val, THT)
     footprint.SetAttributes(val)
@@ -219,7 +188,7 @@ def set_tht(footprint):
 def set_smd(footprint):
     """Set the SMD property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     val = set_bit(val, SMD)
     footprint.SetAttributes(val)
@@ -229,12 +198,9 @@ def set_smd(footprint):
 def set_exclude_from_pos(footprint, v):
     """Set the 'exclude from POS' property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
-    if v:
-        val = set_bit(val, EXCLUDE_FROM_POS)
-    else:
-        val = clear_bit(val, EXCLUDE_FROM_POS)
+    val = set_bit(val, EXCLUDE_FROM_POS) if v else clear_bit(val, EXCLUDE_FROM_POS)
     footprint.SetAttributes(val)
     return bool(get_bit(val, EXCLUDE_FROM_POS))
 
@@ -242,12 +208,9 @@ def set_exclude_from_pos(footprint, v):
 def set_exclude_from_bom(footprint, v):
     """Set the 'exclude from BOM' property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
-    if v:
-        val = set_bit(val, EXCLUDE_FROM_BOM)
-    else:
-        val = clear_bit(val, EXCLUDE_FROM_BOM)
+    val = set_bit(val, EXCLUDE_FROM_BOM) if v else clear_bit(val, EXCLUDE_FROM_BOM)
     footprint.SetAttributes(val)
     return bool(get_bit(val, EXCLUDE_FROM_BOM))
 
@@ -255,12 +218,9 @@ def set_exclude_from_bom(footprint, v):
 def set_not_in_schematic(footprint, v):
     """Set the 'not in schematic' property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
-    if v:
-        val = set_bit(val, NOT_IN_SCHEMATIC)
-    else:
-        val = clear_bit(val, NOT_IN_SCHEMATIC)
+    val = set_bit(val, NOT_IN_SCHEMATIC) if v else clear_bit(val, NOT_IN_SCHEMATIC)
     footprint.SetAttributes(val)
     return bool(get_bit(val, NOT_IN_SCHEMATIC))
 
@@ -268,7 +228,7 @@ def set_not_in_schematic(footprint, v):
 def toggle_tht(footprint):
     """Toggle the THT property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     val = toggle_bit(val, THT)
     footprint.SetAttributes(val)
@@ -278,7 +238,7 @@ def toggle_tht(footprint):
 def toggle_smd(footprint):
     """Toggle the SMD property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     val = toggle_bit(val, SMD)
     footprint.SetAttributes(val)
@@ -288,7 +248,7 @@ def toggle_smd(footprint):
 def toggle_exclude_from_pos(footprint):
     """Toggle the 'exclude from POS' property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     val = toggle_bit(val, EXCLUDE_FROM_POS)
     footprint.SetAttributes(val)
@@ -298,7 +258,7 @@ def toggle_exclude_from_pos(footprint):
 def toggle_exclude_from_bom(footprint):
     """Toggle the 'exclude from BOM' property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     val = toggle_bit(val, EXCLUDE_FROM_BOM)
     footprint.SetAttributes(val)
@@ -308,7 +268,7 @@ def toggle_exclude_from_bom(footprint):
 def toggle_not_in_schematic(footprint):
     """Toggle the 'not in schematic' property of a footprint."""
     if not footprint:
-        return
+        return None
     val = footprint.GetAttributes()
     val = toggle_bit(val, NOT_IN_SCHEMATIC)
     footprint.SetAttributes(val)

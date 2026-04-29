@@ -1,14 +1,14 @@
-import wx
+import builtins
+import multiprocessing
 import os
 import sys
-from wx.lib.mixins.inspection import InspectionMixin
-from .dfm_mainframe import DfmMainframe
-import builtins
+
+import wx
+
 from kicad_dfm import PLUGIN_ROOT
 from kicad_dfm.language.lang_const import LANG_DOMAIN
-import socket
-import multiprocessing
-import pcbnew
+
+from .dfm_mainframe import DfmMainframe
 
 # add translation macro to builtin similar to what gettext does
 builtins.__dict__["_"] = wx.GetTranslation
@@ -16,14 +16,12 @@ builtins.__dict__["_"] = wx.GetTranslation
 
 def _displayHook(obj):
     if obj is not None:
-        print(repr(obj))
+        pass
 
 
 def create_shared_memory(size):
     # 创建一块大小为 `size` 的共享内存
-    shm = multiprocessing.shared_memory.create("my_shm", size=size)
-    print(f"Shared memory created with size: {size} bytes")
-    return shm
+    return multiprocessing.shared_memory.create("my_shm", size=size)
 
 
 class BaseApp(wx.EvtHandler):
@@ -31,16 +29,13 @@ class BaseApp(wx.EvtHandler):
         super().__init__()
         sys.displayhook = _displayHook
 
-        wx.Locale.AddCatalogLookupPathPrefix(
-            os.path.join(PLUGIN_ROOT, "language", "locale")
-        )
+        wx.Locale.AddCatalogLookupPathPrefix(os.path.join(PLUGIN_ROOT, "language", "locale"))
         existing_locale = wx.GetLocale()
         if existing_locale is not None:
             existing_locale.AddCatalog(LANG_DOMAIN)
 
-        print(wx.__version__)
         self.startup()
-        return None
+        return
 
     def __del__(self):
         # destructor
@@ -49,11 +44,9 @@ class BaseApp(wx.EvtHandler):
         SINGLE_PLUGIN.register_main_wind(None)
 
     def startup(self):
-
         for win in wx.GetTopLevelWindows():
             if win.GetTitle() == _("HQ DFM"):
                 win.Destroy()
-                
 
         windows = wx.GetTopLevelWindows()
         pcb_window = [w for w in windows if _("pcb editor") in w.GetTitle().lower()]

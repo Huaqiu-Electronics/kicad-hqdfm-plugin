@@ -1,7 +1,7 @@
 import wx
-import pcbnew
-from kicad_dfm.picture import GetImagePath
+
 from kicad_dfm.hole_childframe.ui_hole_childframe import UiHoleChildframe
+from kicad_dfm.picture import GetImagePath
 
 
 class HoleChildFrameView(UiHoleChildframe):

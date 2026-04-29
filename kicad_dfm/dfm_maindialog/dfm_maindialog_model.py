@@ -1,6 +1,7 @@
-import sys
 import wx
 import wx.dataview as dv
+
+from kicad_dfm.constants import Colour
 
 # ----------------------------------------------------------------------
 
@@ -21,21 +22,19 @@ import wx.dataview as dv
 class DfmMaindialogModel(dv.DataViewIndexListModel):
     def __init__(self, data):
         dv.DataViewIndexListModel.__init__(self, len(data))
-        self.data = [
-            [key, value["display"], value["color"]] for key, value in data.items()
-        ]
+        self.data = [[key, value["display"], value["color"]] for key, value in data.items()]
 
         # self.log = log
 
     # This method is called to provide the data object for a
     # particular row,col
     def GetValueByRow(self, row, col):
-        # 根据行列获取数据，这里假设col为0时获取键，为1时获取'display'，为2时获取'color'
+        # 根据行列获取数据,这里假设col为0时获取键,为1时获取'display',为2时获取'color'
         if col == 0:  # 第一列显示键
             return self.data[row][0]
-        elif col == 1:  # 第二列显示 value['display']
+        if col == 1:  # 第二列显示 value['display']
             return self.data[row][1]
-        elif col == 2:  # 第三列显示 value['color']
+        if col == 2:  # 第三列显示 value['color']
             return self.data[row][2]
         return None  # 默认返回 None
 
@@ -52,7 +51,7 @@ class DfmMaindialogModel(dv.DataViewIndexListModel):
         return 3  # 固定为3列
 
     # Specify the data type for a column
-    def GetColumnType(self, col):
+    def GetColumnType(self, _col):
         return "string"  # 所有列的数据类型都是字符串
 
     # Report the number of rows in the model
@@ -64,13 +63,13 @@ class DfmMaindialogModel(dv.DataViewIndexListModel):
     # cell at (row, col)
     def GetAttrByRow(self, row, col, attr):
         ##self.log.write('GetAttrByRow: (%d, %d)' % (row, col))
-        if col == 1 and self.data[row][2] == "red":  # 第三列有颜色值
-            attr.SetColour("red")  # 设置单元格颜色
+        if col == 1 and self.data[row][2] == Colour.RED:  # 第三列有颜色值
+            attr.SetColour(Colour.RED)  # 设置单元格颜色
             return True
-        elif col == 1 and self.data[row][2] == "black":  # 第三列有颜色值
-            attr.SetColour("black")  # 设置单元格颜色
+        if col == 1 and self.data[row][2] == Colour.BLACK:  # 第三列有颜色值
+            attr.SetColour(Colour.BLACK)  # 设置单元格颜色
             return True
-        elif col == 1 and self.data[row][2] == "gold":  # 第三列有颜色值
+        if col == 1 and self.data[row][2] == Colour.GOLD:  # 第三列有颜色值
             attr.SetColour(wx.Colour(255, 165, 0))  # 设置单元格颜色
             return True
 
@@ -92,18 +91,12 @@ class DfmMaindialogModel(dv.DataViewIndexListModel):
         if col == 0:
             # 对键进行排序
             return (
-                (self.data[row1][0] > self.data[row2][0])
-                - (self.data[row1][0] < self.data[row2][0])
+                (self.data[row1][0] > self.data[row2][0]) - (self.data[row1][0] < self.data[row2][0])
                 if ascending
-                else -1
-                * (
-                    (self.data[row1][0] > self.data[row2][0])
-                    - (self.data[row1][0] < self.data[row2][0])
-                )
+                else -1 * ((self.data[row1][0] > self.data[row2][0]) - (self.data[row1][0] < self.data[row2][0]))
             )
-        else:
-            # 对于 'display' 和 'color'，我们不进行排序
-            return 0
+        # 对于 'display' 和 'color',我们不进行排序
+        return 0
 
     def DeleteRows(self, rows):
         # 删除行的实现

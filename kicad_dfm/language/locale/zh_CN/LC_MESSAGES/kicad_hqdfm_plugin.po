@@ -536,7 +536,7 @@ msgstr "过孔到表层"
 #~ msgid "Yes"
 #~ msgstr "是"
 
-#~ msgid " Fialed to save PCB file."
+#~ msgid " Failed to save PCB file."
 #~ msgstr " 未能保存PCB文件。"
 
 #~ msgid " Close this window before saving the PCB file. "

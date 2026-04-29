@@ -6,7 +6,6 @@
 .vscode/
 *.log
 
-
 certifi/
 certifi/*
 charset_normalizer/
@@ -17,3 +16,28 @@ requests/
 requests/*
 urllib3/
 urllib3/*
+
+# uv
+.uv/
+.venv/
+uv.lock
+
+# pytest
+.pytest_cache/
+
+# ruff
+.ruff_cache/
+
+# mypy
+.mypy_cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# mkdocs
+site/
+
+# coverage
+.coverage
+htmlcov/

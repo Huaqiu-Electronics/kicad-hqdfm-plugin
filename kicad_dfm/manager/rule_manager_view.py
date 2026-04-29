@@ -1,8 +1,7 @@
 import wx
-import pcbnew
-from kicad_dfm.picture import GetImagePath
-from kicad_dfm.manager.ui_rule_manager import UiRuleManager
 import wx.dataview as dv
+
+from kicad_dfm.manager.ui_rule_manager import UiRuleManager
 
 
 class RuleManagerView(UiRuleManager):
@@ -69,8 +68,8 @@ class RuleManagerView(UiRuleManager):
                 data = [
                     str(number),
                     _(item),
-                    _(list(result.keys())[0]),
-                    self.dispose_json_rule(result[list(result.keys())[0]]),
+                    _(next(iter(result.keys()))),
+                    self.dispose_json_rule(result[next(iter(result.keys()))]),
                     unit,
                 ]
                 self.rule_manager_list.AppendItem(data)
@@ -94,8 +93,7 @@ class RuleManagerView(UiRuleManager):
         if self.unit == 0:
             iu_value = float(rule_string) / 25.4
             return str(round(iu_value, 3))
-        elif self.unit == 5:
+        if self.unit == 5:
             mils_value = float(rule_string) * 39.37
             return str(round(mils_value, 3))
-        else:
-            return rule_string
+        return rule_string

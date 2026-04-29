@@ -1,13 +1,11 @@
-import os
-from pathlib import Path
 import logging
-import wx
+import os
+
 from pcbnew import (
+    DRILL_MARKS_NO_DRILL_SHAPE,
     EXCELLON_WRITER,
-    PCB_PLOT_PARAMS,
     PLOT_CONTROLLER,
     PLOT_FORMAT_GERBER,
-    ZONE_FILLER,
     B_Cu,
     B_Mask,
     B_Paste,
@@ -15,20 +13,17 @@ from pcbnew import (
     Cmts_User,
     Edge_Cuts,
     F_Cu,
+    F_Mask,
+    F_Paste,
+    F_SilkS,
     In1_Cu,
     In2_Cu,
     In3_Cu,
     In4_Cu,
-    In5_Cu,
-    In6_Cu,
-    F_Mask,
-    F_Paste,
-    F_SilkS,
-    GetBoard,
-    ToMM,
-    DRILL_MARKS_NO_DRILL_SHAPE,
 )
-from kicad_dfm.settings.version_utils import plot_text
+
+from kicad_dfm.constants import BOARD_LAYERS_4, BOARD_LAYERS_6, BOARD_LAYERS_DOUBLE, BOARD_LAYERS_SINGLE, GERBER_FORMAT
+
 
 class CreateFile:
     def __init__(self, _board):
@@ -41,7 +36,7 @@ class CreateFile:
         popt = pctl.GetPlotOptions()
         popt.SetOutputDirectory(gerber_dir)
 
-        popt.SetFormat(1)
+        popt.SetFormat(GERBER_FORMAT)
 
         popt.SetPlotValue(True)
         popt.SetPlotReference(True)
@@ -81,7 +76,7 @@ class CreateFile:
         if not layer_count:
             layer_count = self.board.GetCopperLayerCount()
 
-        if layer_count == 1:
+        if layer_count == BOARD_LAYERS_SINGLE:
             plot_plan = [
                 ("CuTop", F_Cu, "Top layer"),
                 ("SilkTop", F_SilkS, "Silk top"),
@@ -90,7 +85,7 @@ class CreateFile:
                 ("EdgeCuts", Edge_Cuts, "Edges"),
                 ("VScore", Cmts_User, "V score cut"),
             ]
-        elif layer_count == 2:
+        elif layer_count == BOARD_LAYERS_DOUBLE:
             plot_plan = [
                 ("CuTop", F_Cu, "Top layer"),
                 ("SilkTop", F_SilkS, "Silk top"),
@@ -103,7 +98,7 @@ class CreateFile:
                 ("EdgeCuts", Edge_Cuts, "Edges"),
                 ("VScore", Cmts_User, "V score cut"),
             ]
-        elif layer_count == 4:
+        elif layer_count == BOARD_LAYERS_4:
             plot_plan = [
                 ("CuTop", F_Cu, "Top layer"),
                 ("SilkTop", F_SilkS, "Silk top"),
@@ -118,7 +113,7 @@ class CreateFile:
                 ("EdgeCuts", Edge_Cuts, "Edges"),
                 ("VScore", Cmts_User, "V score cut"),
             ]
-        elif layer_count == 6:
+        elif layer_count == BOARD_LAYERS_6:
             plot_plan = [
                 ("CuTop", F_Cu, "Top layer"),
                 ("SilkTop", F_SilkS, "Silk top"),
@@ -137,26 +132,26 @@ class CreateFile:
             ]
 
         for layer_info in plot_plan:
-            self.logger.debug(f"Setting layer: {layer_info[1]}")
+            self.logger.debug("Setting layer: %s", layer_info[1])
             if layer_info[1] <= B_Cu:
                 popt.SetSkipPlotNPTH_Pads(True)
             else:
                 popt.SetSkipPlotNPTH_Pads(False)
             pctl.SetLayer(layer_info[1])
-            self.logger.debug(f"Opening plot file: {layer_info[0]}")
+            self.logger.debug("Opening plot file: %s", layer_info[0])
             if not pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2]):
-                self.logger.error(f"Failed to open plot file for {layer_info[2]}")
+                self.logger.error("Failed to open plot file for %s", layer_info[2])
                 continue
-            self.logger.debug(f"Plotting layer: {layer_info[2]}")
+            self.logger.debug("Plotting layer: %s", layer_info[2])
             try:
                 if not pctl.PlotLayer():
-                    self.logger.error(f"Error plotting {layer_info[2]}")
+                    self.logger.error("Error plotting %s", layer_info[2])
                 else:
-                    self.logger.info(f"Successfully plotted {layer_info[2]}")
-            except Exception as e:
-                self.logger.error(f"Exception occurred while plotting {layer_info[2]}: {e}")
+                    self.logger.info("Successfully plotted %s", layer_info[2])
+            except Exception:
+                self.logger.exception("Exception occurred while plotting %s", layer_info[2])
         pctl.ClosePlot()
-        
+
         #     pctl.OpenPlotfile(layer_info[0], PLOT_FORMAT_GERBER, layer_info[2])
         #     Plote = pctl.PlotLayer()
         #     if pctl.PlotLayer() is False:

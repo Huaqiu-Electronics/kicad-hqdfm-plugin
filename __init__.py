@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 try:
     PLUGIN_ROOT = os.path.dirname(os.path.abspath(__file__))

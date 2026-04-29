@@ -1,4 +1,3 @@
-import wx
 import wx.dataview as dv
 
 
@@ -7,6 +6,6 @@ class CustomRenderer(dv.DataViewCustomRenderer):
         super().__init__()
         self.color = color
 
-    def Render(self, rect, dc, state):
+    def Render(self, rect, dc, _state):
         dc.SetTextForeground(self.color)
         dc.DrawText(self.GetText(), rect.x, rect.y)

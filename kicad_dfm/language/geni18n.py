@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 This will generate the .pot and .mo files for the application domain and
 languages defined below.
@@ -17,22 +16,19 @@ file or to use the .pot to merge new translations into an existing language
 catalog.
 
 """
+
+import os
 import platform
 import subprocess
 import sys
-import os
-from constraint import CODE_TO_NAME, LANG_DOMAIN, DEFAULT_LANG
+
+from constraint import CODE_TO_NAME, DEFAULT_LANG, LANG_DOMAIN
 
 # we remove English as source code strings are in English
-supportedLang = []
-for code in CODE_TO_NAME:
-    if CODE_TO_NAME[code] != DEFAULT_LANG:
-        supportedLang.append(code)
+supportedLang = [code for code in CODE_TO_NAME if CODE_TO_NAME[code] != DEFAULT_LANG]
 
 
-appFolder = os.path.abspath(
-    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
-)
+appFolder = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
 m, s, _ = platform.python_version_tuple()
 
@@ -48,17 +44,8 @@ if os.name == "nt" and m == "3" and s == "8":
     # build command for pygettext
     gtOptions = "-a -d %s -o %s.pot -p %s %s"
 
-    tCmd = (
-        pyExe
-        + " "
-        + pyGettext
-        + " "
-        + (gtOptions % (LANG_DOMAIN, LANG_DOMAIN, outFolder, appFolder))
-    )
-    print("Generating the .pot file")
-    print("cmd: %s" % tCmd)
+    tCmd = pyExe + " " + pyGettext + " " + (gtOptions % (LANG_DOMAIN, LANG_DOMAIN, outFolder, appFolder))
     rCode = subprocess.call(tCmd)
-    print("return code: %s\n\n" % rCode)
 
     for tLang in supportedLang:
         # build command for msgfmt
@@ -68,10 +55,7 @@ if os.name == "nt" and m == "3" and s == "8":
         poFile = os.path.join(langDir, LANG_DOMAIN + ".po")
         tCmd = pyExe + " " + pyMsgfmt + " " + poFile
 
-        print("Generating the .mo file")
-        print("cmd: %s" % tCmd)
         rCode = subprocess.call(tCmd)
-        print("return code: %s\n\n" % rCode)
 else:
     from pythongettext.msgfmt import Msgfmt
 

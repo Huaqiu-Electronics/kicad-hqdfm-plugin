@@ -1,0 +1,146 @@
+[project]
+name = "kicad-hqdfm-plugin"
+version = "0.1.0"
+description = "One-click PCB design flaw analysis plugin for KiCad"
+requires-python = ">=3.10"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+exclude = [
+    "kicad_dfm/**/ui_*.py",
+]
+
+builtins = ["_"]
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "N",   # naming
+    "UP",  # pyupgrade
+    "S",   # bandit (security)
+    "B",   # flake8-bugbear
+    "C4",  # flake8-comprehensions
+    "RUF", # ruff-specific rules
+    "SIM", # flake8-simplify
+    "T20", # flake8-print
+    "RET", # flake8-return (consistent return statements)
+    "PIE", # flake8-pie (opinionated patterns)
+    "RSE", # flake8-raise (consistent raise statements)
+    "SLF", # flake8-self (no private member access)
+    "T10", # flake8-debugger (no breakpoint/pdb left in code)
+    "ISC", # implicit-string-concat
+    "ANN", # flake8-annotations (type annotations)
+    "ARG", # flake8-unused-arguments
+    "G",   # flake8-logging-format
+    "EM",  # flake8-errmsg
+    "INP", # flake8-no-pep420 (no implicit namespace packages)
+    "TRY", # tryceratops (try/except best practices)
+    "PERF", # perflint (performance)
+    "PT", # flake8-pytest-style
+    "FLY", # flynt (prefer f-strings)
+    "PGH", # pygrep-hooks
+]
+
+ignore = [
+    "S101",  # assert in tests (per-file-ignored)
+    "N802",  # KiCad API naming convention (e.g. GetBoard, GetLanguage)
+    "N803",  # KiCad-style argument names (e.g. parent, _board)
+    "N806",  # KiCad-style variable names in legacy code
+    "N815",  # KiCad mixedCase class attributes (e.g. m_Uuid)
+    "N999",  # repo root name contains a hyphen (KiCad plugin convention)
+    "S603",  # subprocess in geni18n.py (translation build utility)
+]
+[tool.ruff.lint.per-file-ignores]
+"kicad_dfm/language/geni18n.py" = ["N816"]
+"tests/pcbnew_stub.py" = ["N801", "S108"]
+"kicad_dfm/{__init__,__main__,plugin,_baseApp,_main,analysis,config,create_file,dfm_analysis,dfm_mainframe,helpers}.py" = ["ANN"]
+"kicad_dfm/child_frame/*.py" = ["ANN"]
+"kicad_dfm/dfm_maindialog/*.py" = ["ANN"]
+"kicad_dfm/hole_childframe/*.py" = ["ANN"]
+"kicad_dfm/language/*.py" = ["ANN"]
+"kicad_dfm/manager/*.py" = ["ANN"]
+"kicad_dfm/settings/{frame_setting,graphics_setting,kicad_setting,pcb_setting,setting_manager,single_plugin,timestamp,version_utils}.py" = ["ANN"]
+"kicad_dfm/utils/CustomRenderer.py" = ["ANN"]
+"kicad_dfm/picture/*.py" = ["ANN"]
+"kicad_dfm/models.py" = ["ANN401"]
+"tests/*.py" = ["ANN"]
+"tests/**/*.py" = ["ANN"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pyright]
+include = ["kicad_dfm/utils/pure.py", "tests"]
+exclude = ["**/ui_*.py", "**/node_modules"]
+pythonVersion = "3.10"
+typeCheckingMode = "basic"
+reportMissingTypeStubs = false
+reportMissingModuleSource = false
+reportMissingImports = false
+
+
+[tool.ty]
+[tool.ty.terminal]
+error-on-warning = false
+
+[tool.ty.rules]
+"unsupported-base" = "ignore"
+
+[tool.ty.src]
+include = [
+    "kicad_dfm/utils/pure.py",
+    "kicad_dfm/models.py",
+    "kicad_dfm/constants.py",
+    "kicad_dfm/__init__.py",
+    "kicad_dfm/config.py",
+    "kicad_dfm/settings/color_rule.py",
+    "kicad_dfm/settings/point_to_line_distance.py",
+    "tests/unit/test_pure.py",
+    "tests/unit/test_point_to_line_distance.py",
+    "tests/unit/test_point_to_line_distance_properties.py",
+]
+
+[tool.ty.analysis]
+allowed-unresolved-imports = [
+    "pytest.**",
+    "pydantic.**",
+    "tests.pcbnew_stub.**",
+]
+
+
+[tool.pytest.ini_options]
+testpaths = ["tests/unit", "tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+markers = [
+    "pure: tests that need NO external dependencies (no wx, no pcbnew)",
+    "requires_wx: tests that need wxPython installed",
+    "requires_stub: tests that need the pcbnew stub module",
+]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+]
+
+[tool.typos]
+default.extend-ignore-re = [
+    "\\b[A-Z]_[A-Za-z]+",
+    "\\bm_Uuid\\b",
+    "tht",
+    "THT",
+    "Alls",
+]
+
+[tool.typos.files]
+extend-exclude = [
+    "*.gif",
+    "*.png",
+    "*.jpg",
+    "*.mo",
+    "*.pot",
+    "GeoLite2-City.mmdb",
+]

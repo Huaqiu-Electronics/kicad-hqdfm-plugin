@@ -1,22 +1,46 @@
-import json
+from __future__ import annotations
 
-import re
-import wx
+import json
 import os
-import sys
+import re
 import time
-from . import config
-from kicad_dfm import GetFilePath
-from kicad_dfm.settings.timestamp import TimeStamp
-import logging
+
 import requests
+import wx
 from requests.exceptions import (
-    Timeout,
     ConnectionError,
     HTTPError,
-    SSLError,
-    RequestException,
+    Timeout,
 )
+
+from kicad_dfm import GetFilePath
+from kicad_dfm.constants import (
+    API_CODE_PENDING as _API_PENDING,
+)
+from kicad_dfm.constants import (
+    API_CODE_SUCCESS as _API_OK,
+)
+from kicad_dfm.constants import (
+    API_CODE_SUCCESS_ALT_200 as _API_OK_200,
+)
+from kicad_dfm.constants import (
+    API_CODE_SUCCESS_ALT_50000 as _API_OK_50000,
+)
+from kicad_dfm.constants import (
+    HTTP_CHUNK_SIZE,
+    HTTP_SLEEP_POLL_SEC,
+    HTTP_TIMEOUT_SEC,
+    PROGRESS_DONE,
+    PROGRESS_DOWNLOAD,
+    PROGRESS_MAX,
+    PROGRESS_POLL_CAP,
+    PROGRESS_POLL_START,
+    PROGRESS_POLL_STEP,
+    PROGRESS_START,
+    Colour,
+)
+
+from . import config
 
 
 class DfmAnalysis:
@@ -25,58 +49,50 @@ class DfmAnalysis:
 
     def guonei_download_dfm_file(self, zip_path, title_name):
         self.start_progress_bar()
-        url_path = open(zip_path, "rb")
-        files = {"file": ("gerber.zip", url_path, "application/zip", {"Expires": "0"})}
-        data = {"type": "kicad"}
-        url = "https://www.eda.cn/openapi/dfm/hqpcb/upfile"
+        with open(zip_path, "rb") as url_path:
+            files = {"file": ("gerber.zip", url_path, "application/zip", {"Expires": "0"})}
+            data = {"type": "kicad"}
+            url = "https://www.eda.cn/openapi/dfm/hqpcb/upfile"
 
-        response = self.api_request_interface(url, files, data)
+            response = self.api_request_interface(url, files, data)
 
         json_temp = response.json()
         if not json_temp:
-            self.report_part_search_error(
-                _("Failed to upload file. Please request again.")
-            )
-            return
+            self.report_part_search_error(_("Failed to upload file. Please request again."))
+            return None
         if json_temp["code"] != 2000:
-            self.report_part_search_error(
-                _("HTTP request error. Please request again.")
-            )
-            return
+            self.report_part_search_error(_("HTTP request error. Please request again."))
+            return None
         analyse_url = json_temp["data"]
         analyse_id = analyse_url.get("analyse_id", "")
         kicad_id = analyse_url.get("kicad_id", "")
         if analyse_id == "" or kicad_id == "":
             self.report_part_search_error(_("Not dfm data. Please request again."))
-            return
-        url_path.close()
+            return None
         if self.progress.WasCancelled():
             self.progress_dialog_close()
 
         id_url = "https://www.eda.cn/openapi/dfm/hqpcb/getParseResult"
         params = {"id": analyse_id, "kicadid": kicad_id}
-        filename = self.guonei_requset_dfm_analysis_file(
-            id_url, params, zip_path, title_name
-        )
+        filename = self.guonei_request_dfm_analysis_file(id_url, params, zip_path, title_name)
         self.progress_dialog_close()
         return filename
 
     def haiwai_download_dfm_file(self, zip_path, title_name):
         self.start_progress_bar()
-        url_path = open(zip_path, "rb")
-        files = {"file": ("gerber.zip", url_path, "application/zip", {"Expires": "0"})}
-        data = {
-            "region": "us",
-            "type": "dfm",
-            "bcount": "10",
-        }
-        url = "https://www.eda.cn/openapi/api/nextpcb/upfile/kiCadUpFile"
+        with open(zip_path, "rb") as url_path:
+            files = {"file": ("gerber.zip", url_path, "application/zip", {"Expires": "0"})}
+            data = {
+                "region": "us",
+                "type": "dfm",
+                "bcount": "10",
+            }
+            url = "https://www.eda.cn/openapi/api/nextpcb/upfile/kiCadUpFile"
 
-        response = self.api_request_interface(url, files, data)
+            response = self.api_request_interface(url, files, data)
         json_temp = response.json()
         if json_temp["status"] is False:
-            return
-        url_path.close()
+            return None
         if self.progress.WasCancelled():
             self.progress_dialog_close()
 
@@ -94,13 +110,11 @@ class DfmAnalysis:
             kicad_id = ret.group()
         if json_id == "" or kicad_id == "":
             self.report_part_search_error(_("Not dfm data. Please request again."))
-            return
+            return None
 
         id_url = "https://www.eda.cn/openapi/api/nextpcb/DfmView/getParseResult"
         params = {"id": json_id, "kicadid": kicad_id}
-        filename = self.haiwai_requset_dfm_analysis_file(
-            id_url, params, zip_path, title_name
-        )
+        filename = self.haiwai_request_dfm_analysis_file(id_url, params, zip_path, title_name)
         self.progress_dialog_close()
         return filename
 
@@ -108,52 +122,44 @@ class DfmAnalysis:
         self.progress = wx.ProgressDialog(
             _("Upload DFM analysis file"),
             _("Please wait"),
-            maximum=100,
-            style=wx.PD_APP_MODAL | wx.PD_CAN_ABORT | wx.PD_AUTO_HIDE,
+            maximum=PROGRESS_MAX,
         )
-        self.abort = False
-        # self.progress.Bind(wx.EVT_CLOSE, self.on_cancel)
-        self.progress.Update(5)
+        if self.progress:
+            self.progress.Update(PROGRESS_START)
 
     def progress_dialog_close(self):
-        self.progress.Update(100)
+        self.progress.Update(PROGRESS_DONE)
         self.progress.Destroy()
         self.progress = None
 
-    def haiwai_requset_dfm_analysis_file(self, id_url, params, zip_path, title_name):
-        number = 30
-        self.progress.SetTitle(_("Analytical phase"))
-        while 1:
-            if number < 90:
-                number += 2
+    def haiwai_request_dfm_analysis_file(self, id_url, params, zip_path, title_name):
+        number = PROGRESS_POLL_START
+        self.progress.SetTitle(self.language["DFM analysis in progress"])
+        while True:
+            if number < PROGRESS_POLL_CAP:
+                number += PROGRESS_POLL_STEP
             try:
-                json_file = requests.get(id_url, params=params, timeout=20  )
-                time.sleep(1.5)
-            except requests.exceptions.ConnectionError as e:
-                self.report_part_search_error(
-                    _("Network connection error. Please request again.")
-                )
+                json_file = requests.get(id_url, params=params, timeout=HTTP_TIMEOUT_SEC)
+                time.sleep(HTTP_SLEEP_POLL_SEC)
+            except requests.exceptions.ConnectionError:
+                self.report_part_search_error(_("Network connection error. Please request again."))
             file_path = json_file.json()
             self.progress.Update(number)
-            if (
-                file_path["code"] == 2000
-                or file_path["code"] == 200
-                or file_path["code"] == 50000
-            ):
+            if file_path["code"] in (_API_OK, _API_OK_200, _API_OK_50000):
                 break
-            if file_path["code"] != 22006:
+            if file_path["code"] != _API_PENDING:
                 break
 
             if self.progress.WasCancelled():
-                return
+                return None
 
-        if len(file_path["data"]) == 0:
+        if not file_path.get("data"):
             wx.MessageBox(
                 _("Request data error,please request again."),
                 _("Info"),
                 style=wx.ICON_INFORMATION,
             )
-            return
+            return None
 
         file_url = file_path["data"]["analyse_url"]
         filename = GetFilePath("temp.json")
@@ -173,43 +179,37 @@ class DfmAnalysis:
         if os.path.exists(zip_path):
             os.remove(zip_path)
         else:
-            return
+            return None
         return filename
 
-    def guonei_requset_dfm_analysis_file(self, id_url, params, zip_path, title_name):
+    def guonei_request_dfm_analysis_file(self, id_url, params, zip_path, title_name):
         number = 30
         self.progress.SetTitle(_("Analytical phase"))
-        while 1:
-            if number < 90:
-                number += 2
+        while True:
+            if number < PROGRESS_POLL_CAP:
+                number += PROGRESS_POLL_STEP
             try:
-                json_file = requests.post(id_url, params=params)
-                time.sleep(1.5)
-            except requests.exceptions.ConnectionError as e:
-                self.report_part_search_error(
-                    _("Network connection error. Please request again.")
-                )
+                json_file = requests.post(id_url, params=params, timeout=HTTP_TIMEOUT_SEC)
+                time.sleep(HTTP_SLEEP_POLL_SEC)
+            except requests.exceptions.ConnectionError:
+                self.report_part_search_error(_("Network connection error. Please request again."))
             file_path = json_file.json()
             self.progress.Update(number)
-            if (
-                file_path["code"] == 2000
-                or file_path["code"] == 200
-                or file_path["code"] == 50000
-            ):
+            if file_path["code"] in (_API_OK, _API_OK_200, _API_OK_50000):
                 break
-            if file_path["code"] != 22006:
+            if file_path["code"] != _API_PENDING:
                 break
 
             if self.progress.WasCancelled():
-                return
+                return None
 
-        if len(file_path["data"]) == 0:
+        if not file_path.get("data"):
             wx.MessageBox(
                 _("Request data error,please request again."),
                 _("Info"),
                 style=wx.ICON_INFORMATION,
             )
-            return
+            return None
 
         file_url = file_path["data"]["analyse_url"]
         filename = GetFilePath("temp.json")
@@ -229,40 +229,35 @@ class DfmAnalysis:
         if os.path.exists(zip_path):
             os.remove(zip_path)
         else:
-            return
+            return None
         return filename
 
     def download_file(self, url, filename):
-        with requests.get(url, stream=True,  timeout=20 ) as response:
-            response.raise_for_status()  # 检查请求是否成功
+        with requests.get(url, stream=True, timeout=HTTP_TIMEOUT_SEC) as response:
+            response.raise_for_status()
             with open(filename, "wb") as f:
-                for chunk in response.iter_content(chunk_size=8192):
+                for chunk in response.iter_content(chunk_size=HTTP_CHUNK_SIZE):
                     f.write(chunk)
 
     def api_request_interface(self, url, files, data):
         try:
             headers = {"Cookie": "JSESSIONID=107651F471ED81257ABB4BF1FF1E3150"}
-            response = requests.post(url, headers=headers, files=files, data=data)
+            response = requests.post(url, headers=headers, files=files, data=data, timeout=HTTP_TIMEOUT_SEC)
             response.raise_for_status()
-            self.progress.Update(20)
+            self.progress.Update(PROGRESS_DOWNLOAD)
             self.progress.SetTitle(_("Analysis file"))
-            return response
         except Timeout:
             self.report_part_search_error(_("HTTP request timed out."))
         except (ConnectionError, HTTPError) as e:
-            self.report_part_search_error(
-                _("HTTP error occurred: {error}").format(error=e)
-            )
+            self.report_part_search_error(_("HTTP error occurred: {error}").format(error=e))
         except Exception as e:
-            self.report_part_search_error(
-                _("An unexpected HTTP error occurred: {error}").format(error=e)
-            )
+            self.report_part_search_error(_("An unexpected HTTP error occurred: {error}").format(error=e))
+        else:
+            return response
 
     def report_part_search_error(self, reason):
         wx.MessageBox(
-            _("Failed to request dfm analysis data: \r\n{reasons}\r\n").format(
-                reasons=reason
-            ),
+            _("Failed to request dfm analysis data: \r\n{reasons}\r\n").format(reasons=reason),
             _("Error"),
             style=wx.ICON_ERROR,
         )
@@ -271,18 +266,18 @@ class DfmAnalysis:
     def analysis_json(self, json_path, transformation=False):
         json_result = {}
         if json_path is None or not isinstance(json_path, str):
-            return
-        with open(json_path, "r") as f:
+            return None
+        with open(json_path) as f:
             content = f.read().encode(encoding="utf-8")
             try:
                 data = json.loads(content)
-            except json.decoder.JSONDecodeError as e:
-                return
+            except json.decoder.JSONDecodeError:
+                return None
             try:
                 json.loads(content)
-            except ValueError as e:
+            except ValueError:
                 os.remove(json_path)
-                return
+                return None
             json_name = [
                 "Signal Integrity",
                 "Smallest Trace Width",
@@ -309,36 +304,25 @@ class DfmAnalysis:
                     json_result[name] = ""
                     continue
                 item_json = data[name]
-                if (
-                    name == "Drill Hole Density"
-                    or name == "Surface Finish Area"
-                    or name == "Test Point Count"
-                ):
+                if name == "Drill Hole Density" or name == "Surface Finish Area" or name == "Test Point Count":
                     item_result["display"] = item_json["display"]
                     json_result[name] = item_result
                     continue
                 if item_json["check"] is None:
-                    if (
-                        item_json["display"] is not None
-                        and "detected" not in item_json["display"]
-                    ):
+                    if item_json["display"] is not None and "detected" not in item_json["display"]:
                         item_result["display"] = None
                         json_result[name] = item_result
                     else:
                         json_result[name] = ""
                     continue
 
-                self.analysis_every_item(
-                    json_result, item_json, name, item_result, transformation
-                )
+                self.analysis_every_item(json_result, item_json, name, item_result, transformation)
         f.close()
         # with open("output.json", "w") as f:
         #     json.dump(json_result, f)
         return json_result
 
-    def analysis_every_item(
-        self, json_result, item_json, name, item_result, transformation
-    ):
+    def analysis_every_item(self, json_result, item_json, name, item_result, transformation):
         have_red = False
         have_yellow = False
         info_list = []
@@ -353,9 +337,8 @@ class DfmAnalysis:
                 dfm_show_layer = item_check["layer"]
             for item_info in item_check["info"]:
                 item = item_info["item"]
-                if transformation:
-                    if item.lower() in config.Language_chinese:
-                        item = config.Language_chinese[item.lower()]
+                if transformation and item.lower() in config.Language_chinese:
+                    item = config.Language_chinese[item.lower()]
                 rule = item_info["rule"]
                 rule_string1 = rule.partition(",")
                 rule_string2 = rule_string1[2].partition(",")
@@ -373,8 +356,7 @@ class DfmAnalysis:
                         if name == "Drill to Copper":
                             if item_layer == "Drl":
                                 continue
-                            else:
-                                item_layer_list.append(item_layer)
+                            item_layer_list.append(item_layer)
                         elif item_layer == "Drl":
                             item_layer_list.append("Top Layer")
                         else:
@@ -382,7 +364,7 @@ class DfmAnalysis:
                     # 设置显示的颜色
                     if rule_string2[0] == "-" or rule_string1[0] == "-":
                         have_red = True
-                        color = "red"
+                        color = Colour.RED
                     else:
                         if rule_string4[0] != "1":
                             rule1 = float(rule_string1[0])
@@ -399,24 +381,28 @@ class DfmAnalysis:
 
                         if rule1 < rule2:
                             if float(item_info_info["val"]) < rule1:
-                                color = "red"
+                                color = Colour.RED
                                 have_red = True
                             elif rule2 > float(item_info_info["val"]) > rule1:
-                                color = "gold"
+                                color = Colour.GOLD
                                 have_yellow = True
                             else:
-                                color = "black"
+                                color = Colour.BLACK
                         else:
                             if float(item_info_info["val"]) > rule1:
-                                color = "red"
+                                color = Colour.RED
                                 have_red = True
                             elif rule2 < float(item_info_info["val"]) < rule1:
-                                color = "gold"
+                                color = Colour.GOLD
                                 have_yellow = True
                             else:
-                                color = "black"
-                    result_list["result"] = self.anaylsis_dfm_type_info(
-                        item_info_info, item, rule, item_layer_list, color
+                                color = Colour.BLACK
+                    result_list["result"] = self.analysis_dfm_type_info(
+                        item_info_info,
+                        item,
+                        rule,
+                        item_layer_list,
+                        color,
                     )
                     info_list.append(result_list)
 
@@ -428,17 +414,15 @@ class DfmAnalysis:
             item_result["display"] = item_json["display"]
             item_result["display_inch"] = item_json["display_inch"]
         if have_red:
-            item_result["color"] = "red"
+            item_result["color"] = Colour.RED
         elif have_yellow:
-            item_result["color"] = "gold"
+            item_result["color"] = Colour.GOLD
         else:
-            item_result["color"] = "black"
+            item_result["color"] = Colour.BLACK
         json_result[name] = item_result
         return json_result
 
-    def anaylsis_dfm_type_info(
-        self, item_info_info, item, rule, item_layer_list, color
-    ):
+    def analysis_dfm_type_info(self, item_info_info, item, rule, item_layer_list, color):
         item_list = []
         if item_info_info.get("type") == 0:
             result_data = item_info_info.get("result") or []

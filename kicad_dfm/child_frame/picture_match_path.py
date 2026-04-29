@@ -1,4 +1,5 @@
 import wx
+
 from kicad_dfm.picture import GetImagePath
 
 
@@ -7,27 +8,27 @@ class _PictureMatchPath:
         json_string = string.lower()
         if json_string == "acute angle traces" or json_string == "锐角" or json_string == "acute angle traces ":
             return wx.Bitmap(self.GetImagePath("acute_angle" + language_string))
-        elif json_string == "unconnected traces" or json_string == "断头线":
+        if json_string == "unconnected traces" or json_string == "断头线":
             return wx.Bitmap(self.GetImagePath("breakage_line" + language_string))
-        elif json_string == "floating copper" or json_string == "孤立铜":
+        if json_string == "floating copper" or json_string == "孤立铜":
             return wx.Bitmap(self.GetImagePath("isolated_copper" + language_string))
 
-        elif json_string == "unconnected vias" or json_string == "无效过孔":
+        if json_string == "unconnected vias" or json_string == "无效过孔":
             return wx.Bitmap(self.GetImagePath("invalid_via" + language_string))
 
-        elif json_string == "smallest trace width" or json_string == "最小线宽":
+        if json_string == "smallest trace width" or json_string == "最小线宽":
             return wx.Bitmap(self.GetImagePath("line_width" + language_string))
 
-        elif json_string == "trace spacing" or json_string == "线到线":
+        if json_string == "trace spacing" or json_string == "线到线":
             return wx.Bitmap(self.GetImagePath("line2line" + language_string))
 
-        elif json_string == "trace-to-pad spacing" or json_string == "焊盘到线":
+        if json_string == "trace-to-pad spacing" or json_string == "焊盘到线":
             return wx.Bitmap(self.GetImagePath("pad2line" + language_string))
 
-        elif json_string == "pad spacing" or json_string == "焊盘间距":
+        if json_string == "pad spacing" or json_string == "焊盘间距":
             return wx.Bitmap(self.GetImagePath("pad2pad" + language_string))
 
-        elif (
+        if (
             json_string == "bga pads"
             or json_string == "short pads"
             or json_string == "long pads"
@@ -72,9 +73,7 @@ class _PictureMatchPath:
             return wx.Bitmap(self.GetImagePath("slot_length_width" + language_string))
 
         elif json_string == "largest blind/buried via" or json_string == "最大盲埋孔":
-            return wx.Bitmap(
-                self.GetImagePath("max_diameter_blind_buried" + language_string)
-            )
+            return wx.Bitmap(self.GetImagePath("max_diameter_blind_buried" + language_string))
 
         elif (
             json_string == "via annular ring"
@@ -137,6 +136,7 @@ class _PictureMatchPath:
 
         elif json_string == "blind/buried via spacing" or json_string == "盲埋孔距离":
             return wx.Bitmap(self.GetImagePath("blind2blind" + language_string))
+        return None
 
     def GetImagePath(self, bitmap_path):
         return GetImagePath(bitmap_path)

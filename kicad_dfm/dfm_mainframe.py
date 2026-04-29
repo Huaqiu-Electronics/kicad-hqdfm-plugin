@@ -1,34 +1,47 @@
+import json
+import logging
 import os
-import wx
 import re
 import shutil
-from decimal import Decimal
-import json
-import pcbnew
 import tempfile
-from pathlib import Path
-from . import config
-
-from .create_file import CreateFile
-from .child_frame.dfm_child_frame import DfmChildFrame
-from .picture import GetImagePath
-from .analysis import MinimumLineWidth
-from .dfm_analysis import DfmAnalysis
-from kicad_dfm import GetFilePath
-from kicad_dfm.dfm_maindialog.dfm_maindialog_view import DfmMaindailogView
-from kicad_dfm.settings.pcb_setting import PcbSetting
-from kicad_dfm.manager.rule_manager_view import RuleManagerView
-from kicad_dfm.settings.frame_setting import FRAME_SETTING
-from kicad_dfm.settings.single_plugin import SINGLE_PLUGIN
-from kicad_dfm.hole_childframe.hole_childframe_view import HoleChildFrameView
 import threading
-import requests
 import time
+from pathlib import Path
+
+import pcbnew
+import requests
+import wx
+
+from kicad_dfm import GetFilePath
+from kicad_dfm.constants import (
+    HTTP_MAX_RETRIES,
+    HTTP_SLEEP_RETRY_SEC,
+    HTTP_TIMEOUT_SEC,
+    MILS_PER_MM,
+    MM_PER_INCH,
+    PRECISION_STANDARD,
+    UNIT_INCH,
+    UNIT_MM,
+    WINDOW_DEFAULT_HEIGHT,
+    WINDOW_DEFAULT_WIDTH,
+)
+from kicad_dfm.dfm_maindialog.dfm_maindialog_view import DfmMaindailogView
+from kicad_dfm.hole_childframe.hole_childframe_view import HoleChildFrameView
+from kicad_dfm.manager.rule_manager_view import RuleManagerView
+from kicad_dfm.settings.pcb_setting import PcbSetting
+from kicad_dfm.settings.single_plugin import SINGLE_PLUGIN
+
+from . import config
+from .analysis import MinimumLineWidth
+from .child_frame.dfm_child_frame import DfmChildFrame
+from .create_file import CreateFile
+from .dfm_analysis import DfmAnalysis
+from .picture import GetImagePath
 
 
 class DfmMainframe(wx.Frame):
     def __init__(self, parent):
-        super(DfmMainframe, self).__init__(
+        super().__init__(
             parent,
             title=_("HQ DFM"),
             style=wx.DEFAULT_FRAME_STYLE & ~(wx.MAXIMIZE_BOX) | wx.TAB_TRAVERSAL,
@@ -39,9 +52,7 @@ class DfmMainframe(wx.Frame):
             self.control = config.Language_chinese
         elif pcbnew.GetLanguage() == "English":
             self.control = config.Language_english
-        elif pcbnew.GetLanguage() == "Default":
-            self.control = config.Language_chinese
-        elif pcbnew.GetLanguage() == "":
+        elif pcbnew.GetLanguage() == "Default" or pcbnew.GetLanguage() == "":
             self.control = config.Language_chinese
         else:
             wx.MessageBox(
@@ -56,17 +67,16 @@ class DfmMainframe(wx.Frame):
         try:
             pcbnew.GetBoard().GetFileName()
             self.board = pcbnew.GetBoard()
-        except Exception as e:
+        except Exception:
             for fp in (
                 "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
                 "C:\\Program Files\\demos\\kit-dev-coldfire-xilinx_5213\\kit-dev-coldfire-xilinx_5213.kicad_pcb",
                 "C:\\Program Files\\demos\\ESP32 Clone Devkit.kicad_pcb",
                 "C:\\Program Files\\demos\\Prj 1 - LED torch.kicad_pcb",
-
                 "C:\\Program Files\\demos\\video\\video.kicad_pcb",
                 # "C:\\Users\\haf\\Desktop\\常用文档\\tiny-scarab.kicad_pcb",
                 # "C:\\Program Files\\demos\\testDFM\\testDFM.kicad_pcb",
-                #"C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
+                # "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
                 # "C:\\Program Files\\demos\\ecc83\\ecc83-pp_v2.kicad_pcb",
                 # "C:\\Program Files\\demos\\N100.kicad_pcb",
                 # "C:\\Program Files\\demos\\flat_hierarchy\\flat_hierarchy.kicad_pcb",
@@ -94,78 +104,38 @@ class DfmMainframe(wx.Frame):
         self.sizer.Add(self.dfm_maindialog, 1, wx.EXPAND)
         self.SetSizer(self.sizer)
 
-        self.SetSize(wx.Size(490, 830))
+        self.SetSize(wx.Size(WINDOW_DEFAULT_WIDTH, WINDOW_DEFAULT_HEIGHT))
         self.Layout()
         self.Centre(wx.BOTH)
         self.init_data_view()
         threading.Thread(target=self.get_current_location).start()
 
-        self.dfm_maindialog.dfm_run_button.Bind(
-            wx.EVT_BUTTON, self.on_select_export_gerber
-        )
-        self.dfm_maindialog.rule_manager_button.Bind(
-            wx.EVT_BUTTON, self.show_rule_manager
-        )
-        self.dfm_maindialog.signal_integrity_button.Bind(
-            wx.EVT_BUTTON, self.show_signal_integrity_button
-        )
-        self.dfm_maindialog.smallest_trace_width_button.Bind(
-            wx.EVT_BUTTON, self.show_smallest_trace_width_button
-        )
-        self.dfm_maindialog.smallest_trace_spacing_button.Bind(
-            wx.EVT_BUTTON, self.show_smallest_trace_spacing_button
-        )
-        self.dfm_maindialog.pad_size_button.Bind(
-            wx.EVT_BUTTON, self.show_pad_size_button
-        )
-        self.dfm_maindialog.pad_spacing_button.Bind(
-            wx.EVT_BUTTON, self.show_pad_spacing_button
-        )
-        self.dfm_maindialog.hatched_copper_pour_button.Bind(
-            wx.EVT_BUTTON, self.show_hatched_copper_pour_button
-        )
-        self.dfm_maindialog.hole_diameter_button.Bind(
-            wx.EVT_BUTTON, self.show_hole_diameter_button
-        )
-        self.dfm_maindialog.ringHole_button.Bind(
-            wx.EVT_BUTTON, self.show_ringHole_button
-        )
-        self.dfm_maindialog.drill_hole_spacing_button.Bind(
-            wx.EVT_BUTTON, self.show_drill_hole_spacing_button
-        )
-        self.dfm_maindialog.drill_to_copper_button.Bind(
-            wx.EVT_BUTTON, self.show_drill_to_copper_button
-        )
-        self.dfm_maindialog.board_edge_clearance_button.Bind(
-            wx.EVT_BUTTON, self.show_board_edge_clearance_button
-        )
-        self.dfm_maindialog.special_drill_holes_button.Bind(
-            wx.EVT_BUTTON, self.show_special_drill_holes_button
-        )
-        self.dfm_maindialog.holes_on_smd_pads_button.Bind(
-            wx.EVT_BUTTON, self.show_holes_on_smd_pads_button
-        )
-        self.dfm_maindialog.missing_mask_openings_button.Bind(
-            wx.EVT_BUTTON, self.show_missing_mask_openings_button
-        )
-        self.dfm_maindialog.drill_hole_density_button.Bind(
-            wx.EVT_BUTTON, self.show_drill_hole_density_button
-        )
-        self.dfm_maindialog.surface_finish_area_button.Bind(
-            wx.EVT_BUTTON, self.show_surface_finish_area_button
-        )
-        self.dfm_maindialog.test_point_count_button.Bind(
-            wx.EVT_BUTTON, self.show_test_point_count_button
-        )
+        self.dfm_maindialog.dfm_run_button.Bind(wx.EVT_BUTTON, self.on_select_export_gerber)
+        self.dfm_maindialog.rule_manager_button.Bind(wx.EVT_BUTTON, self.show_rule_manager)
+        self.dfm_maindialog.signal_integrity_button.Bind(wx.EVT_BUTTON, self.show_signal_integrity_button)
+        self.dfm_maindialog.smallest_trace_width_button.Bind(wx.EVT_BUTTON, self.show_smallest_trace_width_button)
+        self.dfm_maindialog.smallest_trace_spacing_button.Bind(wx.EVT_BUTTON, self.show_smallest_trace_spacing_button)
+        self.dfm_maindialog.pad_size_button.Bind(wx.EVT_BUTTON, self.show_pad_size_button)
+        self.dfm_maindialog.pad_spacing_button.Bind(wx.EVT_BUTTON, self.show_pad_spacing_button)
+        self.dfm_maindialog.hatched_copper_pour_button.Bind(wx.EVT_BUTTON, self.show_hatched_copper_pour_button)
+        self.dfm_maindialog.hole_diameter_button.Bind(wx.EVT_BUTTON, self.show_hole_diameter_button)
+        self.dfm_maindialog.ringHole_button.Bind(wx.EVT_BUTTON, self.show_ringHole_button)
+        self.dfm_maindialog.drill_hole_spacing_button.Bind(wx.EVT_BUTTON, self.show_drill_hole_spacing_button)
+        self.dfm_maindialog.drill_to_copper_button.Bind(wx.EVT_BUTTON, self.show_drill_to_copper_button)
+        self.dfm_maindialog.board_edge_clearance_button.Bind(wx.EVT_BUTTON, self.show_board_edge_clearance_button)
+        self.dfm_maindialog.special_drill_holes_button.Bind(wx.EVT_BUTTON, self.show_special_drill_holes_button)
+        self.dfm_maindialog.holes_on_smd_pads_button.Bind(wx.EVT_BUTTON, self.show_holes_on_smd_pads_button)
+        self.dfm_maindialog.missing_mask_openings_button.Bind(wx.EVT_BUTTON, self.show_missing_mask_openings_button)
+        self.dfm_maindialog.drill_hole_density_button.Bind(wx.EVT_BUTTON, self.show_drill_hole_density_button)
+        self.dfm_maindialog.surface_finish_area_button.Bind(wx.EVT_BUTTON, self.show_surface_finish_area_button)
+        self.dfm_maindialog.test_point_count_button.Bind(wx.EVT_BUTTON, self.show_test_point_count_button)
         self.Bind(wx.EVT_CLOSE, self.on_close)
-
-
 
     def init_data_view(self):
         # record pcblayer and object visibility
         self.gal_set = self.board.GetVisibleLayers()
         self.ele_gal_set = self.board.GetVisibleElements()
-        
+
         self.json_analysis_map = {
             _("Layer Count"): {"display": "", "color": ""},
             _("Dimensions"): {"display": "", "color": ""},
@@ -193,15 +163,15 @@ class DfmMainframe(wx.Frame):
     def on_close(self, event):
         try:
             # Restore layer and object visibility
-            self.board.SetVisibleLayers( self.gal_set )
+            self.board.SetVisibleLayers(self.gal_set)
             self.board.SetVisibleElements(self.ele_gal_set)
             pcbnew.UpdateUserInterface()
-            
+
             for line in self.line_list:
                 self.board.Delete(line)
             SINGLE_PLUGIN.register_main_wind(None)
-        except Exception as e:
-            print(f"Error during close: {e}")
+        except Exception:
+            logging.getLogger(__name__).exception("Error during close")
         self.Destroy()
         event.Skip()
 
@@ -209,18 +179,14 @@ class DfmMainframe(wx.Frame):
         json_name = GetFilePath("temp.json")
         temp_filename = GetFilePath("name.json")
         if os.path.exists(temp_filename) and os.path.exists(json_name):
-            with open(temp_filename, "r") as f:
+            with open(temp_filename) as f:
                 content = f.read().encode(encoding="utf-8")
                 data = json.loads(content)
                 if data["name"] == self.name or "*" + data["name"] == self.name:
                     if pcbnew.GetLanguage() == "简体中文":
-                        self.analysis_result = self.dfm_analysis.analysis_json(
-                            json_name, True
-                        )
+                        self.analysis_result = self.dfm_analysis.analysis_json(json_name, True)
                     else:
-                        self.analysis_result = self.dfm_analysis.analysis_json(
-                            json_name
-                        )
+                        self.analysis_result = self.dfm_analysis.analysis_json(json_name)
                     if self.analysis_result == "":
                         wx.MessageBox(
                             _("File parsing failed. Please click dfm analysis."),
@@ -263,9 +229,7 @@ class DfmMainframe(wx.Frame):
             if win.GetTitle() in title_name:
                 win.Destroy()
 
-    def create_child_frame(
-        self, title, analysis_result, jsonfile_string, is_kicad_result=False
-    ):
+    def create_child_frame(self, title, analysis_result, jsonfile_string, is_kicad_result=False):
         try:
             wx.BeginBusyCursor()
             self.have_same_class_window()
@@ -285,71 +249,49 @@ class DfmMainframe(wx.Frame):
             wx.EndBusyCursor()
 
     # 每个查看按钮
-    def show_signal_integrity_button(self, event):
-        self.create_child_frame(
-            _("Signal Integrity"), self.analysis_result, "Signal Integrity"
-        )
+    def show_signal_integrity_button(self, _event):
+        self.create_child_frame(_("Signal Integrity"), self.analysis_result, "Signal Integrity")
 
-    def show_smallest_trace_width_button(self, event):
-        self.create_child_frame(
-            _("Smallest Trace Width"), self.kicad_result, "Smallest Trace Width", True
-        )
+    def show_smallest_trace_width_button(self, _event):
+        self.create_child_frame(_("Smallest Trace Width"), self.kicad_result, "Smallest Trace Width", True)
 
-    def show_smallest_trace_spacing_button(self, event):
-        self.create_child_frame(
-            _("Smallest Trace Spacing"), self.analysis_result, "Smallest Trace Spacing"
-        )
+    def show_smallest_trace_spacing_button(self, _event):
+        self.create_child_frame(_("Smallest Trace Spacing"), self.analysis_result, "Smallest Trace Spacing")
 
-    def show_pad_size_button(self, event):
+    def show_pad_size_button(self, _event):
         self.create_child_frame(_("Pad size"), self.kicad_result, "Pad size", True)
 
-    def show_pad_spacing_button(self, event):
+    def show_pad_spacing_button(self, _event):
         self.create_child_frame(_("Pad Spacing"), self.analysis_result, "Pad Spacing")
 
-    def show_hatched_copper_pour_button(self, event):
-        self.create_child_frame(
-            _("Hatched Copper Pour"), self.kicad_result, "Hatched Copper Pour", True
-        )
+    def show_hatched_copper_pour_button(self, _event):
+        self.create_child_frame(_("Hatched Copper Pour"), self.kicad_result, "Hatched Copper Pour", True)
 
-    def show_hole_diameter_button(self, event):
-        self.create_child_frame(
-            _("Hole Diameter"), self.analysis_result, "Hole Diameter"
-        )
+    def show_hole_diameter_button(self, _event):
+        self.create_child_frame(_("Hole Diameter"), self.analysis_result, "Hole Diameter")
 
-    def show_ringHole_button(self, event):
+    def show_ringHole_button(self, _event):
         self.create_child_frame(_("RingHole"), self.kicad_result, "RingHole")
 
-    def show_drill_hole_spacing_button(self, event):
-        self.create_child_frame(
-            _("Drill Hole Spacing"), self.analysis_result, "Drill Hole Spacing"
-        )
+    def show_drill_hole_spacing_button(self, _event):
+        self.create_child_frame(_("Drill Hole Spacing"), self.analysis_result, "Drill Hole Spacing")
 
-    def show_drill_to_copper_button(self, event):
-        self.create_child_frame(
-            _("Drill to Copper"), self.analysis_result, "Drill to Copper"
-        )
+    def show_drill_to_copper_button(self, _event):
+        self.create_child_frame(_("Drill to Copper"), self.analysis_result, "Drill to Copper")
 
-    def show_board_edge_clearance_button(self, event):
-        self.create_child_frame(
-            _("Copper-to-Board Edge"), self.analysis_result, "Copper-to-Board Edge"
-        )
+    def show_board_edge_clearance_button(self, _event):
+        self.create_child_frame(_("Copper-to-Board Edge"), self.analysis_result, "Copper-to-Board Edge")
 
-    def show_special_drill_holes_button(self, event):
-        self.create_child_frame(
-            _("Special Drill Holes"), self.analysis_result, "Special Drill Holes"
-        )
+    def show_special_drill_holes_button(self, _event):
+        self.create_child_frame(_("Special Drill Holes"), self.analysis_result, "Special Drill Holes")
 
-    def show_holes_on_smd_pads_button(self, event):
-        self.create_child_frame(
-            _("Holes on SMD Pads"), self.analysis_result, "Holes on SMD Pads"
-        )
+    def show_holes_on_smd_pads_button(self, _event):
+        self.create_child_frame(_("Holes on SMD Pads"), self.analysis_result, "Holes on SMD Pads")
 
-    def show_missing_mask_openings_button(self, event):
-        self.create_child_frame(
-            _("Missing SMask Openings"), self.analysis_result, "Missing SMask Openings"
-        )
+    def show_missing_mask_openings_button(self, _event):
+        self.create_child_frame(_("Missing SMask Openings"), self.analysis_result, "Missing SMask Openings")
 
-    def show_drill_hole_density_button(self, event):
+    def show_drill_hole_density_button(self, _event):
         self.have_same_class_window()
         drill_hole_data = self.analysis_result.get("Drill Hole Density", {})
         display_value = drill_hole_data.get("display", "") if isinstance(drill_hole_data, dict) else ""
@@ -364,15 +306,14 @@ class DfmMainframe(wx.Frame):
     def show_test_point_count_button(self, event):
         pass
 
-    def on_select_export_gerber(self, event):
-
+    def on_select_export_gerber(self, _event):
         fullfilepath = self.board.GetFileName()
         pcbnew.SaveBoard(fullfilepath, self.board)
 
         try:
             gerber_dir = os.path.join(self.path, "dfm", "gerber")
             Path(gerber_dir).mkdir(parents=True, exist_ok=True)
-        except (PermissionError, OSError) as e:
+        except (PermissionError, OSError):
             gerber_dir = os.path.join(tempfile.gettempdir(), "dfm", "gerber")
             Path(gerber_dir).mkdir(parents=True, exist_ok=True)
         creat_file = CreateFile(self.board)
@@ -389,13 +330,9 @@ class DfmMainframe(wx.Frame):
             #     archived, self.name
             # )
             if self.country == "CN" or self.country == "HK":
-                json_path = self.dfm_analysis.guonei_download_dfm_file(
-                    archived, self.name
-                )
+                json_path = self.dfm_analysis.guonei_download_dfm_file(archived, self.name)
             else:
-                json_path = self.dfm_analysis.haiwai_download_dfm_file(
-                    archived, self.name
-                )
+                json_path = self.dfm_analysis.haiwai_download_dfm_file(archived, self.name)
 
             if pcbnew.GetLanguage() == "English":
                 self.analysis_result = self.dfm_analysis.analysis_json(json_path)
@@ -409,9 +346,7 @@ class DfmMainframe(wx.Frame):
                     style=wx.ICON_INFORMATION,
                 )
             else:
-                wx.MessageDialog(
-                    self, _("Analysis success!"), _("Info"), wx.OK | wx.ICON_INFORMATION
-                ).ShowModal()
+                wx.MessageDialog(self, _("Analysis success!"), _("Info"), wx.OK | wx.ICON_INFORMATION).ShowModal()
 
         self.have_progress = False
         self.add_all_item()
@@ -421,28 +356,18 @@ class DfmMainframe(wx.Frame):
         if self.analysis_result == {}:
             return
         # kicad项 分析
-        minmum_line_width = MinimumLineWidth(self.control, self.board)
+        minimum_line_width = MinimumLineWidth(self.control, self.board)
 
-        self.kicad_result["Smallest Trace Width"] = minmum_line_width.get_line_width(
-            self.analysis_result
-        )
+        self.kicad_result["Smallest Trace Width"] = minimum_line_width.get_line_width(self.analysis_result)
 
-        self.kicad_result["RingHole"] = minmum_line_width.get_annular_ring(
-            self.analysis_result
-        )
-        self.kicad_result["Hatched Copper Pour"] = minmum_line_width.get_zone_attribute(
-            self.analysis_result
-        )
-        self.kicad_result["Pad size"] = minmum_line_width.get_pad(self.analysis_result)
+        self.kicad_result["RingHole"] = minimum_line_width.get_annular_ring(self.analysis_result)
+        self.kicad_result["Hatched Copper Pour"] = minimum_line_width.get_zone_attribute(self.analysis_result)
+        self.kicad_result["Pad size"] = minimum_line_width.get_pad(self.analysis_result)
 
         # 板子层数 # 板子尺寸
-        self.json_analysis_map[_("Layer Count")]["display"] = str(
-            self.board.GetCopperLayerCount()
-        )
+        self.json_analysis_map[_("Layer Count")]["display"] = str(self.board.GetCopperLayerCount())
         self.json_analysis_map[_("Layer Count")]["color"] = ""
-        self.json_analysis_map[_("Dimensions")]["display"] = str(
-            self.pcb_setting.get_layer_size()
-        )
+        self.json_analysis_map[_("Dimensions")]["display"] = str(self.pcb_setting.get_layer_size())
         self.json_analysis_map[_("Dimensions")]["color"] = ""
 
         # 电气信号
@@ -452,55 +377,39 @@ class DfmMainframe(wx.Frame):
         else:
             data = self.analysis_result["Signal Integrity"]["display"]
             if data is not None:
-                self.json_analysis_map[_("Signal Integrity")]["display"] = _(
-                    "Error(s) detected"
-                )
-                self.json_analysis_map[_("Signal Integrity")][
+                self.json_analysis_map[_("Signal Integrity")]["display"] = _("Error(s) detected")
+                self.json_analysis_map[_("Signal Integrity")]["color"] = self.analysis_result["Signal Integrity"][
                     "color"
-                ] = self.analysis_result["Signal Integrity"]["color"]
+                ]
             else:
-                self.json_analysis_map[_("Signal Integrity")][
-                    "display"
-                ] = self.item_result
+                self.json_analysis_map[_("Signal Integrity")]["display"] = self.item_result
                 self.json_analysis_map[_("Signal Integrity")]["color"] = ""
 
         # 最小线宽
         if self.kicad_result["Smallest Trace Width"] == "":
-            self.json_analysis_map[_("Smallest Trace Width")][
-                "display"
-            ] = self.item_result
+            self.json_analysis_map[_("Smallest Trace Width")]["display"] = self.item_result
             self.json_analysis_map[_("Smallest Trace Width")]["color"] = ""
         else:
             minimum_value = self.kicad_result["Smallest Trace Width"]["display"]
-            self.json_analysis_map[_("Smallest Trace Width")][
-                "display"
-            ] = self.unit_conversion(minimum_value)
-            self.json_analysis_map[_("Smallest Trace Width")][
+            self.json_analysis_map[_("Smallest Trace Width")]["display"] = self.unit_conversion(minimum_value)
+            self.json_analysis_map[_("Smallest Trace Width")]["color"] = self.kicad_result["Smallest Trace Width"][
                 "color"
-            ] = self.kicad_result["Smallest Trace Width"]["color"]
+            ]
 
         # 最小间距
         if self.analysis_result["Smallest Trace Spacing"] == "":
-            self.json_analysis_map[_("Smallest Trace Spacing")][
-                "display"
-            ] = self.item_result
+            self.json_analysis_map[_("Smallest Trace Spacing")]["display"] = self.item_result
             self.json_analysis_map[_("Smallest Trace Spacing")]["color"] = ""
         else:
-            data = self.get_data(
-                self.analysis_result["Smallest Trace Spacing"]["display"]
-            )
+            data = self.get_data(self.analysis_result["Smallest Trace Spacing"]["display"])
             if data is not None:
-                self.json_analysis_map[_("Smallest Trace Spacing")][
-                    "display"
-                ] = self.unit_conversion(data)
-                self.json_analysis_map[_("Smallest Trace Spacing")][
-                    "color"
-                ] = self.analysis_result["Smallest Trace Spacing"]["color"]
+                self.json_analysis_map[_("Smallest Trace Spacing")]["display"] = self.unit_conversion(data)
+                self.json_analysis_map[_("Smallest Trace Spacing")]["color"] = self.analysis_result[
+                    "Smallest Trace Spacing"
+                ]["color"]
 
             else:
-                self.json_analysis_map[_("Smallest Trace Spacing")][
-                    "display"
-                ] = self.item_result
+                self.json_analysis_map[_("Smallest Trace Spacing")]["display"] = self.item_result
                 self.json_analysis_map[_("Smallest Trace Spacing")]["color"] = ""
 
         # 最小焊盘
@@ -509,12 +418,8 @@ class DfmMainframe(wx.Frame):
             self.json_analysis_map[_("Pad size")]["color"] = ""
         else:
             minimum_value = self.kicad_result["Pad size"]["display"]
-            self.json_analysis_map[_("Pad size")]["display"] = self.unit_conversion(
-                minimum_value
-            )
-            self.json_analysis_map[_("Pad size")]["color"] = self.kicad_result[
-                "Pad size"
-            ]["color"]
+            self.json_analysis_map[_("Pad size")]["display"] = self.unit_conversion(minimum_value)
+            self.json_analysis_map[_("Pad size")]["color"] = self.kicad_result["Pad size"]["color"]
 
         # smd间距
         if self.analysis_result["Pad Spacing"] == "":
@@ -523,12 +428,8 @@ class DfmMainframe(wx.Frame):
         else:
             data = self.get_data(self.analysis_result["Pad Spacing"]["display"])
             if data is not None:
-                self.json_analysis_map[_("Pad Spacing")][
-                    "display"
-                ] = self.unit_conversion(data)
-                self.json_analysis_map[_("Pad Spacing")][
-                    "color"
-                ] = self.analysis_result["Pad Spacing"]["color"]
+                self.json_analysis_map[_("Pad Spacing")]["display"] = self.unit_conversion(data)
+                self.json_analysis_map[_("Pad Spacing")]["color"] = self.analysis_result["Pad Spacing"]["color"]
 
             else:
                 self.json_analysis_map[_("Pad Spacing")]["display"] = self.item_result
@@ -536,18 +437,14 @@ class DfmMainframe(wx.Frame):
 
         # 网格铺铜
         if self.kicad_result["Hatched Copper Pour"] == "":
-            self.json_analysis_map[_("Hatched Copper Pour")][
-                "display"
-            ] = self.item_result
+            self.json_analysis_map[_("Hatched Copper Pour")]["display"] = self.item_result
             self.json_analysis_map[_("Hatched Copper Pour")]["color"] = ""
         else:
             minimum_value = self.kicad_result["Hatched Copper Pour"]["display"]
-            self.json_analysis_map[_("Hatched Copper Pour")][
-                "display"
-            ] = self.unit_conversion(minimum_value)
-            self.json_analysis_map[_("Hatched Copper Pour")][
+            self.json_analysis_map[_("Hatched Copper Pour")]["display"] = self.unit_conversion(minimum_value)
+            self.json_analysis_map[_("Hatched Copper Pour")]["color"] = self.kicad_result["Hatched Copper Pour"][
                 "color"
-            ] = self.kicad_result["Hatched Copper Pour"]["color"]
+            ]
 
         # 孔大小
         if self.analysis_result["Hole Diameter"] == "":
@@ -556,12 +453,8 @@ class DfmMainframe(wx.Frame):
         else:
             data = self.get_data(self.analysis_result["Hole Diameter"]["display"])
             if data is not None:
-                self.json_analysis_map[_("Hole Diameter")][
-                    "display"
-                ] = self.unit_conversion(data)
-                self.json_analysis_map[_("Hole Diameter")][
-                    "color"
-                ] = self.analysis_result["Hole Diameter"]["color"]
+                self.json_analysis_map[_("Hole Diameter")]["display"] = self.unit_conversion(data)
+                self.json_analysis_map[_("Hole Diameter")]["color"] = self.analysis_result["Hole Diameter"]["color"]
 
             else:
                 self.json_analysis_map[_("Hole Diameter")]["display"] = self.item_result
@@ -573,32 +466,22 @@ class DfmMainframe(wx.Frame):
             self.json_analysis_map[_("RingHole")]["color"] = ""
         else:
             minimum_value = self.kicad_result["RingHole"]["display"]
-            self.json_analysis_map[_("RingHole")]["display"] = self.unit_conversion(
-                minimum_value
-            )
-            self.json_analysis_map[_("RingHole")]["color"] = self.kicad_result[
-                "RingHole"
-            ]["color"]
+            self.json_analysis_map[_("RingHole")]["display"] = self.unit_conversion(minimum_value)
+            self.json_analysis_map[_("RingHole")]["color"] = self.kicad_result["RingHole"]["color"]
 
         # 孔到孔
         if self.analysis_result["Drill Hole Spacing"] == "":
-            self.json_analysis_map[_("Drill Hole Spacing")][
-                "display"
-            ] = self.item_result
+            self.json_analysis_map[_("Drill Hole Spacing")]["display"] = self.item_result
             self.json_analysis_map[_("Drill Hole Spacing")]["color"] = ""
         else:
             data = self.get_data(self.analysis_result["Drill Hole Spacing"]["display"])
             if data is not None:
-                self.json_analysis_map[_("Drill Hole Spacing")][
-                    "display"
-                ] = self.unit_conversion(data)
-                self.json_analysis_map[_("Drill Hole Spacing")][
+                self.json_analysis_map[_("Drill Hole Spacing")]["display"] = self.unit_conversion(data)
+                self.json_analysis_map[_("Drill Hole Spacing")]["color"] = self.analysis_result["Drill Hole Spacing"][
                     "color"
-                ] = self.analysis_result["Drill Hole Spacing"]["color"]
+                ]
             else:
-                self.json_analysis_map[_("Drill Hole Spacing")][
-                    "display"
-                ] = self.item_result
+                self.json_analysis_map[_("Drill Hole Spacing")]["display"] = self.item_result
                 self.json_analysis_map[_("Drill Hole Spacing")]["color"] = ""
 
         # 孔到线
@@ -608,60 +491,40 @@ class DfmMainframe(wx.Frame):
         else:
             data = self.get_data(self.analysis_result["Drill to Copper"]["display"])
             if data is not None:
-                self.json_analysis_map[_("Drill to Copper")][
-                    "display"
-                ] = self.unit_conversion(data)
-                self.json_analysis_map[_("Drill to Copper")][
-                    "color"
-                ] = self.analysis_result["Drill to Copper"]["color"]
+                self.json_analysis_map[_("Drill to Copper")]["display"] = self.unit_conversion(data)
+                self.json_analysis_map[_("Drill to Copper")]["color"] = self.analysis_result["Drill to Copper"]["color"]
             else:
-                self.json_analysis_map[_("Drill to Copper")][
-                    "display"
-                ] = self.item_result
+                self.json_analysis_map[_("Drill to Copper")]["display"] = self.item_result
                 self.json_analysis_map[_("Drill to Copper")]["color"] = ""
 
         # 板边距离
         if self.analysis_result["Copper-to-Board Edge"] == "":
-            self.json_analysis_map[_("Copper-to-Board Edge")][
-                "display"
-            ] = self.item_result
+            self.json_analysis_map[_("Copper-to-Board Edge")]["display"] = self.item_result
             self.json_analysis_map[_("Copper-to-Board Edge")]["color"] = ""
         else:
-            data = self.get_data(
-                self.analysis_result["Copper-to-Board Edge"]["display"]
-            )
+            data = self.get_data(self.analysis_result["Copper-to-Board Edge"]["display"])
             if data is not None:
-                self.json_analysis_map[_("Copper-to-Board Edge")][
-                    "display"
-                ] = self.unit_conversion(data)
-                self.json_analysis_map[_("Copper-to-Board Edge")][
-                    "color"
-                ] = self.analysis_result["Copper-to-Board Edge"]["color"]
+                self.json_analysis_map[_("Copper-to-Board Edge")]["display"] = self.unit_conversion(data)
+                self.json_analysis_map[_("Copper-to-Board Edge")]["color"] = self.analysis_result[
+                    "Copper-to-Board Edge"
+                ]["color"]
             else:
-                self.json_analysis_map[_("Copper-to-Board Edge")][
-                    "display"
-                ] = self.item_result
+                self.json_analysis_map[_("Copper-to-Board Edge")]["display"] = self.item_result
                 self.json_analysis_map[_("Copper-to-Board Edge")]["color"] = ""
 
         # 特殊孔
         if self.analysis_result["Special Drill Holes"] == "":
-            self.json_analysis_map[_("Special Drill Holes")][
-                "display"
-            ] = self.item_result
+            self.json_analysis_map[_("Special Drill Holes")]["display"] = self.item_result
             self.json_analysis_map[_("Special Drill Holes")]["color"] = ""
         else:
             data = self.get_data(self.analysis_result["Special Drill Holes"]["display"])
             if data is not None:
-                self.json_analysis_map[_("Special Drill Holes")][
-                    "display"
-                ] = self.unit_conversion(data)
-                self.json_analysis_map[_("Special Drill Holes")][
+                self.json_analysis_map[_("Special Drill Holes")]["display"] = self.unit_conversion(data)
+                self.json_analysis_map[_("Special Drill Holes")]["color"] = self.analysis_result["Special Drill Holes"][
                     "color"
-                ] = self.analysis_result["Special Drill Holes"]["color"]
+                ]
             else:
-                self.json_analysis_map[_("Special Drill Holes")][
-                    "display"
-                ] = self.item_result
+                self.json_analysis_map[_("Special Drill Holes")]["display"] = self.item_result
                 self.json_analysis_map[_("Special Drill Holes")]["color"] = ""
 
         # 孔上焊盘
@@ -672,60 +535,46 @@ class DfmMainframe(wx.Frame):
             data = self.analysis_result["Holes on SMD Pads"]["display"]
             if data is not None:
                 self.json_analysis_map[_("Holes on SMD Pads")]["display"] = str(data)
-                self.json_analysis_map[_("Holes on SMD Pads")][
+                self.json_analysis_map[_("Holes on SMD Pads")]["color"] = self.analysis_result["Holes on SMD Pads"][
                     "color"
-                ] = self.analysis_result["Holes on SMD Pads"]["color"]
+                ]
             else:
-                self.json_analysis_map[_("Holes on SMD Pads")][
-                    "display"
-                ] = self.item_result
+                self.json_analysis_map[_("Holes on SMD Pads")]["display"] = self.item_result
                 self.json_analysis_map[_("Holes on SMD Pads")]["color"] = ""
 
             # 阻焊开窗
         if self.analysis_result["Missing SMask Openings"] == "":
-            self.json_analysis_map[_("Missing SMask Openings")][
-                "display"
-            ] = self.item_result
+            self.json_analysis_map[_("Missing SMask Openings")]["display"] = self.item_result
             self.json_analysis_map[_("Missing SMask Openings")]["color"] = ""
         else:
-            data = self.get_data(
-                self.analysis_result["Missing SMask Openings"]["display"]
-            )
+            data = self.get_data(self.analysis_result["Missing SMask Openings"]["display"])
             if data is not None:
-                self.json_analysis_map[_("Missing SMask Openings")]["display"] = str(
-                    data
-                )
-                self.json_analysis_map[_("Missing SMask Openings")][
-                    "color"
-                ] = self.analysis_result["Missing SMask Openings"]["color"]
+                self.json_analysis_map[_("Missing SMask Openings")]["display"] = str(data)
+                self.json_analysis_map[_("Missing SMask Openings")]["color"] = self.analysis_result[
+                    "Missing SMask Openings"
+                ]["color"]
 
             else:
-                self.json_analysis_map[_("Missing SMask Openings")][
-                    "display"
-                ] = self.item_result
+                self.json_analysis_map[_("Missing SMask Openings")]["display"] = self.item_result
                 self.json_analysis_map[_("Missing SMask Openings")]["color"] = ""
 
         # 孔密度
         if self.analysis_result["Drill Hole Density"] == "":
-            self.json_analysis_map[_("Drill Hole Density")][
-                "display"
-            ] = self.item_result
+            self.json_analysis_map[_("Drill Hole Density")]["display"] = self.item_result
             self.json_analysis_map[_("Drill Hole Density")]["color"] = ""
         else:
             self.json_analysis_map[_("Drill Hole Density")]["display"] = str(
-                self.analysis_result["Drill Hole Density"]["display"]
+                self.analysis_result["Drill Hole Density"]["display"],
             )
             self.json_analysis_map[_("Drill Hole Density")]["color"] = ""
 
             # 沉金面积
         if self.analysis_result["Surface Finish Area"] == "":
-            self.json_analysis_map[_("Surface Finish Area")][
-                "display"
-            ] = self.item_result
+            self.json_analysis_map[_("Surface Finish Area")]["display"] = self.item_result
             self.json_analysis_map[_("Surface Finish Area")]["color"] = ""
         else:
             self.json_analysis_map[_("Surface Finish Area")]["display"] = str(
-                self.analysis_result["Surface Finish Area"]["display"]
+                self.analysis_result["Surface Finish Area"]["display"],
             )
             self.json_analysis_map[_("Surface Finish Area")]["color"] = ""
 
@@ -735,7 +584,7 @@ class DfmMainframe(wx.Frame):
             self.json_analysis_map[_("Test Point Count")]["color"] = ""
         else:
             self.json_analysis_map[_("Test Point Count")]["display"] = str(
-                self.analysis_result["Test Point Count"]["display"]
+                self.analysis_result["Test Point Count"]["display"],
             )
             self.json_analysis_map[_("Test Point Count")]["color"] = ""
 
@@ -750,26 +599,23 @@ class DfmMainframe(wx.Frame):
         if ret is not None:
             result = ret.group()
             return float(result)
+        return None
 
     # 单位转换
     def unit_conversion(self, str_value):
-        if self.unit == 0:
-            iu_value = float(str_value) / 25.4
-            return str(round(iu_value, 3)) + "inch"
-        elif self.unit == 5:
-            mils_value = float(str_value) * 39.37
-            return str(round(mils_value, 3)) + "mils"
-        else:
-            return str(round(float(str_value), 3)) + "mm"
+        if self.unit == UNIT_MM:
+            iu_value = float(str_value) / MM_PER_INCH
+            return str(round(iu_value, PRECISION_STANDARD)) + "inch"
+        if self.unit == UNIT_INCH:
+            mils_value = float(str_value) * MILS_PER_MM
+            return str(round(mils_value, PRECISION_STANDARD)) + "mils"
+        return str(round(float(str_value), PRECISION_STANDARD)) + "mm"
 
-    def show_rule_manager(self, event):
+    def show_rule_manager(self, _event):
         rule_item = {}
         item_size = 0
         for item in self.analysis_result:
-            if (
-                self.analysis_result[item] != ""
-                and "check" in self.analysis_result[item]
-            ):
+            if self.analysis_result[item] != "" and "check" in self.analysis_result[item]:
                 rule_item[item] = []
                 for check in self.analysis_result[item]["check"]:
                     rule_result = {}
@@ -786,16 +632,15 @@ class DfmMainframe(wx.Frame):
     def get_current_location(self):
         try:
             attempts = 0
-            max_attempts = 5
-            while attempts < max_attempts:
-                response = requests.get("https://ipinfo.io/json")
+            while attempts < HTTP_MAX_RETRIES:
+                response = requests.get("https://ipinfo.io/json", timeout=HTTP_TIMEOUT_SEC)
                 if response.status_code == 200:
                     location = response.json()
                     if location:
                         self.country = location.get("country", "None")
                     return self.country
-                time.sleep(1)
+                time.sleep(HTTP_SLEEP_RETRY_SEC)
                 attempts += 1
-        except Exception as e:
-            print(f"Error fetching location: {e}")
+        except Exception:
+            logging.getLogger(__name__).exception("Error fetching location")
         return None
