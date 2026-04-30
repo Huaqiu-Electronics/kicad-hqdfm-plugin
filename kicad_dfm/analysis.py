@@ -1,5 +1,5 @@
 import pcbnew
-import wx
+
 from kicad_dfm.settings.color_rule import ColorRule
 
 
@@ -225,10 +225,7 @@ class MinimumLineWidth:
         have_red = False
         have_yellow = False
         smallest_trace = analysis_result.get("Smallest Trace Width", {})
-        if (
-            smallest_trace == ""
-            or smallest_trace.get("check") is None
-        ):
+        if smallest_trace == "" or smallest_trace.get("check") is None:
             return ""
         for item in self.board.GetTracks():  # Can be VIA or TRACK
             if type(item) is pcbnew.PCB_TRACK:
