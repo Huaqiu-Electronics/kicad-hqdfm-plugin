@@ -452,24 +452,24 @@ class DfmAnalysis:
                 item_info_list["color"] = color
                 if item_info_info_result["et"] == 0:
                     item_info_list["et"] = item_info_info_result["et"]
-                    item_info_list["sx"] = item_info_info_result["coord"]["spt"]["x"]
-                    item_info_list["sy"] = item_info_info_result["coord"]["spt"]["y"]
-                    item_info_list["ex"] = item_info_info_result["coord"]["ept"]["x"]
-                    item_info_list["ey"] = item_info_info_result["coord"]["ept"]["y"]
+                    item_info_list["sx"] = item_info_info_result["coord"]["sx"]
+                    item_info_list["sy"] = item_info_info_result["coord"]["sy"]
+                    item_info_list["ex"] = item_info_info_result["coord"]["ex"]
+                    item_info_list["ey"] = item_info_info_result["coord"]["ey"]
                     item_list.append(item_info_list)
                 elif item_info_info_result["et"] == 1:
                     item_info_list["et"] = item_info_info_result["et"]
-                    item_info_list["sx"] = item_info_info_result["coord"]["spt"]["x"]
-                    item_info_list["sy"] = item_info_info_result["coord"]["spt"]["y"]
-                    item_info_list["ex"] = item_info_info_result["coord"]["ept"]["x"]
-                    item_info_list["ey"] = item_info_info_result["coord"]["ept"]["y"]
-                    item_info_list["cx"] = item_info_info_result["coord"]["cpt"]["x"]
-                    item_info_list["cy"] = item_info_info_result["coord"]["cpt"]["y"]
+                    item_info_list["sx"] = item_info_info_result["coord"]["sx"]
+                    item_info_list["sy"] = item_info_info_result["coord"]["sy"]
+                    item_info_list["ex"] = item_info_info_result["coord"]["ex"]
+                    item_info_list["ey"] = item_info_info_result["coord"]["ey"]
+                    item_info_list["cx"] = item_info_info_result["coord"]["cx"]
+                    item_info_list["cy"] = item_info_info_result["coord"]["cy"]
                     item_list.append(item_info_list)
                 else:
                     item_info_list["et"] = item_info_info_result["et"]
-                    item_info_list["cx"] = item_info_info_result["coord"]["cpt"]["x"]
-                    item_info_list["cy"] = item_info_info_result["coord"]["cpt"]["y"]
+                    item_info_list["cx"] = item_info_info_result["coord"]["cx"]
+                    item_info_list["cy"] = item_info_info_result["coord"]["cy"]
                     item_list.append(item_info_list)
         elif item_info_info["type"] == 2:
             item_info_list = {}
@@ -480,10 +480,10 @@ class DfmAnalysis:
             item_info_list["type"] = 0
             item_info_list["type"] = 2
             item_info_list["color"] = color
-            item_info_list["sx"] = item_info_info["result"]["coord"]["spt"]["x"]
-            item_info_list["ex"] = item_info_info["result"]["coord"]["ept"]["x"]
-            item_info_list["sy"] = item_info_info["result"]["coord"]["spt"]["y"]
-            item_info_list["ey"] = item_info_info["result"]["coord"]["ept"]["y"]
+            item_info_list["sx"] = item_info_info["result"]["coord"]["sx"]
+            item_info_list["ex"] = item_info_info["result"]["coord"]["ex"]
+            item_info_list["sy"] = item_info_info["result"]["coord"]["sy"]
+            item_info_list["ey"] = item_info_info["result"]["coord"]["ey"]
             item_list.append(item_info_list)
         else:
             item_info_list = {}
