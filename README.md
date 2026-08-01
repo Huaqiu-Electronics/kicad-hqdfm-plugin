@@ -4,6 +4,10 @@
     English |<a href="README_CN.md">中文<a/>
 </p>
 
+[![CI](https://github.com/hafzhang/kicad-hqdfm-plugin/actions/workflows/ci.yml/badge.svg)](https://github.com/hafzhang/kicad-hqdfm-plugin/actions/workflows/ci.yml)
+[![Python](https://img.shields.io/badge/python-3.10%20|%203.11%20|%203.12-blue)](pyproject.toml)
+[![Code style](https://img.shields.io/badge/code%20style-ruff-000000)](pyproject.toml)
+
 ### Implementing One-Click PCB Design Flaw Analysis with HQ DFM in KiCad
 
 The HQ DFM plugin will assist you in:

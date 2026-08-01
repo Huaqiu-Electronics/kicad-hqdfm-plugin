@@ -1,29 +1,25 @@
-from .constraint import CODE_TO_NAME, ENGLISH, DEFAULT_LANG, LANG_DOMAIN
+from __future__ import annotations
 
-try:
-    from wx import LANGUAGE_JAPANESE_JAPAN
-except:
-    CODE_TO_NAME = {"en": "English", "zh_CN": "Chinese"}
+from typing import Any
 
 
-def get_supported_language():
+def get_supported_language() -> tuple[Any, ...]:
     import wx
 
     try:
-        # NOTE - LANGUAGE_JAPANESE_JAPAN is not available until Kicad 6.0
         return (
             wx.LANGUAGE_ENGLISH,
             wx.LANGUAGE_JAPANESE_JAPAN,
             wx.LANGUAGE_CHINESE_SIMPLIFIED,
         )
-    except:
+    except AttributeError:
         return (
             wx.LANGUAGE_ENGLISH,
             wx.LANGUAGE_CHINESE_SIMPLIFIED,
         )
 
 
-def code_to_wx():
+def code_to_wx() -> dict[str, Any]:
     import wx
 
     try:
@@ -32,17 +28,15 @@ def code_to_wx():
             "ja": wx.LANGUAGE_JAPANESE_JAPAN,
             "zh_CN": wx.LANGUAGE_CHINESE_SIMPLIFIED,
         }
-    except:
+    except AttributeError:
         return {
             "en": wx.LANGUAGE_ENGLISH,
             "zh_CN": wx.LANGUAGE_CHINESE_SIMPLIFIED,
         }
 
 
-def fool_translation():
-    # Just for triggering the gettext
+def fool_translation() -> list[Any]:
     import wx
 
     _ = wx.GetTranslation
-    TRANSLATION = [_("English"), _("Japanese"), _("Chinese")]
-    return TRANSLATION
+    return [_("English"), _("Japanese"), _("Chinese")]

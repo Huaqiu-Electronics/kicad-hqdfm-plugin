@@ -1,7 +1,7 @@
-import sys
+import platform
+
 import wx
 import wx.dataview as dv
-import platform
 
 # ----------------------------------------------------------------------
 
@@ -68,10 +68,8 @@ class MyCustomRenderer(dv.DataViewCustomRenderer):
         return True
 
     def CreateEditorCtrl(self, parent, labelRect, value):
-        self.log.write("CreateEditorCtrl: %s" % labelRect)
-        ctrl = wx.TextCtrl(
-            parent, value=value, pos=labelRect.Position, size=labelRect.Size
-        )
+        self.log.write(f"CreateEditorCtrl: {labelRect}")
+        ctrl = wx.TextCtrl(parent, value=value, pos=labelRect.Position, size=labelRect.Size)
 
         # select the text and put the caret at the end
         ctrl.SetInsertionPointEnd()
@@ -80,7 +78,7 @@ class MyCustomRenderer(dv.DataViewCustomRenderer):
         return ctrl
 
     def GetValueFromEditorCtrl(self, editor):
-        self.log.write("GetValueFromEditorCtrl: %s" % editor)
+        self.log.write(f"GetValueFromEditorCtrl: {editor}")
         value = editor.GetValue()
         return True, value
 
@@ -89,10 +87,10 @@ class MyCustomRenderer(dv.DataViewCustomRenderer):
     # double-clicked on an item.  Implementing them in your renderer
     # is optional.
 
-    def LeftClick(self, pos, cellRect, model, item, col):
+    def LeftClick(self, _pos, _cellRect, _model, _item, _col):
         self.log.write("LeftClick")
         return False
 
-    def Activate(self, cellRect, model, item, col):
+    def Activate(self, _cellRect, _model, _item, _col):
         self.log.write("Activate")
         return False

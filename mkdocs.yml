@@ -1,0 +1,30 @@
+site_name: kicad-hqdfm-plugin
+site_description: One-click PCB design flaw analysis plugin for KiCad
+repo_url: https://github.com/hafzhang/kicad-hqdfm-plugin
+edit_uri: blob/main/docs/
+
+theme:
+  name: material
+  palette:
+    primary: indigo
+  features:
+    - content.code.copy
+
+nav:
+  - Home: index.md
+  - Development: development.md
+  - API Reference:
+    - Constants: api/constants.md
+    - Models: api/models.md
+    - Pure utilities: api/pure.md
+    - Analysis engine: api/analysis.md
+    - Colour rules: api/color_rule.md
+    - Helpers: api/helpers.md
+    - pcbnew stub: api/pcbnew_stub.md
+
+plugins:
+  - search
+
+markdown_extensions:
+  - pymdownx.highlight
+  - pymdownx.superfences

@@ -1,9 +1,17 @@
-import wx
 import sys
-from kicad_dfm.dfm_maindialog.ui_dfm_maindialog import UiDfmMaindialog
+
+import wx
 import wx.dataview as dv
+
+from kicad_dfm.constants import COL_INDEX_DISPLAY, COL_INDEX_ITEM, COL_WIDTH_DISPLAY_AUTO, COL_WIDTH_ITEM
 from kicad_dfm.dfm_maindialog.dfm_maindialog_model import DfmMaindialogModel
+from kicad_dfm.dfm_maindialog.ui_dfm_maindialog import UiDfmMaindialog
 from kicad_dfm.utils.CustomRenderer import MyCustomRenderer
+
+COLUMNS = [
+    ("Item", COL_INDEX_ITEM, COL_WIDTH_ITEM),
+    ("display", COL_INDEX_DISPLAY, COL_WIDTH_DISPLAY_AUTO),
+]
 
 
 class DfmMaindailogView(UiDfmMaindialog):
@@ -14,7 +22,7 @@ class DfmMaindailogView(UiDfmMaindialog):
     ):
         super().__init__(parent)
         self.log = sys.stdout
-        for title, col, width in [("Item", 0, 170), ("display", 1, -1)]:
+        for title, col, width in COLUMNS:
             renderer = MyCustomRenderer(self.log, mode=dv.DATAVIEW_CELL_ACTIVATABLE)
             column = dv.DataViewColumn(title, renderer, col, width=width)
             column.Alignment = wx.ALIGN_CENTER_HORIZONTAL

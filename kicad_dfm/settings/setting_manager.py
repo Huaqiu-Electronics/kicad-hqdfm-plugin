@@ -1,7 +1,11 @@
-import wx
+from __future__ import annotations
+
 import os
-from .kicad_setting import KiCadSetting
+
+import wx
 import wx.lib.newevent as ne
+
+from .kicad_setting import KiCadSetting
 
 LocaleChangeEvent, EVT_LOCALE_CHANGE = ne.NewCommandEvent()
 
@@ -73,7 +77,7 @@ class _SettingManager(wx.EvtHandler):
     def get_language(self) -> int:
         return self.app_conf.ReadInt(LANGUAGE)
 
-    def set_window_size(self, s: "tuple[int,int]"):
+    def set_window_size(self, s: tuple[int, int]):
         self.app_conf.WriteInt(key=WIDTH, value=s[0])
         self.app_conf.WriteInt(key=HEIGHT, value=s[1])
         self.app_conf.Flush()
@@ -83,7 +87,9 @@ class _SettingManager(wx.EvtHandler):
         self.app_conf.Flush()
 
     def get_summary_detail_sash_pos(self):
-        return self.app_conf.ReadInt(SPLITTER_DETAIL_SUMMARY, 432)
+        from kicad_dfm.constants import SPLITTER_SASH_DEFAULT
+
+        return self.app_conf.ReadInt(SPLITTER_DETAIL_SUMMARY, SPLITTER_SASH_DEFAULT)
 
 
 SETTING_MANAGER = _SettingManager()

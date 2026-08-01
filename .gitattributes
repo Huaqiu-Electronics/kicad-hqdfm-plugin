@@ -1,0 +1,9 @@
+# Auto-detect text files and normalize to LF
+* text=auto eol=lf
+
+# Binary files
+*.gif binary
+*.png binary
+*.jpg binary
+*.mmdb binary
+*.pyc binary

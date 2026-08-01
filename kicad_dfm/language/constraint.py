@@ -1,10 +1,9 @@
-# language domain
-LANG_DOMAIN = "kicad_hqdfm_plugin"
+from __future__ import annotations
 
+LANG_DOMAIN: str = "kicad_hqdfm_plugin"
 
-ENGLISH = "English"
+ENGLISH: str = "English"
 
-DEFAULT_LANG = ENGLISH
+DEFAULT_LANG: str = ENGLISH
 
-
-CODE_TO_NAME = {"en": "English", "ja": "Japanese", "zh_CN": "Chinese"}
+CODE_TO_NAME: dict[str, str] = {"en": "English", "ja": "Japanese", "zh_CN": "Chinese"}

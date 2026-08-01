@@ -586,4 +586,3 @@ msgstr ""
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\settings\graphics_setting.py:220
 msgid "Via-to-Trace (Outer)"
 msgstr ""
-
