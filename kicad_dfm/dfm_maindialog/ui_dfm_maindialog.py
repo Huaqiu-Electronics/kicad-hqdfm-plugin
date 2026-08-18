@@ -11,6 +11,8 @@ import wx
 import wx.xrc
 import wx.dataview
 
+from kicad_dfm.core.i18n import _
+
 
 ###########################################################################
 ## Class UiDfmMaindialog
@@ -47,35 +49,117 @@ class UiDfmMaindialog(wx.Panel):
         )
         bSizer11.Add(self.m_panel8, 0, wx.EXPAND | wx.ALL, 0)
 
+        bSizerRule = wx.BoxSizer(wx.HORIZONTAL)
+
+        bSizerRule.Add((0, 0), 1, wx.EXPAND, 5)
+
+        self.rule_profile_label = wx.StaticText(
+            self.m_panel9,
+            wx.ID_ANY,
+            _("Rule Profile"),
+            wx.DefaultPosition,
+            wx.DefaultSize,
+            0,
+        )
+        bSizerRule.Add(self.rule_profile_label, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
+
+        self.rule_profile_panel = wx.Panel(
+            self.m_panel9,
+            wx.ID_ANY,
+            wx.DefaultPosition,
+            wx.DefaultSize,
+            wx.TAB_TRAVERSAL,
+        )
+        self.rule_profile_sizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.rule_profile_panel.SetSizer(self.rule_profile_sizer)
+        self.rule_profile_buttons = []
+        bSizerRule.Add(self.rule_profile_panel, 0, wx.ALIGN_CENTER_VERTICAL | wx.ALL, 5)
+
+        bSizerRule.Add((0, 0), 1, wx.EXPAND, 5)
+
+        bSizer11.Add(bSizerRule, 0, wx.EXPAND, 5)
+
         bSizer2 = wx.BoxSizer(wx.HORIZONTAL)
 
-        bSizer2.Add((0, 0), 1, wx.EXPAND, 5)
+        bSizer2.Add((0, 0), 0, wx.EXPAND, 5)
+
+        self.action_button_sizer = wx.FlexGridSizer(1, 4, 0, 8)
+        for column_index in range(4):
+            self.action_button_sizer.AddGrowableCol(column_index, 1)
 
         self.dfm_run_button = wx.Button(
             self.m_panel9,
             wx.ID_ANY,
-            _("   DFM Analysis   "),
+            _("Quick DFM Check"),
             wx.DefaultPosition,
-            wx.Size(-1, -1),
+            wx.Size(112, 34),
             0,
         )
-        self.dfm_run_button.SetMinSize(wx.Size(-1, 40))
+        self.dfm_run_button.SetMinSize(wx.Size(112, 34))
 
-        bSizer2.Add(self.dfm_run_button, 0, wx.ALL | wx.EXPAND, 15)
+        self.action_button_sizer.Add(self.dfm_run_button, 0, wx.EXPAND, 0)
+
+        self.gerber_dfm_button = wx.Button(
+            self.m_panel9,
+            wx.ID_ANY,
+            _("Full DFM Check"),
+            wx.DefaultPosition,
+            wx.Size(112, 34),
+            0,
+        )
+        self.gerber_dfm_button.SetMinSize(wx.Size(112, 34))
+
+        self.action_button_sizer.Add(self.gerber_dfm_button, 0, wx.EXPAND, 0)
 
         self.rule_manager_button = wx.Button(
             self.m_panel9,
             wx.ID_ANY,
-            _("   Rule Manager   "),
+            _("Rule Manager"),
             wx.DefaultPosition,
-            wx.Size(-1, -1),
+            wx.Size(112, 34),
             0,
         )
-        self.rule_manager_button.SetMinSize(wx.Size(-1, 40))
+        self.rule_manager_button.SetMinSize(wx.Size(112, 34))
 
-        bSizer2.Add(self.rule_manager_button, 0, wx.ALL | wx.EXPAND, 15)
+        self.action_button_sizer.Add(self.rule_manager_button, 0, wx.EXPAND, 0)
 
-        bSizer2.Add((0, 0), 1, wx.EXPAND, 5)
+        self.reset_visible_layers_button = wx.Button(
+            self.m_panel9,
+            wx.ID_ANY,
+            _("Reset Layers"),
+            wx.DefaultPosition,
+            wx.Size(112, 34),
+            0,
+        )
+        self.reset_visible_layers_button.SetMinSize(wx.Size(112, 34))
+
+        self.action_button_sizer.Add(self.reset_visible_layers_button, 0, wx.EXPAND, 0)
+
+        self.inject_drc_markers_button = wx.Button(
+            self.m_panel9,
+            wx.ID_ANY,
+            _("Inject DRC Markers"),
+            wx.DefaultPosition,
+            wx.Size(150, 36),
+            0,
+        )
+        self.inject_drc_markers_button.SetMinSize(wx.Size(112, 34))
+        self.inject_drc_markers_button.Hide()
+
+        self.clear_drc_markers_button = wx.Button(
+            self.m_panel9,
+            wx.ID_ANY,
+            _("Clear DRC Markers"),
+            wx.DefaultPosition,
+            wx.Size(150, 36),
+            0,
+        )
+        self.clear_drc_markers_button.SetMinSize(wx.Size(112, 34))
+        self.clear_drc_markers_button.Hide()
+
+        bSizer2.Add(self.action_button_sizer, 1, wx.ALL | wx.EXPAND, 8)
+
+        bSizer2.Add((0, 0), 0, wx.EXPAND, 5)
 
         bSizer11.Add(bSizer2, 0, wx.EXPAND, 5)
 
@@ -105,7 +189,6 @@ class UiDfmMaindialog(wx.Panel):
             wx.DefaultPosition,
             wx.DefaultSize,
             wx.dataview.DV_HORIZ_RULES
-            | wx.dataview.DV_NO_HEADER
             | wx.dataview.DV_ROW_LINES
             | wx.dataview.DV_VARIABLE_LINE_HEIGHT
             | wx.dataview.DV_VERT_RULES,
@@ -178,7 +261,6 @@ class UiDfmMaindialog(wx.Panel):
             wx.Size(100, 30),
             0,
         )
-        bSizer7.Add(self.pad_size_button, 0, wx.ALIGN_CENTER | wx.ALL, 2)
 
         self.pad_spacing_button = wx.Button(
             self.m_panel3,
@@ -189,16 +271,7 @@ class UiDfmMaindialog(wx.Panel):
             0,
         )
         bSizer7.Add(self.pad_spacing_button, 0, wx.ALIGN_CENTER | wx.ALL, 3)
-
-        self.hatched_copper_pour_button = wx.Button(
-            self.m_panel3,
-            wx.ID_ANY,
-            _("Check"),
-            wx.DefaultPosition,
-            wx.Size(100, 30),
-            0,
-        )
-        bSizer7.Add(self.hatched_copper_pour_button, 0, wx.ALIGN_CENTER | wx.ALL, 2)
+        bSizer7.Add(self.pad_size_button, 0, wx.ALIGN_CENTER | wx.ALL, 2)
 
         self.hole_diameter_button = wx.Button(
             self.m_panel3,
@@ -250,6 +323,16 @@ class UiDfmMaindialog(wx.Panel):
         )
         bSizer7.Add(self.board_edge_clearance_button, 0, wx.ALIGN_CENTER | wx.ALL, 3)
 
+        self.hole_to_board_edge_button = wx.Button(
+            self.m_panel3,
+            wx.ID_ANY,
+            _("Check"),
+            wx.DefaultPosition,
+            wx.Size(100, 30),
+            0,
+        )
+        bSizer7.Add(self.hole_to_board_edge_button, 0, wx.ALIGN_CENTER | wx.ALL, 2)
+
         self.special_drill_holes_button = wx.Button(
             self.m_panel3,
             wx.ID_ANY,
@@ -293,7 +376,7 @@ class UiDfmMaindialog(wx.Panel):
         self.surface_finish_area_button = wx.Button(
             self.m_panel3,
             wx.ID_ANY,
-            wx.EmptyString,
+            _("Check"),
             wx.DefaultPosition,
             wx.Size(100, 30),
             0,
@@ -303,7 +386,7 @@ class UiDfmMaindialog(wx.Panel):
         self.test_point_count_button = wx.Button(
             self.m_panel3,
             wx.ID_ANY,
-            wx.EmptyString,
+            _("Check"),
             wx.DefaultPosition,
             wx.Size(100, 30),
             0,

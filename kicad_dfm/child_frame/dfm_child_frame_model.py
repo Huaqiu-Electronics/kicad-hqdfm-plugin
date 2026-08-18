@@ -16,8 +16,8 @@ import wx.dataview as dv
 #
 # For this example our data is stored in a simple list of lists.  In
 # real life you can use whatever you want or need to hold your data.
-# 定义列的最大数量
-MAX_COLS = 2
+# The last value in each row stores the color used for rendering.
+VISIBLE_COLS = 4
 
 
 class DfmChildFrameModel(dv.DataViewIndexListModel):
@@ -31,7 +31,7 @@ class DfmChildFrameModel(dv.DataViewIndexListModel):
     # particular row,col
     def GetValueByRow(self, row, col):
         # 检查行索引是否在有效范围内
-        if col < 0 or col >= MAX_COLS:
+        if col < 0 or col >= VISIBLE_COLS:
             return None
         try:
             # 使用循环来获取数据，而不是多个 elif 语句
@@ -48,15 +48,17 @@ class DfmChildFrameModel(dv.DataViewIndexListModel):
 
     def GetAttrByRow(self, row, col, attr):
         ##self.log.write('GetAttrByRow: (%d, %d)' % (row, col))
-        if col == 0 and self.data[row][1] == "red":
+        if col != 0:
+            return False
+
+        color = self.data[row][-1]
+        if col == 0 and color == "red":
             attr.SetColour("red")
             return True
-        elif col == 0 and self.data[row][1] == "black":
-            attr.SetColour("black")
-            return True
-        elif col == 0 and self.data[row][1] == "gold":
+        elif color == "gold":
             attr.SetColour(wx.Colour(255, 165, 0))
             return True
+        return False
 
     # This method is called when the user edits a data item in the view.
     def SetValueByRow(self, value, row, col):
@@ -69,7 +71,7 @@ class DfmChildFrameModel(dv.DataViewIndexListModel):
 
     # Report how many columns this model provides data for.
     def GetColumnCount(self):
-        return MAX_COLS
+        return VISIBLE_COLS
 
     # Specify the data type for a column
     def GetColumnType(self, col):

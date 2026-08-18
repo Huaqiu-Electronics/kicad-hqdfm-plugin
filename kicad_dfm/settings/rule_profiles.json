@@ -1,0 +1,1757 @@
+{
+  "economy": {
+    "description": "Relaxed limits for common low-cost prototype and standard production.",
+    "display": "Basic",
+    "name": "Economy",
+    "rules": {
+      "Copper-to-Board Edge": [
+        {
+          "description": "Minimum distance from SMD pad to board edge.",
+          "item": "SMD-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.317500,0.476250,0.635000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum distance from trace to board edge.",
+          "item": "Trace-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.253750,0.348750,0.476250",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum distance from copper pour or copper feature to board edge.",
+          "item": "Copper-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.253750,0.348750,0.476250",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "Drill Hole Spacing": [
+        {
+          "description": "Minimum spacing between vias on the same net.",
+          "item": "Same Net Via Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.317500,0.375000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum spacing between vias on different nets.",
+          "item": "Different Net Via Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.317500,0.375000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Insufficient hole-to-hole spacing can reduce production efficiency and quality yield. Use a minimum spacing of at least 15 mil; 17 mil or greater is recommended.",
+          "description_only": true,
+          "item": "Different Net PTH Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.400050,0.450088,0.500126",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum spacing between blind/buried vias.",
+          "item": "Blind/Buried Via Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.317500,0.375000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Drill to Copper": [
+        {
+          "description": "Outer-layer clearance from plated through-hole edge to trace.",
+          "item": "PTH-to-Trace [Outer]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.200000,0.250000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Inner-layer clearance from plated through-hole edge to trace.",
+          "item": "PTH-to-Trace [Inner]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.250000,0.300000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Outer-layer clearance from via edge to trace.",
+          "item": "Via-to-Trace [Outer]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.200000,0.250000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Inner-layer clearance from via edge to trace.",
+          "item": "Via-to-Trace [Inner]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.250000,0.300000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Clearance from non-plated hole edge to copper.",
+          "item": "NPTH-to-Copper",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.200000,0.250000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Hole Size": [
+        {
+          "description": "Too-small through-vias can reduce production efficiency and yield and may increase cost. Use a via drill diameter of at least 0.3 mm.",
+          "description_only": true,
+          "item": "Smallest Drill Size",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.237500,0.312500,0.375000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum component PTH pad drill diameter; excludes vias and NPTH pads.",
+          "item": "Smallest PTH",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.362500,0.562500,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Maximum generic drill size used by the remote DFM contract.",
+          "item": "Largest Drill Size",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "999.000000,6.300000,6.000000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Maximum plated through-hole size.",
+          "item": "Largest PTH Size",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "999.000000,6.300000,6.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "As drill diameter decreases, usable flute length also decreases; very small drills may not penetrate a thick PCB.",
+          "description_only": true,
+          "item": "Aspect Ratio",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "12.000000,10.000000,8.000000",
+          "source": "official_service_sample",
+          "unit": "ratio"
+        },
+        {
+          "description": "Minimum mechanical via drill.",
+          "item": "Smallest Via [mec]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.237500,0.312500,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum laser blind via drill.",
+          "item": "Smallest Blind_Laser",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.112500,0.162500,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum mechanically drilled blind via.",
+          "item": "Smallest Blind_mec",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.237500,0.312500,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum laser buried via drill.",
+          "item": "Smallest Buried_Laser",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.112500,0.162500,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum mechanically drilled buried via.",
+          "item": "Smallest Buried_mec",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.237500,0.312500,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "The minimum oval-slot cutter diameter is 0.4 mm. The original slot must not be narrower than 0.3 mm; use at least 0.4 mm, with 0.6 mm or greater recommended.",
+          "description_only": true,
+          "item": "Smallest Slot Width",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.450088,0.599948,5.999988",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Maximum blind or buried via drill.",
+          "item": "Largest Blind/Buried Via",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.500000,0.400000,0.300000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Oversized slots require additional production operations, reducing efficiency and increasing cost. Keep the slot length at or below 10 mm.",
+          "description_only": true,
+          "item": "Largest Slot Length",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "15.000000,12.000000,10.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Oversized slot widths require additional production operations, reducing efficiency and increasing cost. Keep the cutter diameter at or below 5.8 mm.",
+          "description_only": true,
+          "item": "Largest Slot Width",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "8.000000,7.000000,6.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "When slot length is less than twice its width, uneven forces during production can deform it. Use a slot length of at least twice the width.",
+          "description_only": true,
+          "item": "Slot Aspect Ratio",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "1.500000,2.000000,999.000000",
+          "source": "official_service_sample",
+          "unit": "ratio"
+        }
+      ],
+      "Hole-to-Board Edge": [
+        {
+          "description": "PTH holes too close to the board edge risk breakout and may severely affect electrical performance. Use at least 12 mil; 15 mil or greater is recommended.",
+          "description_only": true,
+          "item": "PTH-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.400050,0.500126,0.599948",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Vias too close to the board edge risk breakout and may severely affect electrical performance. Use at least 12 mil; 15 mil or greater is recommended.",
+          "description_only": true,
+          "item": "Via-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.299974,0.400050,0.500126",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Screw holes too close to the board edge risk breakout. Use at least 8 mil; 12 mil or greater is recommended.",
+          "description_only": true,
+          "item": "Screw Hole-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.400050,0.500126,0.599948",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "NPTH holes too close to the board edge risk breakout. Use at least 8 mil; 12 mil or greater is recommended.",
+          "description_only": true,
+          "item": "NPTH-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.199898,0.299974,0.400050",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "Holes on SMD Pads": [
+        {
+          "description": "Via overlap with BGA pad.",
+          "item": "Via on BGA Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.010000,0.010000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Via overlap with SMD pad.",
+          "item": "Via on SMD Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.150000,0.050000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "NPTH overlap with SMD pad.",
+          "item": "NPTH on SMD Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.100000,0.010000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "PTH overlap with SMD pad.",
+          "item": "PTH on SMD Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.100000,0.050000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "Missing SMask Openings": [
+        {
+          "description": "Pad or copper feature that should expose solder mask but has no opening.",
+          "item": "Missing SMask Opening",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ],
+      "Pad size": [
+        {
+          "description": "Minimum shorter-side length of ordinary pads.",
+          "item": "Short Pads",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.203200,0.304800,0.508000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Undersized elongated pads have low adhesion, which can reduce manufacturing quality and yield and may increase testing costs. Use a minimum width of at least 0.15 mm; 0.2 mm or greater is recommended.",
+          "description_only": true,
+          "item": "Long Pads",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.152400,0.177800,0.254000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "RingHole": [
+        {
+          "description": "Minimum annular ring for vias.",
+          "item": "Via Annular Ring",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.101600,0.127000,0.152400",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum annular ring for plated through-hole pads.",
+          "item": "PTH Annular Ring",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.152400,0.177800,0.203200",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        }
+      ],
+      "SMD Spacing": [
+        {
+          "description": "Minimum edge-to-edge clearance between SMD pads.",
+          "item": "SMD Pad Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.152400,0.203200,0.254000",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Signal Integrity": [
+        {
+          "description": "Disconnected copper trace fragments returned by the DFM service.",
+          "item": "Trace Mssing",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "39.370079,39.370079,78.740157",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Acute trace/copper angles that may trap acid or create weak copper.",
+          "item": "Acute Angle Traces",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Track ends that are not connected to a pad, via, or other copper.",
+          "item": "Dangling Tracks",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Copper islands that are isolated from useful nets.",
+          "item": "Floating Copper",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Vias without effective copper connectivity.",
+          "item": "Unconnected Vias",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ],
+      "Smallest Trace Spacing": [
+        {
+          "description": "Minimum clearance between copper traces.",
+          "item": "Trace Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.158750,0.187500,999.000000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum clearance between traces and pads.",
+          "item": "Trace-to-Pad Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.158750,0.187500,999.000000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum general clearance between copper pads.",
+          "item": "Pad-to-Pad Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.158750,0.187500,999.000000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum edge-to-edge clearance between BGA pads.",
+          "item": "BGA Pads",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.100000,0.127000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Smallest Trace Width": [
+        {
+          "description": "Minimum copper trace width. Public HQPCB capability lists 5 mil as the lower bound for common orders.",
+          "item": "Smallest Trace Width",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.158750,0.187500,999.000000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        }
+      ],
+      "Solder Mask Analysis": [
+        {
+          "description": "Minimum solder-mask web between separate openings.",
+          "item": "Solder Mask Bridge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.127000,0.152400,0.254000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Clearance from a mask opening to a trace on another net.",
+          "item": "Solder Mask Covers Trace",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.038100,0.050800,0.063500",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "One connected solder-mask opening exposes copper from multiple nets.",
+          "item": "Solder Mask Covers Multiple Nets",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ],
+      "Special Drill Holes": [
+        {
+          "description": "Right-angle corners in square or rectangular holes cannot be machined in the production process. Use a circular or oval hole instead.",
+          "description_only": true,
+          "item": "Square/Rectangular Drills",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Castellated or half-hole feature detection.",
+          "item": "Castellated Holes",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ]
+    }
+  },
+  "precision": {
+    "description": "Tighter limits for finer features and higher-end fabrication.",
+    "display": "Advanced",
+    "name": "Precision",
+    "rules": {
+      "Copper-to-Board Edge": [
+        {
+          "description": "Minimum distance from SMD pad to board edge.",
+          "item": "SMD-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.203200,0.304800,0.406400",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum distance from trace to board edge.",
+          "item": "Trace-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.162400,0.223200,0.304800",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum distance from copper pour or copper feature to board edge.",
+          "item": "Copper-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.162400,0.223200,0.304800",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "Drill Hole Spacing": [
+        {
+          "description": "Minimum spacing between vias on the same net.",
+          "item": "Same Net Via Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.203200,0.240000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum spacing between vias on different nets.",
+          "item": "Different Net Via Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.203200,0.240000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Insufficient hole-to-hole spacing can reduce production efficiency and quality yield. Use a minimum spacing of at least 15 mil; 17 mil or greater is recommended.",
+          "description_only": true,
+          "item": "Different Net PTH Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.400050,0.450088,0.500126",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum spacing between blind/buried vias.",
+          "item": "Blind/Buried Via Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.203200,0.240000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Drill to Copper": [
+        {
+          "description": "Outer-layer clearance from plated through-hole edge to trace.",
+          "item": "PTH-to-Trace [Outer]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.200000,0.250000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Inner-layer clearance from plated through-hole edge to trace.",
+          "item": "PTH-to-Trace [Inner]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.250000,0.300000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Outer-layer clearance from via edge to trace.",
+          "item": "Via-to-Trace [Outer]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.200000,0.250000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Inner-layer clearance from via edge to trace.",
+          "item": "Via-to-Trace [Inner]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.250000,0.300000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Clearance from non-plated hole edge to copper.",
+          "item": "NPTH-to-Copper",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.200000,0.250000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Hole Size": [
+        {
+          "description": "Too-small through-vias can reduce production efficiency and yield and may increase cost. Use a via drill diameter of at least 0.3 mm.",
+          "description_only": true,
+          "item": "Smallest Drill Size",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.152000,0.200000,0.240000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum component PTH pad drill diameter; excludes vias and NPTH pads.",
+          "item": "Smallest PTH",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.232000,0.360000,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Maximum generic drill size used by the remote DFM contract.",
+          "item": "Largest Drill Size",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "999.000000,6.300000,6.000000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Maximum plated through-hole size.",
+          "item": "Largest PTH Size",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "999.000000,6.300000,6.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "As drill diameter decreases, usable flute length also decreases; very small drills may not penetrate a thick PCB.",
+          "description_only": true,
+          "item": "Aspect Ratio",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "12.000000,10.000000,8.000000",
+          "source": "official_service_sample",
+          "unit": "ratio"
+        },
+        {
+          "description": "Minimum mechanical via drill.",
+          "item": "Smallest Via [mec]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.152000,0.200000,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum laser blind via drill.",
+          "item": "Smallest Blind_Laser",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.072000,0.104000,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum mechanically drilled blind via.",
+          "item": "Smallest Blind_mec",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.152000,0.200000,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum laser buried via drill.",
+          "item": "Smallest Buried_Laser",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.072000,0.104000,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum mechanically drilled buried via.",
+          "item": "Smallest Buried_mec",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.152000,0.200000,999.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "The minimum oval-slot cutter diameter is 0.4 mm. The original slot must not be narrower than 0.3 mm; use at least 0.4 mm, with 0.6 mm or greater recommended.",
+          "description_only": true,
+          "item": "Smallest Slot Width",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.450088,0.599948,5.999988",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Maximum blind or buried via drill.",
+          "item": "Largest Blind/Buried Via",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.500000,0.400000,0.300000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Oversized slots require additional production operations, reducing efficiency and increasing cost. Keep the slot length at or below 10 mm.",
+          "description_only": true,
+          "item": "Largest Slot Length",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "15.000000,12.000000,10.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Oversized slot widths require additional production operations, reducing efficiency and increasing cost. Keep the cutter diameter at or below 5.8 mm.",
+          "description_only": true,
+          "item": "Largest Slot Width",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "8.000000,7.000000,6.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "When slot length is less than twice its width, uneven forces during production can deform it. Use a slot length of at least twice the width.",
+          "description_only": true,
+          "item": "Slot Aspect Ratio",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "1.500000,2.000000,999.000000",
+          "source": "official_service_sample",
+          "unit": "ratio"
+        }
+      ],
+      "Hole-to-Board Edge": [
+        {
+          "description": "PTH holes too close to the board edge risk breakout and may severely affect electrical performance. Use at least 12 mil; 15 mil or greater is recommended.",
+          "description_only": true,
+          "item": "PTH-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.400050,0.500126,0.599948",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Vias too close to the board edge risk breakout and may severely affect electrical performance. Use at least 12 mil; 15 mil or greater is recommended.",
+          "description_only": true,
+          "item": "Via-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.299974,0.400050,0.500126",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Screw holes too close to the board edge risk breakout. Use at least 8 mil; 12 mil or greater is recommended.",
+          "description_only": true,
+          "item": "Screw Hole-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.400050,0.500126,0.599948",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "NPTH holes too close to the board edge risk breakout. Use at least 8 mil; 12 mil or greater is recommended.",
+          "description_only": true,
+          "item": "NPTH-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.199898,0.299974,0.400050",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "Holes on SMD Pads": [
+        {
+          "description": "Via overlap with BGA pad.",
+          "item": "Via on BGA Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.010000,0.010000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Via overlap with SMD pad.",
+          "item": "Via on SMD Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.150000,0.050000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "NPTH overlap with SMD pad.",
+          "item": "NPTH on SMD Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.100000,0.010000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "PTH overlap with SMD pad.",
+          "item": "PTH on SMD Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.100000,0.050000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "Missing SMask Openings": [
+        {
+          "description": "Pad or copper feature that should expose solder mask but has no opening.",
+          "item": "Missing SMask Opening",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ],
+      "Pad size": [
+        {
+          "description": "Minimum shorter-side length of ordinary pads.",
+          "item": "Short Pads",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.203200,0.304800,0.508000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Undersized elongated pads have low adhesion, which can reduce manufacturing quality and yield and may increase testing costs. Use a minimum width of at least 0.15 mm; 0.2 mm or greater is recommended.",
+          "description_only": true,
+          "item": "Long Pads",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.152400,0.177800,0.254000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "RingHole": [
+        {
+          "description": "Minimum annular ring for vias.",
+          "item": "Via Annular Ring",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.101600,0.127000,0.152400",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum annular ring for plated through-hole pads.",
+          "item": "PTH Annular Ring",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.152400,0.177800,0.203200",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        }
+      ],
+      "SMD Spacing": [
+        {
+          "description": "Minimum edge-to-edge clearance between SMD pads.",
+          "item": "SMD Pad Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.152400,0.203200,0.254000",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Signal Integrity": [
+        {
+          "description": "Disconnected copper trace fragments returned by the DFM service.",
+          "item": "Trace Mssing",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "39.370079,39.370079,78.740157",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Acute trace/copper angles that may trap acid or create weak copper.",
+          "item": "Acute Angle Traces",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Track ends that are not connected to a pad, via, or other copper.",
+          "item": "Dangling Tracks",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Copper islands that are isolated from useful nets.",
+          "item": "Floating Copper",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Vias without effective copper connectivity.",
+          "item": "Unconnected Vias",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ],
+      "Smallest Trace Spacing": [
+        {
+          "description": "Minimum clearance between copper traces.",
+          "item": "Trace Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.101600,0.120000,999.000000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum clearance between traces and pads.",
+          "item": "Trace-to-Pad Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.101600,0.120000,999.000000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum general clearance between copper pads.",
+          "item": "Pad-to-Pad Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.101600,0.120000,999.000000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum edge-to-edge clearance between BGA pads.",
+          "item": "BGA Pads",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.100000,0.127000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Smallest Trace Width": [
+        {
+          "description": "Minimum copper trace width. Public HQPCB capability lists 5 mil as the lower bound for common orders.",
+          "item": "Smallest Trace Width",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.101600,0.120000,999.000000",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        }
+      ],
+      "Solder Mask Analysis": [
+        {
+          "description": "Minimum solder-mask web between separate openings.",
+          "item": "Solder Mask Bridge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.127000,0.152400,0.254000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Clearance from a mask opening to a trace on another net.",
+          "item": "Solder Mask Covers Trace",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.038100,0.050800,0.063500",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "One connected solder-mask opening exposes copper from multiple nets.",
+          "item": "Solder Mask Covers Multiple Nets",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ],
+      "Special Drill Holes": [
+        {
+          "description": "Right-angle corners in square or rectangular holes cannot be machined in the production process. Use a circular or oval hole instead.",
+          "description_only": true,
+          "item": "Square/Rectangular Drills",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Castellated or half-hole feature detection.",
+          "item": "Castellated Holes",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ]
+    }
+  },
+  "standard": {
+    "description": "Balanced default limits for typical reliable fabrication.",
+    "display": "Standard",
+    "name": "Standard",
+    "rules": {
+      "Copper-to-Board Edge": [
+        {
+          "description": "Minimum distance from SMD pad to board edge.",
+          "item": "SMD-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.254000,0.381000,0.508000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum distance from trace to board edge.",
+          "item": "Trace-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.202997,0.278994,0.381000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum distance from copper pour or copper feature to board edge.",
+          "item": "Copper-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.202997,0.278994,0.381000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "Drill Hole Spacing": [
+        {
+          "description": "Minimum spacing between vias on the same net.",
+          "item": "Same Net Via Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.254000,0.299999,999.000009",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum spacing between vias on different nets.",
+          "item": "Different Net Via Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.254000,0.299999,999.000009",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Insufficient hole-to-hole spacing can reduce production efficiency and quality yield. Use a minimum spacing of at least 15 mil; 17 mil or greater is recommended.",
+          "description_only": true,
+          "item": "Different Net PTH Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.400050,0.450088,0.500126",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum spacing between blind/buried vias.",
+          "item": "Blind/Buried Via Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.254000,0.299999,999.000009",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Drill to Copper": [
+        {
+          "description": "Outer-layer clearance from plated through-hole edge to trace.",
+          "item": "PTH-to-Trace [Outer]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.200000,0.250000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Inner-layer clearance from plated through-hole edge to trace.",
+          "item": "PTH-to-Trace [Inner]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.250000,0.300000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Outer-layer clearance from via edge to trace.",
+          "item": "Via-to-Trace [Outer]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.200000,0.250000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Inner-layer clearance from via edge to trace.",
+          "item": "Via-to-Trace [Inner]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.250000,0.300000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Clearance from non-plated hole edge to copper.",
+          "item": "NPTH-to-Copper",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.200000,0.250000,999.000000",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Hole Size": [
+        {
+          "description": "Too-small through-vias can reduce production efficiency and yield and may increase cost. Use a via drill diameter of at least 0.3 mm.",
+          "description_only": true,
+          "item": "Smallest Drill Size",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.189992,0.250012,0.299999",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum component PTH pad drill diameter; excludes vias and NPTH pads.",
+          "item": "Smallest PTH",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.289992,0.450012,999.000009",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Maximum generic drill size used by the remote DFM contract.",
+          "item": "Largest Drill Size",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "999.000009,6.299987,5.999988",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Maximum plated through-hole size.",
+          "item": "Largest PTH Size",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "999.000009,6.299987,5.999988",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "As drill diameter decreases, usable flute length also decreases; very small drills may not penetrate a thick PCB.",
+          "description_only": true,
+          "item": "Aspect Ratio",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "12.000000,10.000000,8.000000",
+          "source": "official_service_sample",
+          "unit": "ratio"
+        },
+        {
+          "description": "Minimum mechanical via drill.",
+          "item": "Smallest Via [mec]",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.189992,0.250012,999.000009",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum laser blind via drill.",
+          "item": "Smallest Blind_Laser",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.089992,0.129997,999.000009",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum mechanically drilled blind via.",
+          "item": "Smallest Blind_mec",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.189992,0.250012,999.000009",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum laser buried via drill.",
+          "item": "Smallest Buried_Laser",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.089992,0.129997,999.000009",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum mechanically drilled buried via.",
+          "item": "Smallest Buried_mec",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.189992,0.250012,999.000009",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "The minimum oval-slot cutter diameter is 0.4 mm. The original slot must not be narrower than 0.3 mm; use at least 0.4 mm, with 0.6 mm or greater recommended.",
+          "description_only": true,
+          "item": "Smallest Slot Width",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.450088,0.599948,5.999988",
+          "source": "plugin_default",
+          "unit": "mm"
+        },
+        {
+          "description": "Maximum blind or buried via drill.",
+          "item": "Largest Blind/Buried Via",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.499999,0.399999,0.299999",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Oversized slots require additional production operations, reducing efficiency and increasing cost. Keep the slot length at or below 10 mm.",
+          "description_only": true,
+          "item": "Largest Slot Length",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "14.999995,12.000001,10.000005",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Oversized slot widths require additional production operations, reducing efficiency and increasing cost. Keep the cutter diameter at or below 5.8 mm.",
+          "description_only": true,
+          "item": "Largest Slot Width",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "8.000009,7.000011,5.999988",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "When slot length is less than twice its width, uneven forces during production can deform it. Use a slot length of at least twice the width.",
+          "description_only": true,
+          "item": "Slot Aspect Ratio",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "1.500000,2.000000,999.000000",
+          "source": "official_service_sample",
+          "unit": "ratio"
+        }
+      ],
+      "Hole-to-Board Edge": [
+        {
+          "description": "PTH holes too close to the board edge risk breakout and may severely affect electrical performance. Use at least 12 mil; 15 mil or greater is recommended.",
+          "description_only": true,
+          "item": "PTH-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.400050,0.500126,0.599948",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Vias too close to the board edge risk breakout and may severely affect electrical performance. Use at least 12 mil; 15 mil or greater is recommended.",
+          "description_only": true,
+          "item": "Via-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.299974,0.400050,0.500126",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Screw holes too close to the board edge risk breakout. Use at least 8 mil; 12 mil or greater is recommended.",
+          "description_only": true,
+          "item": "Screw Hole-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.400050,0.500126,0.599948",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "NPTH holes too close to the board edge risk breakout. Use at least 8 mil; 12 mil or greater is recommended.",
+          "description_only": true,
+          "item": "NPTH-to-Board Edge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.199898,0.299974,0.400050",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "Holes on SMD Pads": [
+        {
+          "description": "Via overlap with BGA pad.",
+          "item": "Via on BGA Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.010000,0.010000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Via overlap with SMD pad.",
+          "item": "Via on SMD Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.150000,0.050000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "NPTH overlap with SMD pad.",
+          "item": "NPTH on SMD Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.100000,0.010000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "PTH overlap with SMD pad.",
+          "item": "PTH on SMD Pad",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.100000,0.050000,0.000000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "Missing SMask Openings": [
+        {
+          "description": "Pad or copper feature that should expose solder mask but has no opening.",
+          "item": "Missing SMask Opening",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ],
+      "Pad size": [
+        {
+          "description": "Minimum shorter-side length of ordinary pads.",
+          "item": "Short Pads",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.203200,0.304800,0.508000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Undersized elongated pads have low adhesion, which can reduce manufacturing quality and yield and may increase testing costs. Use a minimum width of at least 0.15 mm; 0.2 mm or greater is recommended.",
+          "description_only": true,
+          "item": "Long Pads",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.152400,0.177800,0.254000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        }
+      ],
+      "RingHole": [
+        {
+          "description": "Minimum annular ring for vias.",
+          "item": "Via Annular Ring",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.101600,0.127000,0.152400",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum annular ring for plated through-hole pads.",
+          "item": "PTH Annular Ring",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.152400,0.177800,0.203200",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        }
+      ],
+      "SMD Spacing": [
+        {
+          "description": "Minimum edge-to-edge clearance between SMD pads.",
+          "item": "SMD Pad Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.152400,0.203200,0.254000",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Signal Integrity": [
+        {
+          "description": "Disconnected copper trace fragments returned by the DFM service.",
+          "item": "Trace Mssing",
+          "kind": "max",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "39.370076,39.370076,78.740152",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Acute trace/copper angles that may trap acid or create weak copper.",
+          "item": "Acute Angle Traces",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Track ends that are not connected to a pad, via, or other copper.",
+          "item": "Dangling Tracks",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Copper islands that are isolated from useful nets.",
+          "item": "Floating Copper",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Vias without effective copper connectivity.",
+          "item": "Unconnected Vias",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ],
+      "Smallest Trace Spacing": [
+        {
+          "description": "Minimum clearance between copper traces.",
+          "item": "Trace Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.127000,0.150012,999.000009",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum clearance between traces and pads.",
+          "item": "Trace-to-Pad Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.127000,0.150012,999.000009",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum general clearance between copper pads.",
+          "item": "Pad-to-Pad Spacing",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.127000,0.150012,999.000009",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        },
+        {
+          "description": "Minimum edge-to-edge clearance between BGA pads.",
+          "item": "BGA Pads",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.100000,0.127000,999.000009",
+          "source": "plugin_default",
+          "unit": "mm"
+        }
+      ],
+      "Smallest Trace Width": [
+        {
+          "description": "Minimum copper trace width. Public HQPCB capability lists 5 mil as the lower bound for common orders.",
+          "item": "Smallest Trace Width",
+          "kind": "min",
+          "offline_status": "implemented",
+          "rule": "0.127000,0.150012,999.000009",
+          "source": "hqpcb_public_capability",
+          "unit": "mm"
+        }
+      ],
+      "Solder Mask Analysis": [
+        {
+          "description": "Minimum solder-mask web between separate openings.",
+          "item": "Solder Mask Bridge",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.127000,0.152400,0.254000",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "Clearance from a mask opening to a trace on another net.",
+          "item": "Solder Mask Covers Trace",
+          "kind": "min",
+          "offline_status": "implemented",
+          "profile_scale": "fixed",
+          "rule": "0.038100,0.050800,0.063500",
+          "source": "official_service_sample",
+          "unit": "mm"
+        },
+        {
+          "description": "One connected solder-mask opening exposes copper from multiple nets.",
+          "item": "Solder Mask Covers Multiple Nets",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ],
+      "Special Drill Holes": [
+        {
+          "description": "Right-angle corners in square or rectangular holes cannot be machined in the production process. Use a circular or oval hole instead.",
+          "description_only": true,
+          "item": "Square/Rectangular Drills",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        },
+        {
+          "description": "Castellated or half-hole feature detection.",
+          "item": "Castellated Holes",
+          "kind": "boolean",
+          "offline_status": "implemented",
+          "rule": "-,-,-",
+          "source": "official_service_sample",
+          "unit": ""
+        }
+      ]
+    }
+  }
+}

@@ -100,6 +100,17 @@ class UiChildFrame(wx.Frame):
         self.combo_box.SetSelection(1)
         bSizer3.Add(self.combo_box, 0, wx.ALL | wx.EXPAND, 5)
 
+        self.rule_value_label = wx.StaticText(
+            self.layer_panel,
+            wx.ID_ANY,
+            _("Rule: qualitative check"),
+            wx.DefaultPosition,
+            wx.DefaultSize,
+            0,
+        )
+        self.rule_value_label.Wrap(-1)
+        bSizer3.Add(self.rule_value_label, 0, wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, 5)
+
         self.layer_panel.SetSizer(bSizer3)
         self.layer_panel.Layout()
         bSizer3.Fit(self.layer_panel)
@@ -240,8 +251,21 @@ class UiChildFrame(wx.Frame):
         bSizer7 = wx.BoxSizer(wx.VERTICAL)
 
         sbSizer2 = wx.StaticBoxSizer(
-            wx.StaticBox(self.m_panel5, wx.ID_ANY, _("Rule description")), wx.VERTICAL
+            wx.StaticBox(self.m_panel5, wx.ID_ANY, _("Rule description")), wx.HORIZONTAL
         )
+
+        self.rule_description_text = wx.TextCtrl(
+            sbSizer2.GetStaticBox(),
+            wx.ID_ANY,
+            wx.EmptyString,
+            wx.DefaultPosition,
+            wx.DefaultSize,
+            wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_WORDWRAP,
+        )
+        self.rule_description_text.SetBackgroundColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
+        )
+        sbSizer2.Add(self.rule_description_text, 1, wx.ALL | wx.EXPAND, 5)
 
         self.bmp = wx.StaticBitmap(
             sbSizer2.GetStaticBox(),

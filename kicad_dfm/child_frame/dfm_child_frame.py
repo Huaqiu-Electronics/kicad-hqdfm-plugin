@@ -1,7 +1,5 @@
-import os
 import wx
 import re
-from decimal import Decimal
 import pcbnew
 from .. import config
 from ..picture import GetImagePath
@@ -12,10 +10,24 @@ from kicad_dfm.child_frame.child_frame_setting import (
     CHILDFRAME_UNIT_CONVERSION
 )
 import wx.dataview as dv
-from kicad_dfm.child_frame.picture_match_path import PICTURE_MATCH_PATH
-from kicad_dfm.settings.timestamp import TimeStamp
+from kicad_dfm.child_frame.diagram_hint import diagram_bitmap_for
+from kicad_dfm.child_frame.rule_guidance import current_rule_guidance
+from kicad_dfm.child_frame.rule_guidance import current_rule_text
+from kicad_dfm.settings.kicad_setting import KiCadSetting
 from .dfm_child_frame_model import DfmChildFrameModel
-import sys
+import logging
+from kicad_dfm.services.locate import LocateService
+from kicad_dfm.services.locate import LocatePlan
+from kicad_dfm.services.locate import ResultLocationPlanner
+from kicad_dfm.core.i18n import _
+from kicad_dfm.core.rule_catalog import RULE_CATALOG
+from kicad_dfm.core.rule_catalog import normalize_name
+from kicad_dfm.core.rule_contract import rule_key as build_rule_key
+
+MAX_LOCATE_ITEMS = 200
+MAX_LOCATE_MARKERS = 20
+RULE_DIAGRAM_MAX_SIZE = (360, 190)
+LOGGER = logging.getLogger(__name__)
 
 
 class MyShapeItem(pcbnew.PCB_SHAPE):
@@ -48,7 +60,7 @@ class DfmChildFrame(UiChildFrame):
         self.result_json = analysis_result
         self.json_string = json_string
         self.message_type = {}
-        if pcbnew.GetLanguage() == "English":
+        if KiCadSetting.read_lang_setting() == "English":
             self.message_type = config.Language_english
         else:
             self.message_type = config.Language_chinese
@@ -58,18 +70,41 @@ class DfmChildFrame(UiChildFrame):
         self.child_frame_setting = ChildFrameSetting(self.board)
 
         self.SetTitle(title)
+        self._locate_status = ""
+        self.CreateStatusBar()
+        self.set_locate_status("")
         self.result = {}
+        self.result_row_keys = []
         self.layer_name = []
         self.item_list = []
+        self.locate_service = LocateService(self.board, self.line_list, self.item_list)
         self.delete_value = {}
         self.select_number = -1
         # self.combo_box.SetSelection(0)
 
         self.analysis_result_data = self.get_result()
         self.lst_analysis_result1.AppendTextColumn(
-            _("Item"),
-            width=-1,
-            mode=dv.DATAVIEW_CELL_ACTIVATABLE,
+            _("#"),
+            width=48,
+            mode=dv.DATAVIEW_CELL_INERT,
+            align=wx.ALIGN_LEFT,
+        )
+        self.lst_analysis_result1.AppendTextColumn(
+            _("Severity"),
+            width=90,
+            mode=dv.DATAVIEW_CELL_INERT,
+            align=wx.ALIGN_LEFT,
+        )
+        self.lst_analysis_result1.AppendTextColumn(
+            _("Value"),
+            width=180,
+            mode=dv.DATAVIEW_CELL_INERT,
+            align=wx.ALIGN_LEFT,
+        )
+        self.lst_analysis_result1.AppendTextColumn(
+            _("Layer"),
+            width=140,
+            mode=dv.DATAVIEW_CELL_INERT,
             align=wx.ALIGN_LEFT,
         )
 
@@ -95,6 +130,8 @@ class DfmChildFrame(UiChildFrame):
         # 设置事件处理程序
 
         self.data_view_binding()
+        if self.should_show_all_by_default():
+            self.combo_box.SetSelection(0)
         self.dispose_result()
         self.set_layer()
         self.set_color_rule()
@@ -104,23 +141,38 @@ class DfmChildFrame(UiChildFrame):
         self.Show(True)
 
     def remove_added_line(self, event):
-        if len(self.item_list) != 0:
-            for item in self.item_list:
-                if item:
-                    item.ClearBrightened()
-                # item.ClearSelected()
-        if len(self.line_list) != 0:
-            for line in self.line_list:
-                self.board.Delete(line)
-            self.line_list.clear()
-        pcbnew.Refresh
+        self.locate_service.clear()
         # pcbnew.UpdateUserInterface
         event.Skip()
 
+    def should_show_all_by_default(self):
+        result = self.result_json.get(self.json_string) if isinstance(self.result_json, dict) else None
+        if not isinstance(result, dict):
+            return False
+        display = str(result.get("display") or "").lower()
+        if display in ("", "normal", "正常"):
+            return False
+        checks = result.get("check") or []
+        for check in checks:
+            for item in check.get("result") or []:
+                if item.get("color") in ("red", "gold"):
+                    return False
+        return True
+
     # 关闭窗口时清空在kicad上的处理
     def on_close(self, event):
-        self.remove_added_line(event)
-        self.Destroy()
+        if getattr(self, "_closing", False):
+            return
+        self._closing = True
+        try:
+            self.locate_service.clear()
+        except Exception:
+            # The owner may already have removed temporary board shapes while
+            # shutting down.  Cleanup failure must never leave an orphaned,
+            # uncloseable top-level window behind.
+            LOGGER.debug("detail window cleanup failed during close", exc_info=True)
+        finally:
+            self.Destroy()
 
     def select_first(self, event):
         if len(self.get_layer) == 0:
@@ -130,7 +182,7 @@ class DfmChildFrame(UiChildFrame):
         string_data = self.lst_analysis_result1.GetTextValue(
             self.lst_analysis_result1.GetSelectedRow(), 0
         )
-        self.analysis_process(string_data, event)
+        self.analysis_process(self.result_key_for_row(0, string_data), event)
         event.Skip()
 
     def select_back(self, event):
@@ -142,7 +194,7 @@ class DfmChildFrame(UiChildFrame):
             self.select_number = 0
         self.lst_analysis_result1.SelectRow(self.select_number)
         string_data = self.lst_analysis_result1.GetTextValue(self.select_number, 0)
-        self.analysis_process(string_data, event)
+        self.analysis_process(self.result_key_for_row(self.select_number, string_data), event)
         event.Skip()
 
     def select_next(self, event):
@@ -154,7 +206,7 @@ class DfmChildFrame(UiChildFrame):
             self.select_number = self.lst_analysis_result1.GetItemCount() - 1
         self.lst_analysis_result1.SelectRow(self.select_number)
         string_data = self.lst_analysis_result1.GetTextValue(self.select_number, 0)
-        self.analysis_process(string_data, event)
+        self.analysis_process(self.result_key_for_row(self.select_number, string_data), event)
         event.Skip()
 
     def select_last(self, event):
@@ -163,7 +215,7 @@ class DfmChildFrame(UiChildFrame):
         self.select_number = self.lst_analysis_result1.GetItemCount() - 1
         self.lst_analysis_result1.SelectRow(self.select_number)
         string_data = self.lst_analysis_result1.GetTextValue(self.select_number, 0)
-        self.analysis_process(string_data, event)
+        self.analysis_process(self.result_key_for_row(self.select_number, string_data), event)
         event.Skip()
 
     def read_json(self, event):
@@ -224,238 +276,155 @@ class DfmChildFrame(UiChildFrame):
                 self.layer_name.append(self.lst_layer.GetString(i))
 
         selected_layers = set(self.layer_name)
-        selected_item_types = set(self.get_type_data)
-        for result_list in self.result_json[self.json_string]["check"]:
-            for result in result_list["result"]:
-                result_layer = self.child_frame_setting.layer_conversion(
-                    self.json_string, result["layer"]
-                )
-                if (
-                    result["item"] not in selected_item_types
-                    and result_layer[0] in selected_layers
-                ):
-                    selected_item_types.add(result["item"])
-
-        self.lst_analysis_type.Set(list(selected_item_types))
+        counts = self.analysis_type_counts(selected_layers)
+        self.lst_analysis_type.Set(
+            [self.analysis_type_label(item, counts[item]) for item in sorted(counts)]
+        )
 
     def set_color_rule(self):
         if self.result_json[self.json_string] == "":
             return
         results_list = []
+        self.result_row_keys = []
         self.result = {}  # 展示的结果集
         if self.lst_analysis_type.GetSelections() != wx.NOT_FOUND:
             list_data = self.lst_analysis_type.GetSelections()
         num = 0
         list_string = []
         for data in list_data:
-            list_string.append(self.lst_analysis_type.GetString(data))
-        if len(list_string) == 0 and len(self.get_layer) != 0:
-            list_string.append(self.lst_analysis_type.GetString(0))
+            list_string.append(
+                self.analysis_type_key(self.lst_analysis_type.GetString(data))
+            )
+        if len(list_string) == 0 and self.lst_analysis_type.GetCount() != 0:
+            list_string.append(
+                self.analysis_type_key(self.lst_analysis_type.GetString(0))
+            )
             self.lst_analysis_type.SetSelection(0)
-            bitmap_path =  PICTURE_MATCH_PATH.picture_path(
-                    self, list_string[0], self.message_type["picture_path"]
+
+        # Refresh all rule context for automatic and explicit selections.
+        if list_string:
+            self.update_rule_diagram(list_string[0])
+            self.update_rule_content(list_string[0])
+
+        for result_list in self.result_json[self.json_string]["check"]:
+            for result in result_list["result"]:
+                result_layer = self.child_frame_setting.layer_conversion(
+                    self.json_string, result["layer"]
                 )
-            if bitmap_path is None:
-                self.bmp.SetBitmap(wx.Bitmap(GetImagePath("none.png")))
-                print(" PICTURE_MATCH_PATH.picture_path() 返回了 None")
-            else:
-                self.bmp.SetBitmap(bitmap_path)
-            self.Layout()
-
-        # 孔环和最小线宽的特殊展示方式
-        if self.json_string == "Smallest Trace Width" or self.json_string == "RingHole":
-            check_lists =self.result_json[self.json_string]["check"]
-            for check_list in self.result_json[self.json_string]["check"]:
-                for result in check_list["result"]:
-                    result_layer = self.child_frame_setting.layer_conversion(
-                        self.json_string, result["layer"]
+                if (
+                    any(
+                        self.result_matches_rule_item(result, item)
+                        for item in list_string
                     )
-                    if (
-                        result["item"] in list_string
-                        and result_layer[0] in self.layer_name
-                    ):
-                        is_join = False
-                        for number in self.result.keys():
-                            # 最小线宽的线宽相同就放一起展示
-                            if (
-                                result["value"] == self.result[number][0]["value"]
-                                and result["layer"] == self.result[number][0]["layer"]
-                                and self.json_string == "Smallest Trace Width"
-                            ):
-                                self.result[number].append(result)
-                                is_join = True
-                            # 孔环的盘直径和孔径相同才放一起展示
-                            elif self.json_string == "RingHole":
-                                if (
-                                    result["pad_diameter"]
-                                    == self.result[number][0]["pad_diameter"]
-                                    and result["hole_diameter"]
-                                    == self.result[number][0]["hole_diameter"]
-                                    and result["layer"]
-                                    == self.result[number][0]["layer"]
-                                ):
-                                    self.result[number].append(result)
-                                    is_join = True
-                        if is_join is False:
-                            num += 1
-                            result_list = []
-                            result_list.append(result)
-                            self.result[str(num)] = result_list
-            for result in self.result:
-                millimeter_value = round(float(self.result[result][0]["value"]), 3)
-                iu_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2iu(millimeter_value)
-                mils_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2mils(
-                    millimeter_value
-                )
-                if self.unit == 0:
-                    string = CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
-                        result, str(iu_value) + "inch", len(self.result[result])
-                    )
-                elif self.unit == 5:
-                    string = CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
-                        result, str(mils_value) + "mils", len(self.result[result])
-                    )
-                else:
-                    string = CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
-                        result, str(millimeter_value) + "mm", len(self.result[result])
-                    )
-
-                value = self.result[result][0]["value"]
-                color = self.result[result][0]["color"]
-                results_list.append([string, color])
-
-        else:
-            for result_list in self.result_json[self.json_string]["check"]:
-                for result in result_list["result"]:
-                    result_layer = self.child_frame_setting.layer_conversion(
-                        self.json_string, result["layer"]
-                    )
-                    if (
-                        result["item"] in list_string
-                        and result_layer[0] in self.layer_name
-                    ):
-                        num += 1
-                        if self.json_string == "Holes on SMD Pads":
-                            results_list.append(
-                                [
-                                    CHILDFRAME_UNIT_CONVERSION.string_conversion(
-                                        str(num), result["value"]
-                                    ),
-                                    result["color"],
-                                ]
-                            )
-                        elif result["item"] == _("Aspect Ratio"):
-                            millimeter_value = round(float(result["value"]), 2)
-                            board_thickness = round(
-                                (
-                                    self.board.GetDesignSettings().GetBoardThickness()
-                                    / 1000000
-                                ),
-                                2,
-                            )
-                            hole_diameter = round(board_thickness / millimeter_value, 2)
-                            values = (
-                                str(millimeter_value)
-                                + "("
-                                + str(board_thickness)
-                                + "/"
-                                + str(hole_diameter)
-                                + ")"
-                                + ", "
-                                + str(len(result_list["result"]))
-                                + _("pcs")
-                            )
-                            results_list.append(
-                                [
-                                    CHILDFRAME_UNIT_CONVERSION.string_conversion(
-                                        str(num), values
-                                    ),
-                                    result["color"],
-                                ]
-                            )
-                        elif self.json_string == "Hole Diameter":
-                            # elif result["item"] == _("Largest Drill Size") or result[
-                            #     "item"
-                            # ] == _("Smallest Drill Size"):
-                            millimeter_value = round(float(result["value"]), 3)
-                            iu_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2iu(
-                                millimeter_value
-                            )
-                            mils_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2mils(
-                                millimeter_value
-                            )
-                            if self.unit == 0:
-                                results_list.append(
-                                    [
-                                        CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
-                                            str(num),
-                                            str(iu_value) + "inch",
-                                            len(result_list["result"]),
-                                        ),
-                                        result["color"],
-                                    ]
-                                )
-                            elif self.unit == 5:
-                                results_list.append(
-                                    [
-                                        CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
-                                            str(num),
-                                            str(mils_value) + "mil",
-                                            len(result_list["result"]),
-                                        ),
-                                        result["color"],
-                                    ]
-                                )
-                            else:
-                                results_list.append(
-                                    [
-                                        CHILDFRAME_UNIT_CONVERSION.multi_string_conversion(
-                                            str(num),
-                                            result["value"] + "mm",
-                                            len(result_list["result"]),
-                                        ),
-                                        result["color"],
-                                    ]
-                                )
-                        else:
-                            millimeter_value = round(float(result["value"]), 3)
-                            iu_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2iu(
-                                millimeter_value
-                            )
-                            mils_value = CHILDFRAME_UNIT_CONVERSION.Millimeter2mils(
-                                millimeter_value
-                            )
-                            if self.unit == 0:
-                                results_list.append(
-                                    [
-                                        CHILDFRAME_UNIT_CONVERSION.string_conversion(
-                                            str(num), str(iu_value) + "inch"
-                                        ),
-                                        result["color"],
-                                    ]
-                                )
-                            elif self.unit == 5:
-                                results_list.append(
-                                    [
-                                        CHILDFRAME_UNIT_CONVERSION.string_conversion(
-                                            str(num), str(mils_value) + "mil"
-                                        ),
-                                        result["color"],
-                                    ]
-                                )
-                            else:
-                                results_list.append(
-                                    [
-                                        CHILDFRAME_UNIT_CONVERSION.string_conversion(
-                                            str(num), result["value"] + "mm"
-                                        ),
-                                        result["color"],
-                                    ]
-                                )
-                        self.result[str(num)] = result_list
-                        break
+                    and result_layer[0] in self.layer_name
+                ):
+                    num += 1
+                    self.result[str(num)] = {"result": [result]}
+                    self.append_result_row(results_list, num, result)
 
         self.dfm_child_frame_model.Update(results_list)
+
+    def update_rule_diagram(self, item):
+        bitmap = diagram_bitmap_for(item, max_size=RULE_DIAGRAM_MAX_SIZE)
+        if bitmap is None:
+            bitmap = wx.Bitmap(GetImagePath("none.png"))
+        self.bmp.SetBitmap(bitmap)
+        self.Layout()
+
+    def update_rule_content(self, item):
+        result = self.rule_result_for_item(item)
+        label = current_rule_text(self.json_string, result, self.unit)
+        guidance = current_rule_guidance(self.json_string, result, self.unit)
+        rule_label = getattr(self, "rule_value_label", None)
+        if rule_label is not None:
+            rule_label.SetLabel(label)
+            rule_label.SetToolTip(label)
+            rule_label.Wrap(max(rule_label.GetParent().GetClientSize().width - 10, 120))
+        description = getattr(self, "rule_description_text", None)
+        if description is not None:
+            description.SetValue(guidance)
+            description.SetInsertionPoint(0)
+        self.Layout()
+
+    def rule_result_for_item(self, item):
+        result_data = self.result_json.get(self.json_string, {})
+        if not isinstance(result_data, dict):
+            return {"item": item}
+        for result_list in result_data.get("check") or ():
+            for result in result_list.get("result") or ():
+                if self.result_matches_rule_item(result, item):
+                    return result
+        for summary_item, summary in self.executed_item_summaries():
+            if summary_item == item:
+                return summary
+        return {"item": item}
+
+    def append_result_row(self, rows, key, result):
+        rows.append(
+            [
+                str(key),
+                self.result_severity(result),
+                self.format_result_value(result),
+                self.format_result_layer(result),
+                result.get("color", "black"),
+            ]
+        )
+        self.result_row_keys.append(str(key))
+
+    def format_result_value(self, result):
+        value = result.get("value", "")
+        if result.get("value_kind") == "boolean":
+            return "—"
+        if self.result_matches_rule_item(result, "Aspect Ratio"):
+            try:
+                ratio = float(value)
+                raw = result.get("raw") or {}
+                thickness = float(
+                    result.get("board_thickness_mm")
+                    or raw.get("board_thickness_mm")
+                    or self.board.GetDesignSettings().GetBoardThickness() / 1000000
+                )
+                diameter = float(
+                    result.get("diameter")
+                    or raw.get("diameter")
+                    or thickness / ratio
+                )
+                return f"{ratio:.2f} ({thickness:.2f}/{diameter:.2f})"
+            except (TypeError, ValueError, ZeroDivisionError):
+                return str(value)
+        if self.result_matches_rule_item(result, "Slot Aspect Ratio"):
+            try:
+                return str(round(float(value), 3))
+            except (TypeError, ValueError):
+                return str(value)
+        try:
+            millimeter_value = float(value)
+        except (TypeError, ValueError):
+            return str(value)
+        if self.unit == 0:
+            return str(CHILDFRAME_UNIT_CONVERSION.Millimeter2iu(millimeter_value)) + "inch"
+        if self.unit == 5:
+            return str(CHILDFRAME_UNIT_CONVERSION.Millimeter2mils(millimeter_value)) + "mil"
+        return str(round(millimeter_value, 3)) + "mm"
+
+    def result_matches_rule_item(self, result, item):
+        """Match a result item by its stable rule identity, independent of UI language."""
+        actual_key = str(result.get("rule_key") or "")
+        if actual_key:
+            return actual_key == build_rule_key(self.json_string, item)
+        actual_item = str(result.get("item") or "")
+        candidates = {str(item), str(_(item))}
+        for mapping in (config.Language_chinese, config.Language_english):
+            candidates.add(str(mapping.get(item, "")))
+            candidates.add(str(mapping.get(str(item).lower(), "")))
+        candidates.discard("")
+        return actual_item in candidates
+
+    def format_result_layer(self, result):
+        layer = result.get("layer") or ()
+        if isinstance(layer, str):
+            return layer
+        return ", ".join(str(item) for item in layer)
 
     def data_view_binding(self):
         self.dfm_child_frame_model = DfmChildFrameModel(self.analysis_result_data)
@@ -464,246 +433,441 @@ class DfmChildFrame(UiChildFrame):
 
     def on_analysis_result(self, event):
         selection = self.lst_analysis_result1.GetSelectedRow()
-        item_data = self.lst_analysis_result1.GetValue(selection, 0)
+        if selection < 0:
+            event.Skip()
+            return
+        item_data = self.lst_analysis_result1.GetTextValue(selection, 0)
         # Assuming item_data is the data associated with the selected row
         # Start the analysis process synchronously
-        self.analysis_process(item_data, event)
+        self.analysis_process(self.result_key_for_row(selection, item_data), event)
         event.Skip()
+
+    def result_key_for_row(self, row, fallback_text):
+        parsed_key = self.result_key_from_text(fallback_text)
+        if parsed_key is not None:
+            return parsed_key
+        try:
+            return self.result_row_keys[row]
+        except (IndexError, TypeError):
+            return fallback_text
+
+    def result_key_from_text(self, text):
+        try:
+            match = re.search(r"^(\d+)$|(\d+(?=(\、)))", text)
+        except TypeError:
+            return None
+        if match:
+            return match.group(1) or match.group(2)
+        return None
 
     # 通过选中行的string去查找到对应的item
     def analysis_process(self, string_data, event):
+        self.set_locate_status(_("Locating..."))
         settings = self.board.GetDesignSettings()
         x = settings.GetAuxOrigin().x
         y = settings.GetAuxOrigin().y
-        self.remove_added_line(event)
-
-        self.item_list = []
-        pattern = re.compile(r"(\d+(?=(\、)))")
+        locate_started = False
         try:
-            search_res = pattern.search(string_data)
-        except TypeError as e:
-            return
-        layer_num = []
-        self.board.ClearSelected()
-        self.board.SetVisibleAlls()
-        if search_res:
-            search = search_res.group()
-        else:
-            return
-        # 高亮多个结果的kicad分析项
-        if self.json_string == "Smallest Trace Width" or self.json_string == "RingHole":
-            self.board.ClearBrightened()
-            for result_list in self.result:
-                if search == str(result_list):
-                    for result in self.result[result_list]:
-                        item = self.board.ResolveItem(result["id"])
-                        item.SetBrightened()
-                        # item.SetSelected()
-                        self.item_list.append(item)
-                        for layer in result["layer"]:
+            search = self.result_key_from_text(string_data)
+            if search is None:
+                return
+            if search not in self.result:
+                self.set_locate_status(_("No selected result."))
+                return
+            result_group = self.result[search]
+            selected_results = result_group.get("result", []) if isinstance(result_group, dict) else result_group
+            if self.is_file_based_result_group(selected_results) and not self.has_drawable_location_result(selected_results):
+                self.locate_service.clear()
+                self.set_locate_status(_("Gerber/Drill file result has no PCB object location."))
+                return
+            if self.has_no_location_result(selected_results):
+                self.locate_service.clear()
+                wx.MessageBox(
+                    _("This issue has no location data from the DFM service."),
+                    _("Info"),
+                    style=wx.ICON_INFORMATION,
+                )
+                return
+            layer_num = []
+            self.locate_service.begin(defer_focus=True)
+            locate_started = True
+            # 结果表每一行对应一条结果，选择时只定位当前行。
+            if self.is_file_based_result_group(selected_results):
+                if self.draw_file_based_results(selected_results, x, y, layer_num):
+                    pass
+                else:
+                    self.set_locate_status(_("Gerber/Drill file result has no PCB object location."))
+                    return
+            elif self.json_string in [
+                "Pad size",
+                "Smallest Trace Width",
+                "RingHole",
+            ]:
+                result = selected_results[0]
+                for layer in result["layer"]:
+                    layer_num.append(self.board.GetLayerID(layer))
+                plan = ResultLocationPlanner(self.locate_service.backend).plan_native_items(result)
+                self.locate_service.apply_plan(plan)
+                if not plan.items and not plan.bboxes_nm:
+                    self.draw_result_location(result, x, y, layer_num)
+
+            elif self.json_string in ["Signal Integrity", "Hole Size"]:
+                items = []
+                for result in selected_results:
+                    item = self.signal_result_item(result, x, y)
+                    if item is not None:
+                        items.append(item)
+                for layer in result["layer"]:
+                    layer_num.append(self.board.GetLayerID(layer))
+                if items:
+                    self.locate_service.apply_plan(LocatePlan(items=items))
+                else:
+                    for result in selected_results:
+                        self.draw_result_location(result, x, y, layer_num)
+
+            elif self.json_string in [
+                "Holes on SMD Pads",
+                "Special Drill Holes",
+            ]:
+                planner = ResultLocationPlanner(self.locate_service.backend)
+                plan = planner.plan_item_or_drawable_results(
+                    selected_results,
+                    resolve_items=lambda result: self.smd_pad_location_items(result, x, y),
+                    create_shape=self.locate_service.create_warning_shape,
+                    draw_shape=lambda line, result: self.draw_result_shape(line, result, x, y),
+                    result_layer=self.first_result_layer,
+                )
+                layer_num.extend(plan.layers)
+                self.locate_service.apply_plan(plan)
+                if plan.items:
+                    self.set_bulk_locate_status(len(plan.items))
+
+            elif self.json_string in [
+                "Drill to Copper",
+                "Smallest Trace Spacing",
+                "SMD Spacing",
+            ]:
+                planner = ResultLocationPlanner(self.locate_service.backend)
+                plan = planner.plan_item_or_drawable_results(
+                    selected_results,
+                    resolve_items=self.location_items_for_result,
+                    create_shape=self.locate_service.create_warning_shape,
+                    draw_shape=lambda line, result: self.spacing_result_shape(line, result, x, y),
+                    result_layer=self.first_result_layer,
+                )
+                layer_num.extend(plan.layers)
+                self.locate_service.apply_plan(plan)
+                if plan.items:
+                    self.set_bulk_locate_status(len(plan.items))
+
+            elif self.json_string in (
+                "Copper-to-Board Edge",
+                "Hole-to-Board Edge",
+            ):
+                planner = ResultLocationPlanner(self.locate_service.backend)
+                plan = planner.plan_item_or_drawable_results(
+                    selected_results,
+                    resolve_items=self.location_items_for_result,
+                    create_shape=self.locate_service.create_warning_shape,
+                    draw_shape=lambda line, result: self.board_edge_result_shape(line, result, x, y),
+                    result_layer=self.first_result_layer,
+                )
+                layer_num.extend(plan.layers)
+                self.locate_service.apply_plan(plan)
+
+            elif self.json_string in [
+                "Smallest Trace Spacing",
+                "Drill Hole Spacing",
+                "Solder Mask Analysis",
+            ]:
+                planner = ResultLocationPlanner(self.locate_service.backend)
+                plan = planner.plan_item_or_drawable_results(
+                    selected_results,
+                    resolve_items=self.location_items_for_result,
+                    create_shape=self.locate_service.create_warning_shape,
+                    draw_shape=lambda line, result: self.spacing_result_shape(line, result, x, y),
+                    result_layer=self.first_result_layer,
+                )
+                layer_num.extend(plan.layers)
+                self.locate_service.apply_plan(plan)
+                if plan.items:
+                    self.set_bulk_locate_status(len(plan.items))
+
+            # dfm analysis item
+            else:
+                for result in selected_results:
+                    self.draw_result_location(result, x, y, layer_num)
+                    # show layers
+                    for layer in result["layer"]:
+                        if self.board.GetLayerID(layer) > -1:
                             layer_num.append(self.board.GetLayerID(layer))
-                    if len(self.item_list) == 1:
-                        pcbnew.FocusOnItem(
-                            item, self.board.GetLayerID(self.item_list[0].GetLayer())
-                        )
-                    else:
-                        pcbnew.FocusOnItem(
-                            self.item_list[int(len(self.item_list) / 2)],
-                            self.board.GetLayerID(
-                                self.item_list[int(len(self.item_list) / 2)].GetLayer()
-                            ),
-                        )
-        # 其他项只需要高亮一个结果
+                        else:
+                            layer_num.append(pcbnew.B_Adhes)
+
+            # close needn't layers
+            if self.check_box.GetValue() is False and self.should_hide_unrelated_layers(layer_num, selected_results):
+                self.locate_service.hide_unrelated_layers(layer_num)
+        finally:
+            if locate_started:
+                self.locate_service.flush_focus()
+                if LOGGER.isEnabledFor(logging.DEBUG):
+                    LOGGER.debug("locate_result key=%s profile=%s", self.json_string, self.locate_service.profile)
+                wx.CallAfter(pcbnew.Refresh)
+                if self._locate_status == _("Locating..."):
+                    self.set_locate_status(_("Location updated."))
+            if event is not None and hasattr(event, "Skip"):
+                event.Skip()
+
+    def draw_result_location(self, result, x, y, layer_num):
+        planner = ResultLocationPlanner(self.locate_service.backend)
+        plan = planner.plan_drawable_result(
+            result,
+            create_shape=self.locate_service.create_warning_shape,
+            draw_shape=lambda line, item: self.draw_result_shape(line, item, x, y),
+            result_layer=self.first_result_layer,
+        )
+        layer_num.extend(plan.layers)
+        self.locate_service.apply_plan(plan)
+        return bool(plan.temporary_shapes or plan.bboxes_nm)
+
+    def draw_result_shape(self, line, result, x, y):
+        if result.get("type") == 0:
+            if result.get("et") == 0:
+                return self.graphics_setting.set_segment(line, result, x, y)
+            if result.get("et") == 1:
+                return self.graphics_setting.set_arc(line, result, x, y)
+            return self.graphics_setting.set_rect(line, result, x, y)
+        if result.get("type") == 2:
+            return self.graphics_setting.set_segment(line, result, x, y)
+        if "result" in result:
+            return self.graphics_setting.set_rect_list(line, result, x, y)
+        return None
+
+    def spacing_result_shape(self, line, result, x, y):
+        if result.get("item") in {
+            _("Pad-to-Pad Spacing"),
+            _("BGA Pads"),
+            _("SMD Pad Spacing"),
+            _("Pad Spacing"),  # legacy cached/remote result
+        }:
+            items = self.graphics_setting.get_pad_spacing_judge_segment(result, x, y)
         else:
-            for result_list in self.result:
-                if search == str(result_list):
+            items = self.graphics_setting.get_spacing_judge_segment(result, x, y)
+        return items[0] if items else None
 
-                    self.remove_added_line(event)
-                    if self.json_string in ["Hatched Copper Pour", "Pad size"]:
-                        item = self.board.ResolveItem(self.result[result_list][0]["id"])
-                        pcbnew.FocusOnItem(item, self.board.GetLayerID(item.GetLayer()))
-                        for layer in self.result[result_list][0]["layer"]:
-                            layer_num.append(self.board.GetLayerID(layer))
-                        item.SetBrightened()
-                        self.item_list.append(item)
+    def board_edge_result_shape(self, line, result, x, y):
+        return self.graphics_setting.set_segment(line, result, x, y)
 
-                    elif self.json_string in ["Signal Integrity", "Hole Diameter"]:
-                        items = []
-                        for result in self.result[result_list]["result"]:
-                            if result["type"] == 0:
-                                if result["et"] == 0:
-                                    if self.json_string == "Signal Integrity":
-                                        item = self.graphics_setting.get_signal_integrity_segment(
-                                            result, x, y
-                                        )
-                                    else:
-                                        item = self.graphics_setting.get_hole_diameter_segment(
-                                            result, x, y
-                                        )
-                                elif result["et"] == 1:
-                                    item = (
-                                        self.graphics_setting.get_signal_integrity_arc(
-                                            result, x, y
-                                        )
-                                    )
-                                elif result["et"] == 3:
-                                        item = self.graphics_setting.get_signal_integrity_floating_copper(
-                                            result, x, y
-                                        )
-                                else:
-                                    item = (
-                                        self.graphics_setting.get_signal_integrity_rect(
-                                            result, x, y
-                                        )
-                                    )
-                                items.append(item)
-                                self.item_list.append(item)
-                            for layer in result["layer"]:
-                                layer_num.append(self.board.GetLayerID(layer))
-                        if items:
-                            for item in items:
-                                if not item:
-                                    return
-                                item.SetBrightened()
-                                if type(item) is pcbnew.PCB_TEXT:
-                                    pcbnew.FocusOnItem(
-                                        item, self.board.GetLayerID(item.GetLayer())
-                                    )
-                                if len(items) - items.index(item) == 1:
-                                    pcbnew.FocusOnItem(
-                                        item, self.board.GetLayerID(item.GetLayer())
-                                    )
+    def signal_result_item(self, result, x, y):
+        if result["type"] != 0:
+            return None
+        if result["et"] == 0:
+            if self.json_string == "Signal Integrity":
+                return self.graphics_setting.get_signal_integrity_segment(result, x, y)
+            return self.graphics_setting.get_hole_diameter_segment(result, x, y)
+        if result["et"] == 1:
+            return self.graphics_setting.get_signal_integrity_arc(result, x, y)
+        if result["et"] == 3:
+            return self.graphics_setting.get_signal_integrity_floating_copper(result, x, y)
+        return self.graphics_setting.get_signal_integrity_rect(result, x, y)
 
-                    elif self.json_string in [
-                        "Holes on SMD Pads",
-                        "Special Drill Holes",
-                    ]:
-                        items = []
-                        for result in self.result[result_list]["result"]:
-                            item = self.graphics_setting.get_SMD_pads_rect_list(
-                                result, x, y
-                            )
-                            items.append(item)
-                            self.item_list.append(item)
-                            for layer in result["layer"]:
-                                layer_num.append(self.board.GetLayerID(layer))
-                        if items:
-                            self.set_items_Brightened(items)
+    def smd_pad_location_items(self, result, x, y):
+        items = self.location_items_for_result(result)
+        if items or not result.get("result"):
+            return items
+        item = self.graphics_setting.get_SMD_pads_rect_list(result, x, y)
+        return [item] if item is not None else []
 
-                    elif self.json_string in [
-                        "Drill to Copper",
-                        "Smallest Trace Spacing",
-                    ]:
-                        items = []
-                        for result in self.result[result_list]["result"]:
-                            if result["item"] == _("Pad Spacing"):
-                                items = (
-                                    self.graphics_setting.get_pad_spacing_judge_segment(
-                                        result, x, y
-                                    )
-                                )
-                            else:
-                                items = self.graphics_setting.get_spacing_judge_segment(
-                                    result, x, y
-                                )
-                            for layer in result["layer"]:
-                                layer_num.append(self.board.GetLayerID(layer))
-                        if items:
-                            self.set_items_Brightened(items)
+    def first_result_layer(self, result):
+        for layer in result.get("layer") or ():
+            layer_id = self.board.GetLayerID(layer)
+            if layer_id > -1:
+                return layer_id
+        return pcbnew.Dwgs_User
 
-                    elif self.json_string == "Copper-to-Board Edge":
-                        self.process_items(
-                            self.result[result_list]["result"],
-                            self.graphics_setting.get_board_edge_judge_segment,
-                            x,
-                            y,
-                            layer_num,
-                        )
+    def has_no_location_result(self, results):
+        return bool(results) and all(result.get("type") == 9 for result in results)
 
-                    elif self.json_string in ["Pad Spacing", "Drill Hole Spacing"]:
-                        self.process_items(
-                            self.result[result_list]["result"],
-                            self.graphics_setting.get_pad_spacing_judge_segment,
-                            x,
-                            y,
-                            layer_num,
-                        )
+    def should_hide_unrelated_layers(self, layer_nums, results):
+        if not layer_nums:
+            return False
+        return any(isinstance(layer, int) and layer >= 0 for layer in layer_nums)
 
-                    # dfm analysis item
-                    else:
-                        for result in self.result[result_list]["result"]:
-                            line = pcbnew.PCB_SHAPE()
-                            line.GetLayerSet()
-                            line.SetLayer(pcbnew.LAYER_DRC_WARNING)
-                            line.SetWidth(100000)
-                            if result["type"] == 0:
-                                if result["et"] == 0:
-                                    line = self.graphics_setting.set_segment(
-                                        line, result, x, y
-                                    )
-                                elif result["et"] == 1:
-                                    line = self.graphics_setting.set_arc(
-                                        line, result, x, y
-                                    )
-                                else:
-                                    line = self.graphics_setting.set_rect(
-                                        line, result, x, y
-                                    )
-                            elif result["type"] == 2:
-                                line = self.graphics_setting.set_segment(
-                                    line, result, x, y
-                                )
-                            else:
-                                line = self.graphics_setting.set_rect_list(
-                                    line, result, x, y
-                                )
-                            self.line_list.append(line)
-                            layer_num.append(pcbnew.Dwgs_User)
+    def is_file_based_result_group(self, results):
+        return bool(results) and all(result.get("item_type") in ("gerber", "drill") for result in results)
 
-                            # show layers
-                            for layer in result["layer"]:
-                                if self.board.GetLayerID(layer) > -1:
-                                    layer_num.append(self.board.GetLayerID(layer))
-                                else:
-                                    layer_num.append(pcbnew.B_Adhes)
-                        count = 0
-                        # orientation
-                        for line in self.line_list:
-                            count += 1
-                            self.board.Add(line)
-                            line.SetBrightened()
-                            if count == len(self.line_list):
-                                pcbnew.FocusOnItem(line, layer_num[0])
+    def has_drawable_location_result(self, results):
+        return any(self.is_drawable_location_result(result) for result in results or ())
 
-        # close needn't layers
-        if self.check_box.GetValue() is False:
-            gal_set = self.board.GetVisibleLayers()
-            for num in [x for x in gal_set.Seq()]:
-                if num in layer_num:
-                    continue
-                gal_set.removeLayer(num)
-            self.board.SetVisibleLayers(gal_set)
-            pcbnew.UpdateUserInterface()
-        wx.CallAfter(pcbnew.Refresh)
-        event.Skip()
+    def is_drawable_location_result(self, result):
+        return result.get("type") in (0, 2) and all(key in result for key in ("sx", "sy", "ex", "ey"))
 
-    def process_items(self, results, get_item_func, x, y, layer_num):
+    def draw_file_based_results(self, results, x, y, layer_num):
+        planner = ResultLocationPlanner(self.locate_service.backend)
+        drawables = []
+        resolved_items = []
+        seen_items = set()
+        for result in results or ():
+            primary_item = self.resolve_location_item(result.get("id"))
+            related_item = self.resolve_location_item(result.get("related_id"))
+            items = [item for item in (primary_item, related_item) if item is not None]
+            drawables.extend(
+                self.file_result_drawables(
+                    result,
+                    primary_resolved=primary_item is not None,
+                    related_resolved=related_item is not None,
+                )
+            )
+            for item in items:
+                identity = id(item)
+                if identity not in seen_items:
+                    seen_items.add(identity)
+                    resolved_items.append(item)
+        plan = planner.plan_file_results(
+            drawables,
+            create_shape=self.locate_service.create_warning_shape,
+            set_segment=lambda line, result: self.graphics_setting.set_segment(line, result, x, y),
+            result_width=self.file_result_width_nm,
+            result_layer=self.file_result_layer,
+            is_drawable=self.is_drawable_location_result,
+        )
+        plan.items.extend(resolved_items)
+        layer_num.extend(plan.layers)
+        for result in results or ():
+            for layer in self.file_result_layers(result):
+                layer_id = self.board.GetLayerID(layer)
+                if layer_id > -1 and layer_id not in layer_num:
+                    layer_num.append(layer_id)
+        self.locate_service.apply_plan(plan)
+        if plan.status:
+            self.set_locate_status(_(plan.status))
+        return bool(plan.items or plan.temporary_shapes)
+
+    def resolve_location_item(self, item_id):
+        resolver = getattr(self.locate_service.backend, "resolve_item", None)
+        return resolver(item_id) if resolver is not None and item_id else None
+
+    def file_result_drawables(self, result, primary_resolved=False, related_resolved=False):
+        """Draw only unresolved physical segments; never draw a zone centreline."""
+        drawables = []
+        raw = result.get("raw") or {}
+        primary = raw.get("primary")
+        related = raw.get("related") or raw.get("related_raw")
+        for mapping, resolved in ((primary, primary_resolved), (related, related_resolved)):
+            if resolved or not isinstance(mapping, dict):
+                continue
+            if mapping.get("kind") == "region" and "pad" not in str(mapping.get("aperture_function") or "").lower():
+                continue
+            segment = mapping.get("segment")
+            if not segment or len(segment) != 2:
+                continue
+            drawable = dict(result)
+            drawable["raw"] = mapping
+            drawable["layer"] = mapping.get("layer") or result.get("layer")
+            drawable.update(self.segment_location_fields(segment))
+            drawables.append(drawable)
+        # Flashed pads/regions have no centreline in their nested mapping.  If
+        # neither side maps to a native object, draw the top-level measured-gap
+        # segment so every Gerber spacing result still has a visible location.
+        if not drawables and not primary_resolved and not related_resolved:
+            drawables.append(result)
+        return drawables
+
+    @staticmethod
+    def segment_location_fields(segment):
+        start, end = segment
+        return {
+            "type": 0,
+            "et": 0,
+            "sx": "{0:.6f}".format(start[0]),
+            "sy": "{0:.6f}".format(start[1]),
+            "ex": "{0:.6f}".format(end[0]),
+            "ey": "{0:.6f}".format(end[1]),
+        }
+
+    def file_result_layers(self, result):
+        """Return PCB layers referenced by a Gerber/Excellon result and its pair."""
+        layers = []
+
+        def append(value):
+            if isinstance(value, str):
+                value = (value,)
+            for layer in value or ():
+                if layer and layer not in layers:
+                    layers.append(layer)
+
+        append(result.get("layer"))
+        raw = result.get("raw") or {}
+        for key in ("primary", "related", "related_raw"):
+            nested = raw.get(key)
+            if isinstance(nested, dict):
+                append(nested.get("layer"))
+        append(raw.get("related_layer"))
+        append(result.get("related_layer"))
+        return layers
+
+    def file_result_width_nm(self, result):
+        raw = result.get("raw") or {}
+        width = raw.get("width") or raw.get("diameter")
+        try:
+            return max(int(float(width) * 1000000), 150000) if width else 300000
+        except (TypeError, ValueError):
+            return 300000
+
+    def file_result_layer(self, result):
+        for layer in result.get("layer") or ():
+            layer_id = self.board.GetLayerID(layer)
+            if layer_id > -1:
+                return layer_id
+        return pcbnew.Dwgs_User
+
+    def location_items_for_result(self, result):
         items = []
-        for result in results:
-            items = get_item_func(result, x, y)
-            for layer in result["layer"]:
-                layer_num.append(self.board.GetLayerID(layer))
-        if items:
-            self.set_items_Brightened(items)
+        resolver = getattr(self.locate_service.backend, "resolve_item", None)
+        if resolver is None:
+            return items
+        for key in ("id", "related_id"):
+            item_id = result.get(key)
+            item = resolver(item_id) if item_id else None
+            if item is not None:
+                items.append(item)
+        return items
 
     def set_items_Brightened(self, items):
-        for item in items:
-            if not item:
-                return
-            self.item_list.append(item)
-            item.SetBrightened()
-        if len(items) - items.index(item) == 1:
-            pcbnew.FocusOnItem(item, self.board.GetLayerID(item.GetLayer()))
+        self.set_bulk_locate_status(len(items))
+        limited_items = items[:MAX_LOCATE_ITEMS]
+        if any(not item for item in limited_items):
+            return
+        self.locate_service.apply_plan(
+            LocatePlan(
+                items=limited_items,
+                marker_limit=MAX_LOCATE_MARKERS,
+            )
+        )
+
+    def set_bulk_locate_status(self, total):
+        shown = min(total, MAX_LOCATE_ITEMS)
+        markers = min(shown, MAX_LOCATE_MARKERS)
+        if total <= MAX_LOCATE_ITEMS:
+            self.set_locate_status(
+                _("Selected {shown} item(s), marked {markers}.").format(
+                    shown=shown,
+                    markers=markers,
+                )
+            )
+            return
+        self.set_locate_status(
+            _("This group has {total} items. Showing first {shown}, marking first {markers} to keep KiCad responsive.").format(
+                total=total,
+                shown=shown,
+                markers=markers,
+            )
+        )
+
+    def set_locate_status(self, message):
+        self._locate_status = message
+        if self.GetStatusBar() is not None:
+            self.SetStatusText(message)
 
     @property
     def get_layer(self):
@@ -722,38 +886,165 @@ class DfmChildFrame(UiChildFrame):
 
     @property
     def get_type_data(self):
-        if not hasattr(self, "_cached_analysis_type"):
-            # Compute and cache the analysis types
-            analysis_type = set()
-            if self.result_json[self.json_string] != "":
-                for result_list in self.result_json[self.json_string]["check"]:
-                    for result in result_list["result"]:
-                        analysis_type.add(result["item"])
+        counts = self.analysis_type_counts()
+        return [
+            self.analysis_type_label(item, counts[item])
+            for item in sorted(counts)
+        ]
 
-            # # 遍历列表
-            # _cached_analysis_type = []
-            # analysis_type_list = list(analysis_type)
-            # for item in analysis_type_list:
-            #     item = item.strip()  # 去掉首尾空格
-            #     _language_item = self.message_type.get(item)  # 使用 get 方法避免 KeyError
-            #     if _language_item is None:
-            #         print(f"Warning: '{item}' not found in Language_chinese.")
-            #         _language_item = item  # 如果找不到，保留原字符串
-            #     _cached_analysis_type.append(_language_item)
+    def analysis_type_counts(self, selected_layers=None):
+        counts = {}
+        result_data = self.result_json.get(self.json_string, "")
+        if not isinstance(result_data, dict):
+            return counts
+        for result_list in result_data.get("check") or ():
+            for result in result_list.get("result") or ():
+                if selected_layers is not None:
+                    layers = self.child_frame_setting.layer_conversion(
+                        self.json_string, result.get("layer") or []
+                    )
+                    if not layers or layers[0] not in selected_layers:
+                        continue
+                # Native rows may already contain a localized item while
+                # Gerber rows keep the canonical English item.  Both engines
+                # attach the same stable rule key, so resolve that identity
+                # before counting to avoid duplicate visual groups.
+                item = self.canonical_analysis_item(result)
+                counts[item] = counts.get(item, 0) + 1
+        # The alarm-only filter intentionally removes passing detail rows from
+        # ``check``.  Do not let that make an executed rule disappear from the
+        # analysis structure: an item summary is the engine's explicit proof
+        # that the rule ran, while the zero count makes it clear that there are
+        # no rows in the current view.
+        for item, _summary in self.executed_item_summaries():
+            counts.setdefault(item, 0)
+        return counts
 
-            _cached_analysis_type = list(analysis_type)
-        return _cached_analysis_type
+    def executed_item_summaries(self):
+        """Return catalog identities for item summaries proven to have run."""
+        result_data = self.result_json.get(self.json_string, "")
+        if not isinstance(result_data, dict):
+            return ()
+        if str(result_data.get("execution_status") or "") != "completed":
+            return ()
+        summaries = result_data.get("item_summaries")
+        if not isinstance(summaries, dict):
+            return ()
+
+        executed = []
+        seen = set()
+        catalog_keys = {
+            build_rule_key(self.json_string, metadata.get("item")): metadata.get("item")
+            for metadata in RULE_CATALOG.get(self.json_string, ())
+        }
+        for summary_key, summary in summaries.items():
+            if not isinstance(summary, dict):
+                continue
+            summary_status = str(summary.get("execution_status") or "completed")
+            if summary_status != "completed":
+                continue
+            stable_key = str(summary.get("rule_key") or "")
+            if not stable_key and str(summary_key) in catalog_keys:
+                stable_key = str(summary_key)
+            raw_item = str(summary.get("item") or "")
+            if not raw_item and not stable_key:
+                raw_item = str(summary_key)
+            item = self.canonical_analysis_item(
+                {"rule_key": stable_key, "item": raw_item}
+            )
+            # Only catalog-backed identities are safe to present as an
+            # executed rule.  This prevents partial/remote payload metadata
+            # from inventing checks that the engine did not run.
+            if item not in catalog_keys.values() or item in seen:
+                continue
+            normalized = dict(summary)
+            normalized.setdefault("item", item)
+            normalized.setdefault("rule_key", build_rule_key(self.json_string, item))
+            executed.append((item, normalized))
+            seen.add(item)
+        return tuple(executed)
+
+    def canonical_analysis_item(self, result):
+        """Return the catalog item identified by a result's stable rule key."""
+        result = result if isinstance(result, dict) else {}
+        stable_key = str(result.get("rule_key") or "")
+        catalog = RULE_CATALOG.get(self.json_string, ())
+        if stable_key:
+            for metadata in catalog:
+                item = str(metadata.get("item") or "")
+                if stable_key == build_rule_key(self.json_string, item):
+                    return item
+
+        raw_item = str(result.get("item") or "")
+        normalized_item = normalize_name(raw_item)
+        if not normalized_item:
+            return raw_item
+        for metadata in catalog:
+            item = str(metadata.get("item") or "")
+            aliases = {
+                normalize_name(item),
+                normalize_name(_(item)),
+            }
+            item_key = item.strip().lower()
+            for mapping in (config.Language_chinese, config.Language_english):
+                aliases.add(normalize_name(mapping.get(item, "")))
+                aliases.add(normalize_name(mapping.get(item_key, "")))
+            aliases.discard("")
+            if normalized_item in aliases:
+                return item
+        return raw_item
+
+    def analysis_type_text(self, item):
+        """Translate a rule item for display while retaining its stable key."""
+        translated = _(str(item))
+        if translated != item:
+            return translated
+        return self.message_type.get(str(item).strip().lower(), str(item))
+
+    def analysis_type_label(self, item, count=None):
+        text = self.analysis_type_text(item)
+        if count is None:
+            return text
+        return "{0}({1}{2})".format(
+            text,
+            count,
+            self.message_type.get("pcs", _("pcs")),
+        )
+
+    def analysis_type_key(self, label):
+        for item in self.analysis_type_counts():
+            text = self.analysis_type_text(item)
+            if label == item or label == text or str(label).startswith(text + "("):
+                return item
+        return label
 
     def get_result(self):
         analysis_result = []
         result_data = self.result_json.get(self.json_string, {})
         if result_data == "" or not result_data.get("check"):
             return analysis_result
+        num = 0
         for result_list in result_data["check"]:
             for result in result_list["result"]:
-                if result["value"] not in analysis_result:
-                    analysis_result.append([result["value"], result["color"]])
+                num += 1
+                analysis_result.append(
+                    [
+                        str(num),
+                        self.result_severity(result),
+                        self.format_result_value(result),
+                        self.format_result_layer(result),
+                        result.get("color", "black"),
+                    ]
+                )
         return analysis_result
+
+    def result_severity(self, result):
+        color = result.get("color")
+        if color == "red":
+            return _("Error")
+        if color == "gold":
+            return _("Warning")
+        return _("OK")
 
     def GetImagePath(self, bitmap_path):
         return GetImagePath(bitmap_path)

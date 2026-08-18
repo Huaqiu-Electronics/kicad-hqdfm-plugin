@@ -21,29 +21,31 @@ msgstr ""
 msgid "HQ DFM"
 msgstr "HQ DFM"
 
+msgid "For more advanced DFM checks, use"
+msgstr "如需要更强的DFM检查，请使用"
+
+msgid "Huaqiu DFM"
+msgstr "华秋DFM"
+
+msgid "Open Huaqiu DFM in your browser"
+msgstr "在浏览器中打开华秋DFM"
+
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\_baseApp.py:59
 msgid "pcb editor"
 msgstr "pcb 编辑器"
 
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:82
 msgid "Long Pads"
 msgstr "长条焊盘"
 
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:85
 msgid "Short Pads"
 msgstr "常规焊盘"
 
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:124
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:149
 msgid "Via Annular Ring"
 msgstr "via孔环"
 
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:127
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:192
 msgid "PTH Annular Ring"
 msgstr "pth孔环"
 
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:244
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:172
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:244
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:294
@@ -53,14 +55,6 @@ msgstr "pth孔环"
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:475
 msgid "Smallest Trace Width"
 msgstr "最小线宽"
-
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:301
-msgid "Grid Spacing"
-msgstr "网格间距"
-
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:311
-msgid "Grid Width"
-msgstr "网格线宽"
 
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\child_frame\child_frame_setting.py:53
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:366
@@ -73,7 +67,7 @@ msgstr "项目"
 
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:347
 msgid "Aspect Ratio"
-msgstr "孔后径比"
+msgstr "孔厚径比"
 
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\child_frame\dfm_child_frame.py:599
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:175
@@ -176,6 +170,15 @@ msgstr "请求数据错误，请重新请求。"
 msgid "Info"
 msgstr "信息"
 
+msgid "Gerber export check completed locally."
+msgstr "Gerber 导出检查已在本地完成。"
+
+msgid "Gerber File Integrity"
+msgstr "Gerber 文件完整性"
+
+msgid "Gerber/Drill file result has no PCB object location."
+msgstr "Gerber/Drill 文件结果没有 PCB 对象定位。"
+
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_analysis.py:248
 msgid "Analysis file"
 msgstr "DFM分析"
@@ -207,6 +210,15 @@ msgstr "错误"
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:57
 msgid "   DFM Analysis   "
 msgstr "  DFM 分析  "
+
+msgid "KiCad DFM Analysis"
+msgstr "KiCad DFM 分析"
+
+msgid "Export Gerber DFM"
+msgstr "导出 Gerber 并分析"
+
+msgid "Rule Manager"
+msgstr "规则管理"
 
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:69
 msgid "   Rule Manager   "
@@ -279,6 +291,9 @@ msgstr "电气信号"
 msgid "Smallest Trace Spacing"
 msgstr "最小间距"
 
+msgid "SMD Spacing"
+msgstr "SMD间距"
+
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:174
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:246
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:303
@@ -296,9 +311,6 @@ msgstr "焊盘大小"
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:539
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:542
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:545
-msgid "Hatched Copper Pour"
-msgstr "网格铺铜"
-
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:177
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:249
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:315
@@ -310,6 +322,9 @@ msgstr "网格铺铜"
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:565
 msgid "Hole Diameter"
 msgstr "钻孔直径"
+
+msgid "Hole Size"
+msgstr "钻孔孔径"
 
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:178
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:250
@@ -343,7 +358,7 @@ msgstr "孔到孔"
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:615
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:618
 msgid "Drill to Copper"
-msgstr "孔到线"
+msgstr "孔到铜"
 
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:181
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:253
@@ -500,12 +515,231 @@ msgid "Unit"
 msgstr "单位"
 
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\settings\graphics_setting.py:220
-msgid "Via-to-Trace (Inner)"
-msgstr "过孔到内层"
+msgid "Via-to-Trace [Inner]"
+msgstr "过孔到内层走线"
 
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\settings\graphics_setting.py:220
-msgid "Via-to-Trace (Outer)"
-msgstr "过孔到表层"
+msgid "Via-to-Trace [Outer]"
+msgstr "过孔到外层走线"
+
+msgid "PTH-to-Trace [Inner]"
+msgstr "PTH孔到内层走线"
+
+msgid "PTH-to-Trace [Outer]"
+msgstr "PTH孔到外层走线"
+
+msgid "NPTH-to-Copper"
+msgstr "NPTH孔到铜"
+
+msgid "Rule Profile"
+msgstr "规则组"
+
+msgid "Reset Layers"
+msgstr "重置图层"
+
+msgid "Inject DRC Markers"
+msgstr "注入 DRC 标记"
+
+msgid "Clear DRC Markers"
+msgstr "清除 DRC 标记"
+
+msgid "Injected {count} HQ DFM marker(s)."
+msgstr "已注入 {count} 个 HQ DFM 标记。"
+
+msgid "Cleared {count} HQ DFM marker(s)."
+msgstr "已清除 {count} 个 HQ DFM 标记。"
+
+msgid "No UUID-backed DFM results are available for native DRC markers."
+msgstr "没有可用于原生 DRC 标记的 UUID 关联 DFM 结果。"
+
+msgid "Native DRC marker injection is unavailable in KiCad 8, 9, and 10."
+msgstr "KiCad 8、9 和 10 不支持注入原生 DRC 标记。"
+
+msgid "#"
+msgstr "#"
+
+msgid "Severity"
+msgstr "严重程度"
+
+msgid "Value"
+msgstr "值"
+
+msgid "Rule"
+msgstr "规则"
+
+msgid "Warning"
+msgstr "警告"
+
+msgid "OK"
+msgstr "确定"
+
+msgid "No selected result."
+msgstr "未选择结果。"
+
+msgid "No analysis data was returned"
+msgstr "未返回分析数据"
+
+msgid "No detailed issues are available for this item. Please run DFM analysis first, or this item has no detected issues."
+msgstr "该项目暂无详细问题。请先运行 DFM 分析，或该项目当前没有检测到问题。"
+
+msgid "This issue has no location data from the DFM service."
+msgstr "DFM 服务未返回该问题的位置数据。"
+
+msgid "Basic"
+msgstr "普通工艺"
+
+msgid "Standard"
+msgstr "标准工艺"
+
+msgid "Advanced"
+msgstr "高阶工艺"
+
+msgid "Save Rules"
+msgstr "保存规则"
+
+msgid "Rules saved."
+msgstr "规则已保存。"
+
+msgid "Close"
+msgstr "关闭"
+
+msgid "Edit rule values as red threshold, warning threshold, upper limit. Values are in the shown unit."
+msgstr "按 红色阈值、黄色预警阈值、上限 编辑规则；数值单位为表格中显示的单位。"
+
+msgid "Selected Rule"
+msgstr "当前规则"
+
+msgid "Select a rule to edit."
+msgstr "请选择要编辑的规则。"
+
+msgid "Rule Value"
+msgstr "规则值"
+
+msgid "Format: alarm threshold, warning threshold, upper limit."
+msgstr "格式：报警阈值，预警阈值，上限。"
+
+msgid "Rule values must be numbers or '-' placeholders."
+msgstr "规则参数必须是数字或 '-' 占位符。"
+
+msgid "Rule values must contain three comma-separated fields."
+msgstr "规则参数必须包含 3 个用英文逗号分隔的字段。"
+
+msgid "This group has {total} items. To keep KiCad responsive, only the first {shown} items are selected and the first {markers} items are marked."
+msgstr "该分组包含 {total} 个对象。为避免 KiCad 卡死，仅选中前 {shown} 个对象，并只给前 {markers} 个对象添加标记。"
+
+msgid "Locating..."
+msgstr "正在定位..."
+
+msgid "Location updated."
+msgstr "定位已更新。"
+
+msgid "Selected {shown} item(s), marked {markers}."
+msgstr "已选中 {shown} 个对象，已标记 {markers} 个。"
+
+msgid "This group has {total} items. Showing first {shown}, marking first {markers} to keep KiCad responsive."
+msgstr "该分组包含 {total} 个对象。为保持 KiCad 流畅，仅显示前 {shown} 个，并标记前 {markers} 个。"
+
+msgid "diagram.acute_angle"
+msgstr "锐角走线"
+
+msgid "diagram.unconnected_trace"
+msgstr "断头线"
+
+msgid "diagram.floating_copper"
+msgstr "孤立铜"
+
+msgid "diagram.unconnected_via"
+msgstr "无效过孔"
+
+msgid "diagram.trace_width"
+msgstr "走线宽度"
+
+msgid "diagram.trace_spacing"
+msgstr "线到线间距"
+
+msgid "diagram.trace_to_pad_spacing"
+msgstr "线到焊盘间距"
+
+msgid "diagram.pad_spacing"
+msgstr "焊盘间距"
+
+msgid "diagram.bga_pad"
+msgstr "焊盘大小"
+
+msgid "diagram.smd_pad_spacing"
+msgstr "SMD 焊盘间距"
+
+msgid "diagram.min_hole_diameter"
+msgstr "最小孔径"
+
+msgid "diagram.aspect_ratio"
+msgstr "板厚孔径比"
+
+msgid "diagram.min_slot_width"
+msgstr "最小槽宽"
+
+msgid "diagram.max_hole_diameter"
+msgstr "最大孔径"
+
+msgid "diagram.max_slot_width"
+msgstr "最大槽宽"
+
+msgid "diagram.max_slot_length"
+msgstr "最大槽长"
+
+msgid "diagram.slot_aspect_ratio"
+msgstr "槽长宽比"
+
+msgid "diagram.blind_buried_diameter"
+msgstr "盲埋孔孔径"
+
+msgid "diagram.annular_ring"
+msgstr "孔环宽度"
+
+msgid "diagram.outer_hole_to_trace"
+msgstr "外层孔到线间距"
+
+msgid "diagram.inner_hole_to_trace"
+msgstr "内层孔到线间距"
+
+msgid "diagram.npth_to_copper"
+msgstr "NPTH 到铜间距"
+
+msgid "diagram.smd_to_board_edge"
+msgstr "SMD 到板边间距"
+
+msgid "diagram.copper_to_board_edge"
+msgstr "铜到板边间距"
+
+msgid "diagram.square_rect_hole"
+msgstr "方形或矩形孔"
+
+msgid "diagram.castellated_hole"
+msgstr "半孔"
+
+msgid "diagram.pth_on_smd_pad"
+msgstr "插件孔上焊盘"
+
+msgid "diagram.via_on_smd_pad"
+msgstr "过孔上焊盘"
+
+msgid "diagram.npth_on_smd_pad"
+msgstr "NPTH 上焊盘"
+
+msgid "diagram.missing_smask_opening"
+msgstr "阻焊少开窗"
+
+msgid "diagram.same_net_via_spacing"
+msgstr "同网络过孔间距"
+
+msgid "diagram.different_net_via_spacing"
+msgstr "不同网络过孔间距"
+
+msgid "diagram.different_net_pth_spacing"
+msgstr "不同网络插件孔间距"
+
+msgid "diagram.blind_buried_via_spacing"
+msgstr "盲埋孔间距"
 
 #~ msgid "Board Edge Clearance"
 #~ msgstr "板边距离"
@@ -550,3 +784,331 @@ msgstr "过孔到表层"
 
 #~ msgid "Explain"
 #~ msgstr "解释"
+
+msgid "Pad-to-Pad Spacing"
+msgstr "焊盘到焊盘"
+
+msgid "BGA Pads"
+msgstr "BGA 焊盘间距"
+
+msgid "SMD Pad Spacing"
+msgstr "SMD 焊盘间距"
+
+msgid "Ready to check"
+msgstr "等待检查"
+
+msgid "Preparing check..."
+msgstr "正在准备检查……"
+
+msgid "Stop Check"
+msgstr "停止检查"
+
+msgid "Stopping after the current check..."
+msgstr "正在停止，将不再执行后续检查……"
+
+msgid "Check stopped."
+msgstr "检查已停止。"
+
+msgid "Preparing board data"
+msgstr "正在准备电路板数据"
+
+msgid "Checking output directory"
+msgstr "正在检查输出目录"
+
+msgid "Checking exported files"
+msgstr "正在检查导出文件"
+
+msgid "Checking ZIP package"
+msgstr "正在检查 ZIP 压缩包"
+
+msgid "Scanning exported geometry"
+msgstr "正在扫描导出图形"
+
+msgid "Checking copper spacing"
+msgstr "正在检查铜间距"
+
+msgid "Checking drill-to-copper clearance"
+msgstr "正在检查钻孔到铜间距"
+
+msgid "Checking signal integrity"
+msgstr "正在检查信号完整性"
+
+msgid "Checking solder mask"
+msgstr "正在检查阻焊"
+
+msgid "Finalizing results"
+msgstr "正在整理检查结果"
+
+msgid "Saving board"
+msgstr "正在保存电路板"
+
+msgid "Exporting fabrication files"
+msgstr "正在导出生产文件"
+
+msgid "Preparing Gerber analysis"
+msgstr "正在准备 Gerber 分析"
+
+msgid "Enriching Gerber results"
+msgstr "正在关联 Gerber 与 KiCad 结果"
+
+msgid "Merging analysis results"
+msgstr "正在合并分析结果"
+
+msgid "Saving analysis cache"
+msgstr "正在保存分析缓存"
+
+msgid "Checking: {item} ({current}/{total})"
+msgstr "正在检查：{item}（{current}/{total}）"
+
+msgid "Solder Mask Analysis"
+msgstr "阻焊分析"
+
+msgid "diagram.solder_mask_bridge"
+msgstr "阻焊桥"
+
+msgid "diagram.solder_mask_covers_trace"
+msgstr "阻焊开窗与其他网络走线间距"
+
+msgid "diagram.solder_mask_multiple_nets"
+msgstr "一个阻焊开窗覆盖多个网络"
+msgid "Rule: qualitative check"
+msgstr "规则：定性检查"
+
+msgid "Rule: {values}{unit}"
+msgstr "规则：{values}{unit}"
+
+msgid "ratio"
+msgstr "比值"
+
+msgid "No rule description is available for this analysis item."
+msgstr "此分析子项暂无规则说明。"
+
+msgid "{description} This is a qualitative check. Avoid the condition or review every occurrence before production."
+msgstr "{description} 此项为定性检查，应避免出现该情况；投产前请逐条复核。"
+
+msgid "{description} Values outside {lower} to {upper} are high risk. Recommended range: {recommended} to {upper}."
+msgstr "{description} 低于 {lower} 或高于 {upper} 均存在较高风险。建议范围：{recommended} 至 {upper}。"
+
+msgid "{description} Recommended value: {recommended} or less."
+msgstr "{description} 建议值：不大于 {recommended}。"
+
+msgid "{description} Values above {alarm} are high risk. Recommended value: {recommended} or less."
+msgstr "{description} 高于 {alarm} 存在较高风险。建议值：不大于 {recommended}。"
+
+msgid "{description} Recommended value: {recommended} or greater."
+msgstr "{description} 建议值：不小于 {recommended}。"
+
+msgid "{description} Values below {alarm} are high risk. Recommended value: {recommended} or greater."
+msgstr "{description} 低于 {alarm} 存在较高风险。建议值：不小于 {recommended}。"
+
+msgid "Disconnected copper trace fragments returned by the DFM service."
+msgstr "检查同一网络中彼此断开的铜走线片段。"
+
+msgid "Acute trace/copper angles that may trap acid or create weak copper."
+msgstr "检查可能造成蚀刻液残留或铜箔薄弱的锐角走线和铜皮。"
+
+msgid "Track ends that are not connected to a pad, via, or other copper."
+msgstr "检查未连接到焊盘、过孔或其他铜对象的走线端点。"
+
+msgid "Copper islands that are isolated from useful nets."
+msgstr "检查未与有效网络连接的孤立铜岛。"
+
+msgid "Vias without effective copper connectivity."
+msgstr "检查未形成有效铜连接的过孔。"
+
+msgid "Minimum copper trace width. Public HQPCB capability lists 5 mil as the lower bound for common orders."
+msgstr "检查铜走线的最小线宽；常规订单公开能力下限为 5 mil。"
+
+msgid "Minimum clearance between copper traces."
+msgstr "检查不同铜走线之间的最小边到边间距。"
+
+msgid "Minimum clearance between traces and pads."
+msgstr "检查走线与焊盘之间的最小边到边间距。"
+
+msgid "Minimum general clearance between copper pads."
+msgstr "检查普通铜焊盘之间的最小边到边间距。"
+
+msgid "Minimum edge-to-edge clearance between BGA pads."
+msgstr "检查 BGA 焊盘之间的最小边到边间距。"
+
+msgid "Minimum edge-to-edge clearance between SMD pads."
+msgstr "检查 SMD 焊盘之间的最小边到边间距。"
+
+msgid "Minimum shorter-side length of ordinary pads."
+msgstr "检查常规焊盘外形较短一边的最小长度。"
+
+msgid "Undersized elongated pads have low adhesion, which can reduce manufacturing quality and yield and may increase testing costs. Use a minimum width of at least 0.15 mm; 0.2 mm or greater is recommended."
+msgstr "长条焊盘过小无附着力低，会影响生产品质良率，可能会导致测试成本上涨，建议最小宽度≥0.15mm，推荐≥0.2mm。"
+
+msgid "Too-small through-vias can reduce production efficiency and yield and may increase cost. Use a via drill diameter of at least 0.3 mm."
+msgstr "Via通孔过小会影响生产效率、品质良率，可能会导致费用上涨，建议直径≥0.3 mm。"
+
+msgid "Minimum component PTH pad drill diameter; excludes vias and NPTH pads."
+msgstr "检查器件PTH焊盘的最小插件孔径，不包含Via及NPTH焊盘孔。"
+
+msgid "Maximum generic drill size used by the remote DFM contract."
+msgstr "检查远端兼容规则使用的通用最大孔径。"
+
+msgid "Maximum plated through-hole size."
+msgstr "检查金属化通孔的最大成品孔径。"
+
+msgid "As drill diameter decreases, usable flute length also decreases; very small drills may not penetrate a thick PCB."
+msgstr "钻咀直径越小，螺纹长度越短，微小钻刀无法钻穿较厚的PCB。"
+
+msgid "Minimum mechanical via drill."
+msgstr "检查机械过孔的最小孔径。"
+
+msgid "Minimum laser blind via drill."
+msgstr "检查激光盲孔的最小孔径。"
+
+msgid "Minimum mechanically drilled blind via."
+msgstr "检查机械盲孔的最小孔径。"
+
+msgid "Minimum laser buried via drill."
+msgstr "检查激光埋孔的最小孔径。"
+
+msgid "Minimum mechanically drilled buried via."
+msgstr "检查机械埋孔的最小孔径。"
+
+msgid "The minimum oval-slot cutter diameter is 0.4 mm. The original slot must not be narrower than 0.3 mm; use at least 0.4 mm, with 0.6 mm or greater recommended."
+msgstr "椭圆槽刀径最小为0.4 mm，原始槽孔不能小于0.3 mm，建议槽宽≥0.4 mm，推荐≥0.6 mm。"
+
+msgid "Maximum blind or buried via drill."
+msgstr "检查盲孔或埋孔的最大孔径。"
+
+msgid "Oversized slots require additional production operations, reducing efficiency and increasing cost. Keep the slot length at or below 10 mm."
+msgstr "槽长过大需要增加生产工序，会影响效率和成本，建议槽长≤10 mm。"
+
+msgid "Oversized slot widths require additional production operations, reducing efficiency and increasing cost. Keep the cutter diameter at or below 5.8 mm."
+msgstr "槽宽过大需要增加生产工序，会影响效率和成本，建议直径≤5.8 mm。"
+
+msgid "When slot length is less than twice its width, uneven forces during production can deform it. Use a slot length of at least twice the width."
+msgstr "slot槽的长小于2倍宽时，生产过程由于受力不均易变形，建议槽长≥2×宽。"
+
+msgid "Square or rectangular hole size."
+msgstr "检查方孔或矩形孔较短一边的尺寸。"
+
+msgid "Minimum annular ring for vias."
+msgstr "检查过孔孔边到焊盘外缘的最小孔环宽度。"
+
+msgid "Minimum annular ring for plated through-hole pads."
+msgstr "检查金属化通孔孔边到焊盘外缘的最小孔环宽度。"
+
+msgid "Minimum spacing between vias on the same net."
+msgstr "检查相同网络过孔之间的最小孔边间距。"
+
+msgid "Minimum spacing between vias on different nets."
+msgstr "检查不同网络过孔之间的最小孔边间距。"
+
+msgid "Insufficient hole-to-hole spacing can reduce production efficiency and quality yield. Use a minimum spacing of at least 15 mil; 17 mil or greater is recommended."
+msgstr "孔间距过小会影响生产效率、品质良率，建议最小间距≥15mil，推荐≥17mil。"
+
+msgid "Minimum spacing between blind/buried vias."
+msgstr "检查盲埋孔之间的最小孔边间距。"
+
+msgid "Outer-layer clearance from plated through-hole edge to trace."
+msgstr "检查金属化通孔孔边到外层走线的最小间距。"
+
+msgid "Inner-layer clearance from plated through-hole edge to trace."
+msgstr "检查金属化通孔孔边到内层走线的最小间距。"
+
+msgid "Outer-layer clearance from via edge to trace."
+msgstr "检查过孔孔边到外层走线的最小间距。"
+
+msgid "Inner-layer clearance from via edge to trace."
+msgstr "检查过孔孔边到内层走线的最小间距。"
+
+msgid "Clearance from non-plated hole edge to copper."
+msgstr "检查非金属化孔孔边到走线、焊盘或铺铜的最小间距。"
+
+msgid "Minimum distance from SMD pad to board edge."
+msgstr "检查 SMD 焊盘到成品板边的最小距离。"
+
+msgid "Minimum distance from trace to board edge."
+msgstr "检查走线到成品板边的最小距离。"
+
+msgid "Minimum distance from copper pour or copper feature to board edge."
+msgstr "检查铺铜或其他铜特征到成品板边的最小距离。"
+
+msgid "Right-angle corners in square or rectangular holes cannot be machined in the production process. Use a circular or oval hole instead."
+msgstr "生产过程正/长方孔的直角无法加工出来，建议改为圆形或椭圆形。"
+
+msgid "Castellated or half-hole feature detection."
+msgstr "检查钻孔与成品板边相交形成的半孔特征。"
+
+msgid "Via overlap with BGA pad."
+msgstr "检查过孔与 BGA 焊盘的重叠。"
+
+msgid "Via overlap with SMD pad."
+msgstr "检查过孔与 SMD 焊盘的重叠。"
+
+msgid "NPTH overlap with SMD pad."
+msgstr "检查非金属化孔与 SMD 焊盘的重叠。"
+
+msgid "PTH overlap with SMD pad."
+msgstr "检查金属化通孔与 SMD 焊盘的重叠。"
+
+msgid "Pad or copper feature that should expose solder mask but has no opening."
+msgstr "检查应露铜但没有对应阻焊开窗的焊盘或铜特征。"
+
+msgid "Minimum solder-mask web between separate openings."
+msgstr "检查相邻独立阻焊开窗之间的最小阻焊桥宽度。"
+
+msgid "Clearance from a mask opening to a trace on another net."
+msgstr "检查阻焊开窗到其他网络走线的最小间距。"
+
+msgid "One connected solder-mask opening exposes copper from multiple nets."
+msgstr "检查一个连续阻焊开窗是否同时露出多个网络的铜。"
+
+msgid "diagram.dangling_trace"
+msgstr "悬空断点"
+
+msgid "Combined DFM Analysis"
+msgstr "综合 DFM 分析"
+
+msgid "Quick DFM Check"
+msgstr "快速 DFM 检查"
+
+msgid "Full DFM Check"
+msgstr "综合 DFM 检查"
+
+msgid "Quick DFM check completed."
+msgstr "快速 DFM 检查已完成。"
+
+msgid "Combined DFM analysis completed."
+msgstr "综合 DFM 分析已完成。"
+msgid "Hole-to-Board Edge"
+msgstr "孔到板边"
+
+msgid "PTH-to-Board Edge"
+msgstr "插件孔到板边"
+
+msgid "Via-to-Board Edge"
+msgstr "Via到板边"
+
+msgid "Screw Hole-to-Board Edge"
+msgstr "螺丝孔到板边"
+
+msgid "NPTH-to-Board Edge"
+msgstr "NPTH孔到板边"
+
+msgid "PTH holes too close to the board edge risk breakout and may severely affect electrical performance. Use at least 12 mil; 15 mil or greater is recommended."
+msgstr "PTH孔距离板边过近存在破孔的风险，严重时影响电气性能，建议≥12mil，推荐≥15mil。"
+
+msgid "Vias too close to the board edge risk breakout and may severely affect electrical performance. Use at least 12 mil; 15 mil or greater is recommended."
+msgstr "Via孔距离板边过近存在破孔的风险，严重时影响电气性能，建议≥12mil，推荐≥15mil。"
+
+msgid "Screw holes too close to the board edge risk breakout. Use at least 8 mil; 12 mil or greater is recommended."
+msgstr "螺丝孔距离板边过近存在破孔的风险，建议≥8mil，推荐≥12mil。"
+
+msgid "NPTH holes too close to the board edge risk breakout. Use at least 8 mil; 12 mil or greater is recommended."
+msgstr "NPTH孔距离板边过近存在破孔的风险，建议≥8mil，推荐≥12mil。"
+
+msgid "diagram.pth_to_board_edge"
+msgstr "插件孔到板边间距"
+
+msgid "diagram.via_to_board_edge"
+msgstr "Via到板边间距"
+
+msgid "diagram.npth_to_board_edge"
+msgstr "NPTH孔到板边间距"

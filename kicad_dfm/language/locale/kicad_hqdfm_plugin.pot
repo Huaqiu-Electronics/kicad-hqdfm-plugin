@@ -21,35 +21,33 @@ msgstr ""
 msgid "HQ DFM"
 msgstr ""
 
+msgid "For more advanced DFM checks, use"
+msgstr ""
+
+msgid "Huaqiu DFM"
+msgstr ""
+
+msgid "Open Huaqiu DFM in your browser"
+msgstr ""
+
 #:
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\_baseApp.py:59
 msgid "pcb editor"
 msgstr ""
 
-#:
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:82
 msgid "Long Pads"
 msgstr ""
 
-#:
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:85
 msgid "Short Pads"
 msgstr ""
 
-#:
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:124
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:149
 msgid "Via Annular Ring"
 msgstr ""
 
-#:
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:127
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:192
 msgid "PTH Annular Ring"
 msgstr ""
 
 #:
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:244
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:172
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:244
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:294
@@ -58,16 +56,6 @@ msgstr ""
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:472
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:475
 msgid "Smallest Trace Width"
-msgstr ""
-
-#:
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:301
-msgid "Grid Spacing"
-msgstr ""
-
-#:
-#: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\analysis.py:311
-msgid "Grid Width"
 msgstr ""
 
 #:
@@ -208,6 +196,15 @@ msgstr ""
 msgid "Info"
 msgstr ""
 
+msgid "Gerber export check completed locally."
+msgstr ""
+
+msgid "Gerber File Integrity"
+msgstr ""
+
+msgid "Gerber/Drill file result has no PCB object location."
+msgstr ""
+
 #:
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_analysis.py:248
 msgid "Analysis file"
@@ -243,6 +240,54 @@ msgstr ""
 #:
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_maindialog\ui_dfm_maindialog.py:57
 msgid "   DFM Analysis   "
+msgstr ""
+
+msgid "KiCad DFM Analysis"
+msgstr ""
+
+msgid "Export Gerber DFM"
+msgstr ""
+
+msgid "Rule Manager"
+msgstr ""
+
+msgid "Inject DRC Markers"
+msgstr ""
+
+msgid "Clear DRC Markers"
+msgstr ""
+
+msgid "Injected {count} HQ DFM marker(s)."
+msgstr ""
+
+msgid "Cleared {count} HQ DFM marker(s)."
+msgstr ""
+
+msgid "No UUID-backed DFM results are available for native DRC markers."
+msgstr ""
+
+msgid "Native DRC marker injection is unavailable in KiCad 8, 9, and 10."
+msgstr ""
+
+msgid "#"
+msgstr ""
+
+msgid "Severity"
+msgstr ""
+
+msgid "Value"
+msgstr ""
+
+msgid "Rule"
+msgstr ""
+
+msgid "Warning"
+msgstr ""
+
+msgid "OK"
+msgstr ""
+
+msgid "No selected result."
 msgstr ""
 
 #:
@@ -325,6 +370,9 @@ msgstr ""
 msgid "Smallest Trace Spacing"
 msgstr ""
 
+msgid "SMD Spacing"
+msgstr ""
+
 #:
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:174
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:246
@@ -344,9 +392,6 @@ msgstr ""
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:539
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:542
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:545
-msgid "Hatched Copper Pour"
-msgstr ""
-
 #:
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:177
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:249
@@ -358,6 +403,9 @@ msgstr ""
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:564
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\dfm_mainframe.py:565
 msgid "Hole Diameter"
+msgstr ""
+
+msgid "Hole Size"
 msgstr ""
 
 #:
@@ -579,11 +627,359 @@ msgstr ""
 
 #:
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\settings\graphics_setting.py:220
-msgid "Via-to-Trace (Inner)"
+msgid "Via-to-Trace [Inner]"
 msgstr ""
 
 #:
 #: C:\Users\haf\Documents\KiCad\9.0\3rdparty\plugins\com_github_Huaqiu-Electronics_kicad-hqdfm-plugin\kicad_dfm\settings\graphics_setting.py:220
-msgid "Via-to-Trace (Outer)"
+msgid "Via-to-Trace [Outer]"
 msgstr ""
 
+msgid "PTH-to-Trace [Inner]"
+msgstr ""
+
+msgid "PTH-to-Trace [Outer]"
+msgstr ""
+
+msgid "NPTH-to-Copper"
+msgstr ""
+
+msgid "Pad-to-Pad Spacing"
+msgstr ""
+
+msgid "BGA Pads"
+msgstr ""
+
+msgid "SMD Pad Spacing"
+msgstr ""
+
+msgid "Ready to check"
+msgstr ""
+
+msgid "Preparing check..."
+msgstr ""
+
+msgid "Stop Check"
+msgstr ""
+
+msgid "Stopping after the current check..."
+msgstr ""
+
+msgid "Check stopped."
+msgstr ""
+
+msgid "Preparing board data"
+msgstr ""
+
+msgid "Checking output directory"
+msgstr ""
+
+msgid "Checking exported files"
+msgstr ""
+
+msgid "Checking ZIP package"
+msgstr ""
+
+msgid "Scanning exported geometry"
+msgstr ""
+
+msgid "Checking copper spacing"
+msgstr ""
+
+msgid "Checking drill-to-copper clearance"
+msgstr ""
+
+msgid "Checking signal integrity"
+msgstr ""
+
+msgid "Checking solder mask"
+msgstr ""
+
+msgid "Finalizing results"
+msgstr ""
+
+msgid "Saving board"
+msgstr ""
+
+msgid "Exporting fabrication files"
+msgstr ""
+
+msgid "Preparing Gerber analysis"
+msgstr ""
+
+msgid "Enriching Gerber results"
+msgstr ""
+
+msgid "Merging analysis results"
+msgstr ""
+
+msgid "Saving analysis cache"
+msgstr ""
+
+msgid "Checking: {item} ({current}/{total})"
+msgstr ""
+
+msgid "Solder Mask Analysis"
+msgstr ""
+
+msgid "diagram.solder_mask_bridge"
+msgstr ""
+
+msgid "diagram.solder_mask_covers_trace"
+msgstr ""
+
+msgid "diagram.solder_mask_multiple_nets"
+msgstr ""
+msgid "Rule: qualitative check"
+msgstr ""
+
+msgid "Rule: {values}{unit}"
+msgstr ""
+
+msgid "ratio"
+msgstr ""
+
+msgid "No rule description is available for this analysis item."
+msgstr ""
+
+msgid "{description} This is a qualitative check. Avoid the condition or review every occurrence before production."
+msgstr ""
+
+msgid "{description} Values outside {lower} to {upper} are high risk. Recommended range: {recommended} to {upper}."
+msgstr ""
+
+msgid "{description} Recommended value: {recommended} or less."
+msgstr ""
+
+msgid "{description} Values above {alarm} are high risk. Recommended value: {recommended} or less."
+msgstr ""
+
+msgid "{description} Recommended value: {recommended} or greater."
+msgstr ""
+
+msgid "{description} Values below {alarm} are high risk. Recommended value: {recommended} or greater."
+msgstr ""
+
+msgid "Disconnected copper trace fragments returned by the DFM service."
+msgstr ""
+
+msgid "Acute trace/copper angles that may trap acid or create weak copper."
+msgstr ""
+
+msgid "Track ends that are not connected to a pad, via, or other copper."
+msgstr ""
+
+msgid "Copper islands that are isolated from useful nets."
+msgstr ""
+
+msgid "Vias without effective copper connectivity."
+msgstr ""
+
+msgid "Minimum copper trace width. Public HQPCB capability lists 5 mil as the lower bound for common orders."
+msgstr ""
+
+msgid "Minimum clearance between copper traces."
+msgstr ""
+
+msgid "Minimum clearance between traces and pads."
+msgstr ""
+
+msgid "Minimum general clearance between copper pads."
+msgstr ""
+
+msgid "Minimum edge-to-edge clearance between BGA pads."
+msgstr ""
+
+msgid "Minimum edge-to-edge clearance between SMD pads."
+msgstr ""
+
+msgid "Minimum shorter-side length of ordinary pads."
+msgstr ""
+
+msgid "Undersized elongated pads have low adhesion, which can reduce manufacturing quality and yield and may increase testing costs. Use a minimum width of at least 0.15 mm; 0.2 mm or greater is recommended."
+msgstr ""
+
+msgid "Too-small through-vias can reduce production efficiency and yield and may increase cost. Use a via drill diameter of at least 0.3 mm."
+msgstr ""
+
+msgid "Minimum component PTH pad drill diameter; excludes vias and NPTH pads."
+msgstr ""
+
+msgid "Maximum generic drill size used by the remote DFM contract."
+msgstr ""
+
+msgid "Maximum plated through-hole size."
+msgstr ""
+
+msgid "As drill diameter decreases, usable flute length also decreases; very small drills may not penetrate a thick PCB."
+msgstr ""
+
+msgid "Minimum mechanical via drill."
+msgstr ""
+
+msgid "Minimum laser blind via drill."
+msgstr ""
+
+msgid "Minimum mechanically drilled blind via."
+msgstr ""
+
+msgid "Minimum laser buried via drill."
+msgstr ""
+
+msgid "Minimum mechanically drilled buried via."
+msgstr ""
+
+msgid "The minimum oval-slot cutter diameter is 0.4 mm. The original slot must not be narrower than 0.3 mm; use at least 0.4 mm, with 0.6 mm or greater recommended."
+msgstr ""
+
+msgid "Maximum blind or buried via drill."
+msgstr ""
+
+msgid "Oversized slots require additional production operations, reducing efficiency and increasing cost. Keep the slot length at or below 10 mm."
+msgstr ""
+
+msgid "Oversized slot widths require additional production operations, reducing efficiency and increasing cost. Keep the cutter diameter at or below 5.8 mm."
+msgstr ""
+
+msgid "When slot length is less than twice its width, uneven forces during production can deform it. Use a slot length of at least twice the width."
+msgstr ""
+
+msgid "Square or rectangular hole size."
+msgstr ""
+
+msgid "Minimum annular ring for vias."
+msgstr ""
+
+msgid "Minimum annular ring for plated through-hole pads."
+msgstr ""
+
+msgid "Minimum spacing between vias on the same net."
+msgstr ""
+
+msgid "Minimum spacing between vias on different nets."
+msgstr ""
+
+msgid "Insufficient hole-to-hole spacing can reduce production efficiency and quality yield. Use a minimum spacing of at least 15 mil; 17 mil or greater is recommended."
+msgstr ""
+
+msgid "Minimum spacing between blind/buried vias."
+msgstr ""
+
+msgid "Outer-layer clearance from plated through-hole edge to trace."
+msgstr ""
+
+msgid "Inner-layer clearance from plated through-hole edge to trace."
+msgstr ""
+
+msgid "Outer-layer clearance from via edge to trace."
+msgstr ""
+
+msgid "Inner-layer clearance from via edge to trace."
+msgstr ""
+
+msgid "Clearance from non-plated hole edge to copper."
+msgstr ""
+
+msgid "Minimum distance from SMD pad to board edge."
+msgstr ""
+
+msgid "Minimum distance from trace to board edge."
+msgstr ""
+
+msgid "Minimum distance from copper pour or copper feature to board edge."
+msgstr ""
+
+msgid "Right-angle corners in square or rectangular holes cannot be machined in the production process. Use a circular or oval hole instead."
+msgstr ""
+
+msgid "Castellated or half-hole feature detection."
+msgstr ""
+
+msgid "Via overlap with BGA pad."
+msgstr ""
+
+msgid "Via overlap with SMD pad."
+msgstr ""
+
+msgid "NPTH overlap with SMD pad."
+msgstr ""
+
+msgid "PTH overlap with SMD pad."
+msgstr ""
+
+msgid "Pad or copper feature that should expose solder mask but has no opening."
+msgstr ""
+
+msgid "Minimum solder-mask web between separate openings."
+msgstr ""
+
+msgid "Clearance from a mask opening to a trace on another net."
+msgstr ""
+
+msgid "One connected solder-mask opening exposes copper from multiple nets."
+msgstr ""
+
+msgid "diagram.dangling_trace"
+msgstr ""
+
+msgid "Combined DFM Analysis"
+msgstr ""
+
+msgid "Basic"
+msgstr ""
+
+msgid "Standard"
+msgstr ""
+
+msgid "Advanced"
+msgstr ""
+
+msgid "Quick DFM Check"
+msgstr ""
+
+msgid "Full DFM Check"
+msgstr ""
+
+msgid "Reset Layers"
+msgstr ""
+
+msgid "Quick DFM check completed."
+msgstr ""
+
+msgid "Combined DFM analysis completed."
+msgstr ""
+msgid "Hole-to-Board Edge"
+msgstr ""
+
+msgid "PTH-to-Board Edge"
+msgstr ""
+
+msgid "Via-to-Board Edge"
+msgstr ""
+
+msgid "Screw Hole-to-Board Edge"
+msgstr ""
+
+msgid "NPTH-to-Board Edge"
+msgstr ""
+
+msgid "PTH holes too close to the board edge risk breakout and may severely affect electrical performance. Use at least 12 mil; 15 mil or greater is recommended."
+msgstr ""
+
+msgid "Vias too close to the board edge risk breakout and may severely affect electrical performance. Use at least 12 mil; 15 mil or greater is recommended."
+msgstr ""
+
+msgid "Screw holes too close to the board edge risk breakout. Use at least 8 mil; 12 mil or greater is recommended."
+msgstr ""
+
+msgid "NPTH holes too close to the board edge risk breakout. Use at least 8 mil; 12 mil or greater is recommended."
+msgstr ""
+
+msgid "diagram.pth_to_board_edge"
+msgstr ""
+
+msgid "diagram.via_to_board_edge"
+msgstr ""
+
+msgid "diagram.npth_to_board_edge"
+msgstr ""

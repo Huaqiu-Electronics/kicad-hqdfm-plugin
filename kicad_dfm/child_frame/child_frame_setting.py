@@ -1,4 +1,5 @@
 import pcbnew
+from kicad_dfm.core.units import mm_to_inches, mm_to_mils
 
 
 class ChildFrameSetting:
@@ -7,30 +8,12 @@ class ChildFrameSetting:
 
     def layer_conversion(self, json_string, layer_result):
         if (
-            json_string == "Hatched Copper Pour"
-            or json_string == "Pad size"
+            json_string == "Pad size"
             or json_string == "Smallest Trace Width"
             or json_string == "RingHole"
         ):
             return layer_result
-        kicad_layer = {}
-        _layer = {}
-        for i in range(0, 82):
-            _layer[f"Inner{i}"] = self.board.GetLayerName(i)
-        
-        kicad_layer["Top Silk"] = self.board.GetLayerName(5)
-        kicad_layer["Top Solder"] = self.board.GetLayerName(1)
-        kicad_layer["Top Layer"] = self.board.GetLayerName(0)
-        kicad_layer["Bot Silk"] = self.board.GetLayerName(7)
-        kicad_layer["Bot Solder"] = self.board.GetLayerName(3)
-        kicad_layer["Bot Layer"] = self.board.GetLayerName(2)
-        kicad_layer["Outline"] = self.board.GetLayerName(25)
-        kicad_layer["Top Paste"] = self.board.GetLayerName(35)
-        kicad_layer["Bot Paste"] = self.board.GetLayerName(33)
-        kicad_layer["Inner2"] = self.board.GetLayerName(4)
-        kicad_layer["Inner3"] = self.board.GetLayerName(6)
-        for i in range(8, 66, 2):
-            kicad_layer[f"Inner{ i//2 }"] = self.board.GetLayerName( i )
+        kicad_layer = self.layer_name_map()
 
         if isinstance(layer_result, str):  # 如果 layer_result 是字符串
             if layer_result in kicad_layer.keys():
@@ -41,13 +24,48 @@ class ChildFrameSetting:
                     layer_result[i] = kicad_layer[layer]
         return layer_result
 
+    def layer_name_map(self):
+        kicad_layer = {}
+        for source, const_name in (
+            ("Top Silk", "F_SilkS"),
+            ("Top Solder", "F_Mask"),
+            ("Top Layer", "F_Cu"),
+            ("Bot Silk", "B_SilkS"),
+            ("Bot Solder", "B_Mask"),
+            ("Bot Layer", "B_Cu"),
+            ("Outline", "Edge_Cuts"),
+            ("Top Paste", "F_Paste"),
+            ("Bot Paste", "B_Paste"),
+        ):
+            layer_name = self.safe_layer_name(getattr(pcbnew, const_name, None))
+            if layer_name:
+                kicad_layer[source] = layer_name
+
+        try:
+            copper_count = int(self.board.GetCopperLayerCount())
+        except Exception:
+            copper_count = 0
+        for inner_index in range(1, max(copper_count - 1, 1)):
+            layer_name = self.safe_layer_name(inner_index)
+            if layer_name:
+                kicad_layer[f"Inner{inner_index + 1}"] = layer_name
+        return kicad_layer
+
+    def safe_layer_name(self, layer_id):
+        if layer_id is None:
+            return None
+        try:
+            return self.board.GetLayerName(layer_id)
+        except Exception:
+            return None
+
 
 class ChildFrameUnitConversion:
     def Millimeter2iu(millimeter_value):
-        return round(millimeter_value / 25.4, 3)
+        return round(mm_to_inches(millimeter_value), 3)
 
     def Millimeter2mils(millimeter_value):
-        return round((millimeter_value * 39.37), 3)
+        return round(mm_to_mils(millimeter_value), 3)
 
     def multi_string_conversion(num, value, length):
         string = num + "、" + value + ", " + str(length) + _("pcs")

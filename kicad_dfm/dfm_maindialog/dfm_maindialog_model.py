@@ -19,8 +19,9 @@ import wx.dataview as dv
 
 
 class DfmMaindialogModel(dv.DataViewIndexListModel):
-    def __init__(self, data):
+    def __init__(self, data, action_label="Check"):
         dv.DataViewIndexListModel.__init__(self, len(data))
+        self.action_label = action_label
         self.data = [
             [key, value["display"], value["color"]] for key, value in data.items()
         ]
@@ -37,6 +38,9 @@ class DfmMaindialogModel(dv.DataViewIndexListModel):
             return self.data[row][1]
         elif col == 2:  # 第三列显示 value['color']
             return self.data[row][2]
+        elif col == 3:
+            # Layer Count and Dimensions have no detail view.
+            return "" if row < 2 else self.action_label
         return None  # 默认返回 None
 
     # This method is called when the user edits a data item in the view.
@@ -49,7 +53,7 @@ class DfmMaindialogModel(dv.DataViewIndexListModel):
 
     # Report how many columns this model provides data for.
     def GetColumnCount(self):
-        return 3  # 固定为3列
+        return 4
 
     # Specify the data type for a column
     def GetColumnType(self, col):
@@ -64,13 +68,14 @@ class DfmMaindialogModel(dv.DataViewIndexListModel):
     # cell at (row, col)
     def GetAttrByRow(self, row, col, attr):
         ##self.log.write('GetAttrByRow: (%d, %d)' % (row, col))
-        if col == 1 and self.data[row][2] == "red":  # 第三列有颜色值
+        if col != 1:
+            return False
+
+        color = self.data[row][2]
+        if color == "red":  # 第三列有颜色值
             attr.SetColour("red")  # 设置单元格颜色
             return True
-        elif col == 1 and self.data[row][2] == "black":  # 第三列有颜色值
-            attr.SetColour("black")  # 设置单元格颜色
-            return True
-        elif col == 1 and self.data[row][2] == "gold":  # 第三列有颜色值
+        elif color == "gold":  # 第三列有颜色值
             attr.SetColour(wx.Colour(255, 165, 0))  # 设置单元格颜色
             return True
 

@@ -3,13 +3,16 @@ import wx
 import wx.dataview as dv
 import platform
 
+from kicad_dfm.ui.dpi import scaled_dip
+
 # ----------------------------------------------------------------------
 
 
 class MyCustomRenderer(dv.DataViewCustomRenderer):
-    def __init__(self, log, *args, **kw):
+    def __init__(self, log, owner=None, *args, **kw):
         dv.DataViewCustomRenderer.__init__(self, *args, **kw)
         self.log = log
+        self.owner = owner
         self.value = None
 
     def SetValue(self, value):
@@ -31,14 +34,13 @@ class MyCustomRenderer(dv.DataViewCustomRenderer):
         # "Windows"
         current_os = platform.system()
 
-        if current_os == "Windows":
-            size.height = 35
-        elif current_os == "Linux":
-            size.height = 32
-        elif current_os == "Darwin":  # macOS 的系统名称是 "Darwin"
-            size.height = 35  # 假设在 macOS 上你想要设置的高度是 30
+        if current_os == "Linux":
+            minimum_height = 32
         else:
-            size.height = 35
+            minimum_height = 35
+        if self.owner is not None:
+            minimum_height = scaled_dip(self.owner, minimum_height)
+        size.height = max(size.height, minimum_height)
         return size
 
     def Render(self, rect, dc, state):
@@ -96,3 +98,78 @@ class MyCustomRenderer(dv.DataViewCustomRenderer):
     def Activate(self, cellRect, model, item, col):
         self.log.write("Activate")
         return False
+
+
+class SummaryActionRenderer(dv.DataViewCustomRenderer):
+    """Render and dispatch the summary action inside the scrolling view."""
+
+    BUTTON_WIDTH_DIP = 82
+    CELL_WIDTH_DIP = 90
+
+    def __init__(self, owner, buttons, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.owner = owner
+        self.buttons = tuple(buttons)
+        self.value = ""
+
+    def SetValue(self, value):
+        self.value = value or ""
+        return True
+
+    def GetValue(self):
+        return self.value
+
+    def GetSize(self):
+        return wx.Size(
+            scaled_dip(self.owner, self.CELL_WIDTH_DIP),
+            scaled_dip(self.owner, 35),
+        )
+
+    def _button_rect(self, rect):
+        button_rect = wx.Rect(rect)
+        horizontal_margin = scaled_dip(self.owner, 4)
+        button_width = min(
+            scaled_dip(self.owner, self.BUTTON_WIDTH_DIP),
+            max(0, button_rect.width - 2 * horizontal_margin),
+        )
+        button_rect.x += max(0, (button_rect.width - button_width) // 2)
+        button_rect.width = button_width
+        button_rect.Deflate(0, scaled_dip(self.owner, 2))
+        return button_rect
+
+    def Render(self, rect, dc, state):
+        if not self.value:
+            return True
+        button_rect = self._button_rect(rect)
+        wx.RendererNative.Get().DrawPushButton(self.owner, dc, button_rect, 0)
+        # DataView changes the DC foreground to the selection text colour
+        # before rendering a selected row.  A native button keeps its normal
+        # face colour, so inheriting that foreground can produce white text
+        # on a white button.  Use the platform button-text colour explicitly.
+        dc.SetTextForeground(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BTNTEXT))
+        text_width, text_height = dc.GetTextExtent(self.value)
+        dc.DrawText(
+            self.value,
+            button_rect.x + max(0, (button_rect.width - text_width) // 2),
+            button_rect.y + max(0, (button_rect.height - text_height) // 2),
+        )
+        return True
+
+    def LeftClick(self, pos, cellRect, model, item, col):
+        return self._dispatch(model, item)
+
+    def Activate(self, cellRect, model, item, col):
+        return self._dispatch(model, item)
+
+    def _dispatch(self, model, item):
+        try:
+            row = model.GetRow(item)
+            button = self.buttons[row]
+        except (AttributeError, IndexError, TypeError):
+            return False
+        if not self.value or not button.IsEnabled():
+            return False
+        event = wx.CommandEvent(wx.wxEVT_BUTTON, button.GetId())
+        event.SetEventObject(button)
+        button.GetEventHandler().ProcessEvent(event)
+        return True

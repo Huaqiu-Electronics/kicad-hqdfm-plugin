@@ -1,0 +1,13 @@
+{
+  "auto_locate": true,
+  "keep_export_package": false,
+  "region": "auto",
+  "rule_profile": "standard",
+  "summary_column_widths": [
+    170,
+    190,
+    108
+  ],
+  "timeout": 20,
+  "unit": "mm"
+}

@@ -56,6 +56,11 @@ class _SettingManager(wx.EvtHandler):
 
     def set_language(self, now: int):
         old = self.get_language()
+        if isinstance(now, str):
+            if now == "简体中文":
+                now = wx.LANGUAGE_CHINESE_SIMPLIFIED
+            elif now == "English":
+                now = wx.LANGUAGE_ENGLISH
         try:
             now = int(now)
         except ValueError:

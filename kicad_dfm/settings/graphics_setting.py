@@ -5,6 +5,7 @@ import wx
 from math import sqrt
 from .point_to_line_distance import point_to_line_distance
 from kicad_dfm.settings.timestamp import TimeStamp
+from kicad_dfm.kicad.swig import SwigBackend
 
 ERROR_RANGE = 0
 EDGE_WIDTH_EXTEN = 100000
@@ -22,6 +23,7 @@ F_PASTE = 35
 class GraphicsSetting:
     def __init__(self, _board):
         self.board = _board
+        self.backend = SwigBackend(_board)
         self.timestamp_logger = TimeStamp()
 
     def set_segment(self, line, result, x, y):
@@ -119,7 +121,7 @@ class GraphicsSetting:
             return result
 
         Drawings = self.board.GetDrawings()
-        
+
         result = self.analysis_singal_drawings(
             Drawings, line_coordinates, start_point, end_point
         )
@@ -217,9 +219,15 @@ class GraphicsSetting:
         end_point = pcbnew.VECTOR2I(
             line_coordinates["end_x"], line_coordinates["end_y"]
         )
-        if result["item"] == _("Via-to-Trace (Outer)") or result["item"] == _(
-            "Via-to-Trace (Inner)"
-        ):
+        if result.get("rule_key") in {
+            "drilltocopper:viatotraceouter",
+            "drilltocopper:viatotraceinner",
+        } or result.get("item") in {
+            "Via-to-Trace [Outer]",
+            "Via-to-Trace [Inner]",
+            "过孔到外层走线",
+            "过孔到内层走线",
+        }:
             zones = self.board.Zones()
             self.analysis_zones(zones, layer, start_point, end_point, items)
 
@@ -295,6 +303,8 @@ class GraphicsSetting:
         return items
 
     def get_SMD_pads_rect_list(self, result, x, y):
+        if "result" not in result or len(result.get("result") or ()) < 4:
+            return None
         rect_coordinates = {
             "layer": result["layer"][0],
             "start_x": (int(Decimal(result["result"][0]) * 1000000) + x),
@@ -334,7 +344,7 @@ class GraphicsSetting:
     def analysis_board_edge_drawings(self, Drawings, start_point, end_point, items):
         for item in Drawings:
             # 边框线
-            if type(item) is pcbnew.PCB_SHAPE:
+            if self.backend.is_shape(item):
                 hitstart = item.HitTest(start_point, ERROR_ACCURACY)
                 hitend = item.HitTest(end_point, ERROR_ACCURACY)
                 if hitstart or hitend:
@@ -343,7 +353,7 @@ class GraphicsSetting:
     def analysis_singal_tracks(self, items, line_coordinates, start_point, end_point):
         for item in items:  # Can be VIA or TRACK
             if (
-                type(item) is pcbnew.PCB_TRACK
+                self.backend.is_track(item)
                 and line_coordinates["layer"] == item.GetLayerName()
             ):
                 hitstart = item.HitTest(start_point, ERROR_ACCURACY)
@@ -353,7 +363,7 @@ class GraphicsSetting:
 
     def analysis_hole_diameter_vias(self, items, start_point, end_point):
         for item in items:
-            if type(item) is pcbnew.PCB_VIA:
+            if self.backend.is_via(item):
                 hit_start = item.HitTest(start_point, ERROR_ACCURACY)
                 hit_end = item.HitTest(end_point, ERROR_ACCURACY)
                 if hit_start or hit_end:
@@ -371,7 +381,7 @@ class GraphicsSetting:
                     return pad
 
     def analysis_spacing_via(self, item, start_point, end_point):
-        if type(item) is pcbnew.PCB_VIA:
+        if self.backend.is_via(item):
             hit_start = item.HitTest(start_point, ERROR_ACCURACY)
             hit_end = item.HitTest(end_point, ERROR_ACCURACY)
             if hit_start or hit_end:
@@ -379,7 +389,7 @@ class GraphicsSetting:
 
     def analysis_rect_to_vias(self, tracks, rect_coordinates):
         for item in tracks:
-            if type(item) is pcbnew.PCB_VIA:
+            if self.backend.is_via(item):
                 circle = {
                     "layer": item.GetLayerName(),
                     "start_x": item.GetStart().x,
@@ -464,7 +474,7 @@ class GraphicsSetting:
 
     def analysis_spacing_tracks(self, tracks, layer, start_point, end_point, items):
         for item in tracks:
-            if type(item) is pcbnew.PCB_TRACK and item.GetLayerName() in layer:
+            if self.backend.is_track(item) and item.GetLayerName() in layer:
                 result = self.judge_hit_item(item, start_point, end_point)
                 if result is not None:
                     items.append(result)
@@ -486,7 +496,7 @@ class GraphicsSetting:
                 if layer_name in layer:
                     if hits or hite:
                         items.append(zone)
-        
+
         else:
             iter_proxy = zones.begin()
             while iter_proxy != zones.end():

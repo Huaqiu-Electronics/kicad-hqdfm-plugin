@@ -1,17 +1,14 @@
 import wx
-import os
 import sys
 from wx.lib.mixins.inspection import InspectionMixin
 from .dfm_mainframe import DfmMainframe
-import builtins
-from kicad_dfm import PLUGIN_ROOT
-from kicad_dfm.language.lang_const import LANG_DOMAIN
+from kicad_dfm.core.i18n import init_i18n
+from kicad_dfm.settings.kicad_setting import KiCadSetting
 import socket
 import multiprocessing
 import pcbnew
 
-# add translation macro to builtin similar to what gettext does
-builtins.__dict__["_"] = wx.GetTranslation
+init_i18n(KiCadSetting.read_lang_setting(), wx_module=wx)
 
 
 def _displayHook(obj):
@@ -31,12 +28,7 @@ class BaseApp(wx.EvtHandler):
         super().__init__()
         sys.displayhook = _displayHook
 
-        wx.Locale.AddCatalogLookupPathPrefix(
-            os.path.join(PLUGIN_ROOT, "language", "locale")
-        )
-        existing_locale = wx.GetLocale()
-        if existing_locale is not None:
-            existing_locale.AddCatalog(LANG_DOMAIN)
+        init_i18n(KiCadSetting.read_lang_setting(), wx_module=wx)
 
         print(wx.__version__)
         self.startup()
@@ -53,7 +45,7 @@ class BaseApp(wx.EvtHandler):
         for win in wx.GetTopLevelWindows():
             if win.GetTitle() == _("HQ DFM"):
                 win.Destroy()
-                
+
 
         windows = wx.GetTopLevelWindows()
         pcb_window = [w for w in windows if _("pcb editor") in w.GetTitle().lower()]
