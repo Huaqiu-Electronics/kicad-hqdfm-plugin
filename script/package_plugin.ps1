@@ -122,17 +122,34 @@ function Get-RelativePackagePath {
 
 function Assert-ZipEntryNames {
     param(
-        [string]$ArchivePath
+        [string]$ArchivePath,
+        [bool]$AllowDocs
     )
 
     $zip = [System.IO.Compression.ZipFile]::OpenRead($ArchivePath)
     try {
+        $hasMetadata = $false
         foreach ($entry in $zip.Entries) {
             $entryName = ConvertTo-ZipEntryName $entry.FullName
-            $entryParts = $entryName.Split("/")
-            if ($entryParts | Where-Object { $_ -in @("docs", "tests", "tools", "script") }) {
-                throw "Development-only directory found in release: $entryName"
+
+            if ($entryName -eq "metadata.json") {
+                $hasMetadata = $true
+            } elseif ($entryName.StartsWith("plugins/")) {
+                $relativeParts = $entryName.Substring("plugins/".Length).Split("/")
+                if ($relativeParts | Where-Object { $_ -in @("tests", "tools", "script") }) {
+                    throw "Development-only directory found in release: $entryName"
+                }
+                if (-not $AllowDocs -and ($relativeParts | Where-Object { $_ -eq "docs" })) {
+                    throw "Development-only directory found in release: $entryName"
+                }
+            } elseif ($entryName.StartsWith("resources/")) {
+                if ($entryName -ne "resources/icon.png") {
+                    throw "Unexpected resource entry in release: $entryName"
+                }
+            } else {
+                throw "Entry outside PCM package directories found in release: $entryName"
             }
+
             if ($entry.Extension -in @(".fbp", ".po", ".pot", ".pyc", ".pyo")) {
                 throw "Development-only file found in release: $entryName"
             }
@@ -140,6 +157,11 @@ function Assert-ZipEntryNames {
                 throw "Development-only file found in release: $entryName"
             }
         }
+
+        if (-not $hasMetadata) {
+            throw "Archive is missing the root metadata.json required by the KiCad Plugin Manager"
+        }
+
         return $zip.Entries.Count
     } finally {
         $zip.Dispose()
@@ -148,7 +170,8 @@ function Assert-ZipEntryNames {
 
 function Copy-PackageItem {
     param(
-        [string]$RelativePath
+        [string]$RelativePath,
+        [string]$StageSubdir = "plugins"
     )
 
     $sourcePath = Join-Path $repoRoot $RelativePath
@@ -161,8 +184,14 @@ function Copy-PackageItem {
         return
     }
 
+    $stageBase = if ([string]::IsNullOrWhiteSpace($StageSubdir)) {
+        $stageRoot
+    } else {
+        Join-Path $stageRoot $StageSubdir
+    }
+
     if (-not $sourceItem.PSIsContainer) {
-        $destPath = Join-Path $stageRoot $RelativePath
+        $destPath = Join-Path $stageBase $RelativePath
         New-Item -ItemType Directory -Path (Split-Path -Parent $destPath) -Force | Out-Null
         Copy-Item -LiteralPath $sourceItem.FullName -Destination $destPath -Force
         return
@@ -172,7 +201,7 @@ function Copy-PackageItem {
         Where-Object { -not (Test-Excluded $_) } |
         ForEach-Object {
             $relative = Get-RelativePackagePath $repoRoot $_.FullName
-            $destPath = Join-Path $stageRoot $relative
+            $destPath = Join-Path $stageBase $relative
 
             if ($_.PSIsContainer) {
                 New-Item -ItemType Directory -Path $destPath -Force | Out-Null
@@ -189,6 +218,19 @@ try {
     foreach ($root in $includeRoots) {
         Copy-PackageItem $root
     }
+
+    $metadataSource = Join-Path $repoRoot "metadata.json"
+    if (-not (Test-Path $metadataSource)) {
+        throw "Required package path not found: metadata.json"
+    }
+    Copy-Item -LiteralPath $metadataSource -Destination (Join-Path $stageRoot "metadata.json") -Force
+
+    $iconSource = Join-Path $repoRoot "kicad_dfm\picture\icon.png"
+    if (-not (Test-Path $iconSource)) {
+        throw "Required package path not found: kicad_dfm\picture\icon.png"
+    }
+    New-Item -ItemType Directory -Path (Join-Path $stageRoot "resources") -Force | Out-Null
+    Copy-Item -LiteralPath $iconSource -Destination (Join-Path $stageRoot "resources\icon.png") -Force
 
     if (Test-Path $archivePath) {
         Remove-Item -LiteralPath $archivePath -Force
@@ -218,11 +260,11 @@ try {
     New-Item -ItemType Directory -Path $unpackedPath -Force | Out-Null
     Copy-Item -Path (Join-Path $stageRoot "*") -Destination $unpackedPath -Recurse -Force
 
-    $entryCount = Assert-ZipEntryNames $archivePath
+    $entryCount = Assert-ZipEntryNames $archivePath ([bool]$IncludeDocs)
     Write-Host "Created: $archivePath"
     Write-Host "Copied unpacked: $unpackedPath"
     Write-Host "Entries: $entryCount"
-    Write-Host "Install: extract this zip into KiCad's scripting/plugins directory."
+    Write-Host "Install: use KiCad Plugin Manager -> Install from File and select this zip."
 } finally {
     if (Test-Path $stageRoot) {
         $resolvedStage = (Resolve-Path $stageRoot).Path

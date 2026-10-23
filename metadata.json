@@ -1,0 +1,31 @@
+{
+    "$schema": "https://go.kicad.org/pcm/schemas/v1",
+    "name": "HQ DFM",
+    "description": "By sending Gerber files to HQDFM, achieve one-click analysis of potential PCB design hazards.",
+    "description_full": "HQ DFM is committed to meeting your high-quality design risk analysis needs to the fullest extent possible. \n\nThe plugin analyzes more than 10 design risk issues in PCBs, including signal integrity, discontinuous traces, smallest trace spacing, pad spacing, hatched copper pour, hole diameter, board edge clearance, holes on SMD pads, missing Smask openings and more, helping you eliminate production difficulties and design flaws. \n\nHQDFM analyzes design risks with one click, provides optimization solutions, and manufacturing simpler.",
+    "identifier": "com.github.Huaqiu-Electronics.kicad-hqdfm-plugin",
+    "type": "plugin",
+    "author": {
+        "name": "Huaqiu",
+        "contact": {
+            "email": "zhanghaf60@gmail.com"
+        }
+    },
+    "maintainer": {
+        "name": "Huaqiu",
+        "contact": {
+            "email": "zhanghaf60@gmail.com"
+        }
+    },
+    "license": "MIT",
+    "resources": {
+        "Github": "https://github.com/Huaqiu-Electronics/kicad-hqdfm-plugin.git"
+    },
+    "versions": [
+        {
+            "version": "1.0.0",
+            "status": "stable",
+            "kicad_version": "8.0"
+        }
+    ]
+}
