@@ -8,13 +8,13 @@
     "author": {
         "name": "Huaqiu",
         "contact": {
-            "email": "zhanghaf60@gmail.com"
+            "email": "liangtie.qian@gmail.com"
         }
     },
     "maintainer": {
         "name": "Huaqiu",
         "contact": {
-            "email": "zhanghaf60@gmail.com"
+            "email": "liangtie.qian@gmail.com"
         }
     },
     "license": "MIT",
@@ -23,9 +23,9 @@
     },
     "versions": [
         {
-            "version": "1.0.0",
+            "version": "3.0.0",
             "status": "stable",
-            "kicad_version": "8.0"
+            "kicad_version": "9.0"
         }
     ]
 }
